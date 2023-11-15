@@ -7,6 +7,7 @@ import 'package:safesnake/pages/safesnake.dart';
 import 'package:safesnake/util/animations/handler.dart';
 import 'package:safesnake/util/data/env.dart';
 import 'package:safesnake/util/data/local.dart';
+import 'package:safesnake/util/theming/controller.dart';
 import 'package:safesnake/util/theming/themes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -29,6 +30,9 @@ void main() async {
   //Intro Status
   final introStatus = LocalData.boxData(box: "intro")["status"] ?? false;
 
+  //Current Theme
+  final currentTheme = LocalData.boxData(box: "settings")["theme"] ?? false;
+
   //Signed In User
   final currentUser = Supabase.instance.client.auth.currentUser;
 
@@ -47,7 +51,9 @@ void main() async {
             useImmersiveMode: true,
             duration: const Duration(seconds: 4),
             animationCurve: Curves.easeInOut,
-            backgroundColor: Colors.white,
+            backgroundColor: !currentTheme
+                ? const Color(0xFFFAFAFA)
+                : const Color(0xFF161B22),
             nextScreen: introStatus
                 ? currentUser != null
                     ? SafeSnake(user: currentUser)

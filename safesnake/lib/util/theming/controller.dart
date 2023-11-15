@@ -1,6 +1,7 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:safesnake/util/data/local.dart';
 
 ///Theme Controller
 class ThemeController {
@@ -24,7 +25,20 @@ class ThemeController {
     required BuildContext context,
     required bool mode,
   }) {
+    //Set Appearance
     mode ? _setDark(context: context) : _setLight(context: context);
+
+    //Settings
+    final settings = LocalData.boxData(box: "settings");
+
+    //Add Theme to Settings
+    settings.addAll({"theme": mode});
+
+    //Save Theme Locally
+    LocalData.setData(
+      box: "settings",
+      data: settings,
+    );
   }
 
   ///Set Dark Mode

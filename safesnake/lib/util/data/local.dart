@@ -40,7 +40,7 @@ class LocalData {
   ///Set Data
   static Future<void> setData({
     required String box,
-    required Map<String, dynamic> data,
+    required Map<dynamic, dynamic> data,
   }) async {
     //Box
     final localBox = Hive.box(box);
