@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:m_toast/m_toast.dart';
-import 'package:safesnake/util/theming/controller.dart';
 
 ///Local Notification
 class LocalNotification {

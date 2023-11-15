@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/account/login.dart';
-import 'package:safesnake/pages/account/widgets/type.dart';
 import 'package:safesnake/util/account/handler.dart';
-import 'package:safesnake/util/animations/handler.dart';
 import 'package:safesnake/util/widgets/input.dart';
 import 'package:safesnake/util/widgets/main.dart';
 

@@ -2,7 +2,6 @@ import 'package:dough/dough.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/people/people.dart';
 
 class People extends StatelessWidget {
