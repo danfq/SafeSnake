@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://github.com/danfq/safesnake/blob/master/logo.png?raw=true">
+    <img src="https://github.com/danfq/safesnake/blob/main/logo.png?raw=true">
 </div>
 
 <div align="center">
