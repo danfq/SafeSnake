@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_exit_app/flutter_exit_app.dart';
@@ -216,20 +215,25 @@ class AccountHandler {
         email: email,
         password: password,
       )
-          .then((response) {
+          .then((response) async {
         //User
         final user = response.user;
 
         //Check if User was Created
         if (user != null) {
+          //Cache User Data
+          await cacheUser();
+
           //Go Home
-          Navigator.pushAndRemoveUntil(
-            context,
-            CupertinoPageRoute(
-              builder: (context) => SafeSnake(user: user),
-            ),
-            (route) => false,
-          );
+          if (context.mounted) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => SafeSnake(user: user),
+              ),
+              (route) => false,
+            );
+          }
         }
       });
     } on AuthException catch (error) {
@@ -257,12 +261,15 @@ class AccountHandler {
         data: {
           "username": username,
         },
-      ).then((response) {
+      ).then((response) async {
         //User
         final user = response.user;
 
         //Check if User was Created
         if (user != null) {
+          //Cache User Data
+          await cacheUser();
+
           //Go Home
           Navigator.pushReplacement(
             context,

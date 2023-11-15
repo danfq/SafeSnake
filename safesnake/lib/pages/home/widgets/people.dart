@@ -3,9 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:safesnake/pages/people/people.dart';
+import 'package:safesnake/util/models/loved_one.dart';
 
 class People extends StatelessWidget {
-  const People({super.key});
+  const People({super.key, required this.lovedOnes});
+
+  ///Loved Ones
+  final List<LovedOne> lovedOnes;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,9 @@ class People extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              CupertinoPageRoute(builder: (context) => const PeoplePage()),
+              CupertinoPageRoute(
+                builder: (context) => PeoplePage(lovedOnes: lovedOnes),
+              ),
             );
           },
           child: CircleAvatar(

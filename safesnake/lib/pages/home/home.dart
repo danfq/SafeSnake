@@ -28,11 +28,11 @@ class _HomeState extends State<Home> {
         AskForHelp(lovedOnes: lovedOnes),
 
         //Extras
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Settings(),
-            People(),
+            const Settings(),
+            People(lovedOnes: lovedOnes),
           ],
         ),
       ],

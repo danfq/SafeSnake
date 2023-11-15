@@ -34,6 +34,9 @@ dependencies:
   m_toast: ^0.2.4
   flutter_exit_app: ^1.1.2
   uuid: ^4.2.1
+  contacts_service: ^0.6.3
+  native_dialog: ^0.1.1
+  flutter_sms: ^2.3.3
 
 dev_dependencies:
   flutter_test:

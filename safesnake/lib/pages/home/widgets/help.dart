@@ -1,6 +1,7 @@
 import 'package:dough/dough.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/models/loved_one.dart';
 
 class AskForHelp extends StatefulWidget {
@@ -14,59 +15,8 @@ class AskForHelp extends StatefulWidget {
 }
 
 class _AskForHelpState extends State<AskForHelp> {
-  ///Dummy Loved Ones
-  List<LovedOne> dummyLovedOnes = [
-    LovedOne(
-      name: "danfq",
-      email: "danfquerido@gmail.com",
-      fcmID: "",
-    ),
-    LovedOne(
-      name: "danfq",
-      email: "danfquerido@gmail.com",
-      fcmID: "",
-    ),
-    LovedOne(
-      name: "danfq",
-      email: "danfquerido@gmail.com",
-      fcmID: "",
-    ),
-    LovedOne(
-      name: "danfq",
-      email: "danfquerido@gmail.com",
-      fcmID: "",
-    ),
-    LovedOne(
-      name: "danfq",
-      email: "danfquerido@gmail.com",
-      fcmID: "",
-    ),
-    LovedOne(
-      name: "danfq",
-      email: "danfquerido@gmail.com",
-      fcmID: "",
-    ),
-    LovedOne(
-      name: "danfq",
-      email: "danfquerido@gmail.com",
-      fcmID: "",
-    ),
-    LovedOne(
-      name: "danfq",
-      email: "danfquerido@gmail.com",
-      fcmID: "",
-    ),
-    LovedOne(
-      name: "danfq",
-      email: "danfquerido@gmail.com",
-      fcmID: "",
-    ),
-    LovedOne(
-      name: "danfq",
-      email: "danfquerido@gmail.com",
-      fcmID: "",
-    ),
-  ];
+  ///Loved Ones
+  final lovedOnes = LocalData.boxData(box: "loved_ones")["list"] ?? [];
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +74,7 @@ class _AskForHelpState extends State<AskForHelp> {
                       const SizedBox(height: 20.0),
 
                       //Loved Ones
-                      dummyLovedOnes.isNotEmpty
+                      lovedOnes.isNotEmpty
                           ? ConstrainedBox(
                               constraints: const BoxConstraints(
                                 maxHeight: 240.0,
@@ -136,7 +86,7 @@ class _AskForHelpState extends State<AskForHelp> {
                                 crossAxisSpacing: 10.0,
                                 mainAxisSpacing: 10.0,
                                 childAspectRatio: 10 / 3,
-                                children: dummyLovedOnes.map(
+                                children: lovedOnes.map(
                                   (lovedOne) {
                                     return GestureDetector(
                                       onTap: () {
@@ -145,9 +95,8 @@ class _AskForHelpState extends State<AskForHelp> {
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: Theme.of(context).cardColor,
-                                          borderRadius: BorderRadius.circular(
-                                            14.0,
-                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(14.0),
                                         ),
                                         child: Center(
                                           child: Text(
