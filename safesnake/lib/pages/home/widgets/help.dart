@@ -8,7 +8,7 @@ class AskForHelp extends StatefulWidget {
   const AskForHelp({super.key, required this.lovedOnes});
 
   ///Loved Ones
-  final List<LovedOne> lovedOnes;
+  final List<dynamic> lovedOnes;
 
   @override
   State<AskForHelp> createState() => _AskForHelpState();

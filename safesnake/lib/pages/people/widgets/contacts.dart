@@ -7,9 +7,14 @@ import 'package:native_dialog/native_dialog.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/animations/handler.dart';
 import 'package:safesnake/util/data/local.dart';
+import 'package:safesnake/util/models/loved_one.dart';
+import 'package:safesnake/util/notifications/local.dart';
 
 class DeviceContacts extends StatefulWidget {
-  const DeviceContacts({super.key});
+  const DeviceContacts({super.key, required this.onInvited});
+
+  ///On Invited
+  final VoidCallback onInvited;
 
   @override
   State<DeviceContacts> createState() => _DeviceContactsState();
@@ -27,6 +32,9 @@ class _DeviceContactsState extends State<DeviceContacts> {
 
   ///Current User
   final currentUser = LocalData.boxData(box: "personal")["name"];
+
+  ///Loved Ones
+  final lovedOnes = LocalData.boxData(box: "loved_ones")["list"] ?? [];
 
   @override
   void initState() {
@@ -91,11 +99,43 @@ class _DeviceContactsState extends State<DeviceContacts> {
 
                         //Send Invitation if Confirmed
                         if (confirmed) {
-                          sendSMS(
+                          final sms = await sendSMS(
                             message:
                                 "$currentUser needs your help!\n\nGet SafeSnake and join them!",
                             recipients: [contactData.phones!.first.value!],
                           );
+
+                          //Check if Sent
+                          if (context.mounted) {
+                            if (sms == "sent") {
+                              //Notify User
+                              LocalNotification(context: context).show(
+                                type: NotificationType.success,
+                                message: "Invitation Sent!",
+                              );
+
+                              //Loved Ones
+                              lovedOnes.add(
+                                LovedOne(
+                                  name: contactData.displayName!,
+                                  email: "",
+                                  fcmID: "",
+                                  status: LovedOneStatus.invited.name,
+                                ).toJSON(),
+                              );
+
+                              //Add Loved One as "Invited"
+                              await LocalData.setData(
+                                box: "loved_ones",
+                                data: {"list": lovedOnes},
+                              );
+                            } else {
+                              LocalNotification(context: context).show(
+                                type: NotificationType.failure,
+                                message: "Failed to Send Invitation",
+                              );
+                            }
+                          }
                         }
                       },
                       style: IconButton.styleFrom(

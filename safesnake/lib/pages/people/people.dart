@@ -10,7 +10,7 @@ class PeoplePage extends StatelessWidget {
   const PeoplePage({super.key, required this.lovedOnes});
 
   ///Loved Ones
-  final List<LovedOne> lovedOnes;
+  final List<dynamic> lovedOnes;
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +38,8 @@ class PeoplePage extends StatelessWidget {
           ),
         ],
       ),
-      body: SafeArea(
-        child: LovedOnes(lovedOnes: lovedOnes),
+      body: const SafeArea(
+        child: LovedOnes(),
       ),
     );
   }

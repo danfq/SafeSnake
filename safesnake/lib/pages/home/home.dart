@@ -14,7 +14,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   ///Loved Ones
-  List<LovedOne> lovedOnes = LocalData.boxData(box: "loved_ones")["list"] ?? [];
+  List<dynamic> lovedOnes = LocalData.boxData(box: "loved_ones")["list"] ?? [];
 
   @override
   Widget build(BuildContext context) {

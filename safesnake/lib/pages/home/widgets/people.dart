@@ -9,7 +9,7 @@ class People extends StatelessWidget {
   const People({super.key, required this.lovedOnes});
 
   ///Loved Ones
-  final List<LovedOne> lovedOnes;
+  final List<dynamic> lovedOnes;
 
   @override
   Widget build(BuildContext context) {
