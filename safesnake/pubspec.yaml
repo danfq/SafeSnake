@@ -1,0 +1,58 @@
+name: safesnake
+description: No Shame in Asking for Help
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.1.5 <4.0.0'
+
+dependencies:
+
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  adaptive_theme: ^3.4.1
+  google_fonts: ^6.1.0
+  flutter_vector_icons: ^2.0.0
+  introduction_screen: ^3.1.12
+  lottie: ^2.7.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.1
+  supabase_flutter: ^1.10.25
+  flutter_dotenv: ^5.1.0
+  settings_ui: ^2.0.2
+  flutter_svg: ^2.0.9
+  dough: ^1.0.4
+  flutter_keyboard_visibility: ^5.4.1
+  icons_launcher: ^2.1.5
+  another_flutter_splash_screen: ^1.2.0
+  swipeable_button_view: ^0.0.2
+  m_toast: ^0.2.4
+  flutter_exit_app: ^1.1.2
+  uuid: ^4.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  # Assets
+  assets:
+
+    # Environment Variables
+    - .env
+
+    # Animations
+    - assets/anim/
+
+    # Icons
+    - assets/icons/
