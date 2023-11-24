@@ -54,15 +54,8 @@ class _SafeSnakeState extends State<SafeSnake> {
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
             child: IconButton(
-              onPressed: () {
-                ThemeController.setAppearance(
-                  context: context,
-                  mode: !currentTheme,
-                );
-              },
-              icon: currentTheme
-                  ? const Icon(Ionicons.ios_sunny)
-                  : const Icon(Ionicons.ios_moon),
+              onPressed: () {},
+              icon: const Icon(Ionicons.ios_chatbox),
             ),
           ),
         ],

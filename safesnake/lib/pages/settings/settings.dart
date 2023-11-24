@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/settings/pages/account_info.dart';
 import 'package:safesnake/util/data/local.dart';
+import 'package:safesnake/util/theming/controller.dart';
 import 'package:safesnake/util/widgets/main.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -20,6 +21,9 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    //Current Theme
+    final currentTheme = ThemeController.current(context: context);
+
     //UI
     return Scaffold(
       appBar: MainWidgets(context: context).appBar(
@@ -53,10 +57,18 @@ class _SettingsPageState extends State<SettingsPage> {
             SettingsSection(
               title: const Text("UI & Visuals"),
               tiles: [
-                SettingsTile.navigation(
-                  leading: const Icon(Ionicons.ios_text_outline),
-                  title: const Text("Font"),
-                  onPressed: (context) {},
+                //Theme
+                SettingsTile.switchTile(
+                  initialValue: currentTheme,
+                  onToggle: (mode) => ThemeController.setAppearance(
+                    context: context,
+                    mode: mode,
+                  ),
+                  leading: currentTheme
+                      ? const Icon(Ionicons.ios_sunny)
+                      : const Icon(Ionicons.ios_moon),
+                  title: const Text("Theme"),
+                  description: Text(currentTheme ? "Dark Mode" : "Light Mode"),
                 ),
               ],
             ),
