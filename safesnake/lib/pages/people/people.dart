@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:safesnake/pages/people/widgets/add.dart';
 import 'package:safesnake/pages/people/widgets/loved_ones.dart';
-import 'package:safesnake/util/models/loved_one.dart';
+import 'package:safesnake/util/account/handler.dart';
+import 'package:safesnake/util/notifications/local.dart';
 import 'package:safesnake/util/widgets/main.dart';
 
 class PeoplePage extends StatelessWidget {
@@ -24,13 +23,21 @@ class PeoplePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
             child: IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const AddNewLovedOne(),
-                  ),
-                );
+              onPressed: () async {
+                //Invitation Status
+                final inviteSent = await AccountHandler(context).invitePerson();
+
+                //Notify Based on Status
+                if (context.mounted) {
+                  await LocalNotification(context: context).show(
+                    type: inviteSent
+                        ? NotificationType.success
+                        : NotificationType.failure,
+                    message: inviteSent
+                        ? "Invitation Sent!"
+                        : "Failed to Send Invitation",
+                  );
+                }
               },
               tooltip: "Invite Loved One",
               icon: const Icon(Ionicons.ios_add),

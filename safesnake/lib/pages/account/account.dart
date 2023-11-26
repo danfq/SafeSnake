@@ -17,6 +17,9 @@ class _AccountState extends State<Account> {
   ///Username Controller
   TextEditingController usernameController = TextEditingController();
 
+  ///Referral Code
+  TextEditingController referralController = TextEditingController();
+
   ///E-mail Controller
   TextEditingController emailController = TextEditingController();
 
@@ -46,12 +49,16 @@ class _AccountState extends State<Account> {
       case 0:
         question = "What would you like me to call you?";
 
-      //E-mail
+      //Referral Code
       case 1:
+        question = "What's your Loved One's Referral Code?";
+
+      //E-mail
+      case 2:
         question = "Nice to meet you, $name!\nWhat's your E-mail?";
 
       //Password
-      case 2:
+      case 3:
         question = "Can't forget the most important step!";
 
       //Default
@@ -71,15 +78,22 @@ class _AccountState extends State<Account> {
           placeholder: "Name",
         );
 
-      //E-mail
+      //Referral Code
       case 1:
+        return Input(
+          controller: referralController,
+          placeholder: "Leave blank if you don't have a Referral Code",
+        );
+
+      //E-mail
+      case 2:
         return Input(
           controller: emailController,
           placeholder: "E-mail",
         );
 
       //Password
-      case 2:
+      case 3:
         return Input(
           controller: passwordController,
           placeholder: "Password",
@@ -95,7 +109,7 @@ class _AccountState extends State<Account> {
   ///Navigation Text
   String navText() {
     //Return "Next" Except for Last Step
-    if (step != 2) {
+    if (step != 3) {
       return "Next";
     } else {
       return "All Done";
@@ -176,6 +190,7 @@ class _AccountState extends State<Account> {
           onPressed: () async {
             //Inputs
             final nameInput = usernameController.text.trim();
+            final referralCode = referralController.text.trim();
             final emailInput = emailController.text.trim();
             final passwordInput = passwordController.text.trim();
 
@@ -208,20 +223,23 @@ class _AccountState extends State<Account> {
             if (name.isNotEmpty &&
                 email.isNotEmpty &&
                 password.isNotEmpty &&
-                step == 2) {
+                step == 3) {
               //Create Account
               await AccountHandler(context).createAccount(
                 username: name,
                 email: email,
                 password: password,
+                referralCode: referralCode,
               );
             }
 
-            //Go Forward by One
-            setState(() {
-              step += 1;
-              setQuestion();
-            });
+            //Go Forward by One - Until Last Step
+            if (step != 3) {
+              setState(() {
+                step += 1;
+                setQuestion();
+              });
+            }
           },
           child: Text(navText()),
         ),

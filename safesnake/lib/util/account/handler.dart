@@ -7,6 +7,7 @@ import 'package:safesnake/pages/safesnake.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/data/remote.dart';
 import 'package:safesnake/util/notifications/local.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
 import 'package:uuid/uuid.dart';
@@ -252,14 +253,17 @@ class AccountHandler {
     required String username,
     required String email,
     required String password,
+    String? referralCode,
   }) async {
     //Attempt to Create Account
     try {
+      //Sign Up
       await _auth.signUp(
         email: email,
         password: password,
         data: {
           "username": username,
+          "referral": referralCode,
         },
       ).then((response) async {
         //User
@@ -271,12 +275,14 @@ class AccountHandler {
           await cacheUser();
 
           //Go Home
-          Navigator.pushReplacement(
-            context,
-            CupertinoPageRoute(
-              builder: (context) => SafeSnake(user: user),
-            ),
-          );
+          if (context.mounted) {
+            Navigator.pushReplacement(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => SafeSnake(user: user),
+              ),
+            );
+          }
         }
       });
     } on AuthException catch (error) {
@@ -288,6 +294,73 @@ class AccountHandler {
         );
       }
     }
+  }
+
+  ///Invite Person
+  Future<bool> invitePerson() async {
+    //Status
+    bool status = false;
+
+    //Current User
+    final currentUser = _auth.currentUser;
+
+    //Referral Code
+    final referralCode = _referralCode();
+
+    //Message
+    final message =
+        "Hi!\n\n${currentUser?.userMetadata!["username"]} has invited you to be one of their Loved Ones.\n\nUse this Referral Code to create your Account: $referralCode";
+
+    //Create Invitation Record
+    await RemoteData(context).addData(
+      table: "invitations",
+      data: {
+        "id": const Uuid().v4(),
+        "created_by": currentUser?.email,
+        "referral": referralCode,
+        "used": false,
+      },
+    );
+
+    //Send Invitation
+    await Share.share(
+      message,
+      subject: "SafeSnake | Invitation", //E-mail Invitation
+    ).then((_) => status = true);
+
+    //Return Status
+    return status;
+  }
+
+  ///Generate Referral Code Based on UUID V4
+  String _referralCode() {
+    //UUID
+    final uuid = const Uuid().v4();
+
+    //First Section Only
+    final codeSection = uuid.split("-").first;
+
+    //Uppercase ID
+    final referralCode = codeSection.toUpperCase();
+
+    //Return Referral Code
+    return referralCode;
+  }
+
+  ///Set `referral` Code as Used by `email`
+  Future<void> setReferralAsUsed({
+    required String email,
+    required String referral,
+  }) async {
+    await RemoteData(context).updateData(
+      table: "invitations",
+      column: "referral",
+      match: referral,
+      data: {
+        "used_by": email,
+        "used": true,
+      },
+    );
   }
 }
 

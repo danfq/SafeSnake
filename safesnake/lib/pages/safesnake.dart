@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/home/home.dart';
+import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/animations/handler.dart';
 import 'package:safesnake/util/theming/controller.dart';
 import 'package:safesnake/util/widgets/main.dart';
@@ -32,7 +33,25 @@ class _SafeSnakeState extends State<SafeSnake> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    //User Referral Code
+    final userReferral = widget.user.userMetadata!["referral"];
+
+    //Set Referral Code as Used - If Not Null
+    if (userReferral != null) {
+      AccountHandler(context).setReferralAsUsed(
+        email: widget.user.email!,
+        referral: userReferral,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print(widget.user.userMetadata!["referral"]);
+
     //UI
     return Scaffold(
       appBar: MainWidgets(context: context).appBar(

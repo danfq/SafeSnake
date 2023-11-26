@@ -71,6 +71,8 @@ class _LovedOnesState extends State<LovedOnes> {
               },
             ),
           )
-        : const Center(child: Text("You Haven't Added Any Loved Ones Yet"));
+        : const Center(
+            child: Text("No One Has Joined With a Referral Code Yet"),
+          );
   }
 }
