@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/data/local.dart';
+import 'package:safesnake/util/notifications/local.dart';
 import 'package:safesnake/util/widgets/dialogs.dart';
 import 'package:safesnake/util/widgets/main.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -50,6 +52,47 @@ class _AccountInfoState extends State<AccountInfo> {
                     icon: const Icon(
                       Ionicons.ios_log_out,
                       size: 22.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            //Referral Code
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Card(
+                child: ListTile(
+                  title: const Text(
+                    "Your Referral Code",
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: Text(accountData["referral"]),
+                  trailing: IconButton(
+                    onPressed: () async {
+                      //Copy to Clipboard
+                      await Clipboard.setData(
+                        ClipboardData(text: accountData["referral"]),
+                      );
+
+                      //Notify User
+                      if (mounted) {
+                        await LocalNotification(context: context).show(
+                          type: NotificationType.success,
+                          message: "Copied Your Referral Code",
+                        );
+                      }
+                    },
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.grey.shade600,
+                    ),
+                    icon: const Icon(
+                      Ionicons.ios_copy,
+                      size: 20.0,
                       color: Colors.white,
                     ),
                   ),
