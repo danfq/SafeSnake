@@ -20,12 +20,12 @@ class _LovedOnesState extends State<LovedOnes> {
       future: AccountHandler(context).lovedOnes(),
       builder: (context, snapshot) {
         //Loved Ones
-        final lovedOnes = snapshot.data ?? [];
+        final lovedOnes = snapshot.data;
 
         //Connection State
         if (snapshot.connectionState == ConnectionState.done) {
           //Check Loved Ones
-          if (lovedOnes.isNotEmpty) {
+          if (lovedOnes != null && lovedOnes.isNotEmpty) {
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: ListView.builder(
@@ -61,7 +61,7 @@ class _LovedOnesState extends State<LovedOnes> {
                     reverse: true,
                   ),
                 ),
-                const Text("Looks like you don't have any Loved Ones yet!"),
+                const Text("Looks like Tsuki needs to play by herself :("),
               ],
             );
           }

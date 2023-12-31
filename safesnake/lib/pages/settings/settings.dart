@@ -97,41 +97,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     );
                   },
                 ),
-                SettingsTile.switchTile(
-                  leading: const Icon(Ionicons.person_add),
-                  initialValue: acceptInvites,
-                  onToggle: (mode) async {
-                    //Update User Preference
-                    final updated = await AccountHandler(context).updateData(
-                      data: {
-                        "accept_invites": mode,
-                      },
-                    );
-
-                    if (mounted) {
-                      if (updated && mode) {
-                        await LocalNotification(context: context).show(
-                          type: NotificationType.success,
-                          message: "You can now receive Loved One Invites!",
-                        );
-                      } else if (updated && !mode) {
-                        await LocalNotification(context: context).show(
-                          type: NotificationType.failure,
-                          message: "Loved One Invites have been turned off.",
-                        );
-                      }
-                    }
-
-                    //Update UI
-                    setState(() {
-                      acceptInvites = mode;
-                    });
-                  },
-                  title: const Text("Loved One Invites"),
-                  description: const Text(
-                    "Whether you'd like to receive Loved One invites.",
-                  ),
-                ),
               ],
             ),
           ],

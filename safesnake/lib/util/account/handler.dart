@@ -66,6 +66,8 @@ class AccountHandler {
       }
     }
 
+    print("$referral | $lovedOnes");
+
     //Return Loved Ones
     return lovedOnes;
   }
@@ -301,6 +303,18 @@ class AccountHandler {
         if (user != null) {
           //Cache User Data
           await cacheUser();
+
+          //Add Referral if Used
+          if (context.mounted) {
+            await RemoteData(context).addData(
+              table: "invitations",
+              data: {
+                "id": const Uuid().v4(),
+                "referral": referralCode,
+                "used_by": username.trim(),
+              },
+            );
+          }
 
           //Go Home
           if (context.mounted) {
