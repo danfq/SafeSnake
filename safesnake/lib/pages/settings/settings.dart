@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/settings/pages/account_info.dart';
+import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/data/local.dart';
+import 'package:safesnake/util/data/remote.dart';
+import 'package:safesnake/util/notifications/local.dart';
 import 'package:safesnake/util/theming/controller.dart';
 import 'package:safesnake/util/widgets/main.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -16,13 +19,15 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  //Account Data
-  bool receiveInvites = LocalData.boxData(box: "settings")["invites"] ?? false;
-
   @override
   Widget build(BuildContext context) {
     //Current Theme
     final currentTheme = ThemeController.current(context: context);
+
+    //Accept Invites Status
+    bool acceptInvites =
+        AccountHandler(context).currentUser?.userMetadata?["accept_invites"] ??
+            false;
 
     //UI
     return Scaffold(
@@ -32,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
           await LocalData.setData(
             box: "settings",
             data: {
-              "invites": receiveInvites,
+              "invites": acceptInvites,
             },
           );
 
@@ -94,10 +99,32 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 SettingsTile.switchTile(
                   leading: const Icon(Ionicons.person_add),
-                  initialValue: receiveInvites,
-                  onToggle: (mode) {
+                  initialValue: acceptInvites,
+                  onToggle: (mode) async {
+                    //Update User Preference
+                    final updated = await AccountHandler(context).updateData(
+                      data: {
+                        "accept_invites": mode,
+                      },
+                    );
+
+                    if (mounted) {
+                      if (updated && mode) {
+                        await LocalNotification(context: context).show(
+                          type: NotificationType.success,
+                          message: "You can now receive Loved One Invites!",
+                        );
+                      } else if (updated && !mode) {
+                        await LocalNotification(context: context).show(
+                          type: NotificationType.failure,
+                          message: "Loved One Invites have been turned off.",
+                        );
+                      }
+                    }
+
+                    //Update UI
                     setState(() {
-                      receiveInvites = mode;
+                      acceptInvites = mode;
                     });
                   },
                   title: const Text("Loved One Invites"),

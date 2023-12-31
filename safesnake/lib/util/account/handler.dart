@@ -23,6 +23,9 @@ class AccountHandler {
   ///Supabase Auth Client
   static final _auth = Supabase.instance.client.auth;
 
+  ///Current User
+  User? get currentUser => _auth.currentUser;
+
   ///Cache User Data Locally
   static Future<void> cacheUser() async {
     //Current User
@@ -35,6 +38,7 @@ class AccountHandler {
         box: "personal",
         data: {
           "name": currentUser.userMetadata?["username"],
+          "accept_invites": currentUser.userMetadata?["accept_invites"],
           "email": currentUser.email,
         },
       );
@@ -45,9 +49,6 @@ class AccountHandler {
   ///
   ///This action is PERMANENT
   Future<void> deleteAccount() async {
-    //Current User
-    final currentUser = _auth.currentUser;
-
     //Show Sign Out Sheet
     await showModalBottomSheet(
       context: context,
@@ -87,7 +88,7 @@ class AccountHandler {
                           table: "delete_requests",
                           data: {
                             "id": const Uuid().v4(),
-                            "user_id": currentUser.id,
+                            "user_id": currentUser?.id,
                           },
                         );
 
@@ -172,7 +173,7 @@ class AccountHandler {
   Future<bool> updateData({
     String? email,
     String? password,
-    Map<String, String>? data,
+    Map<String, dynamic>? data,
   }) async {
     //User Updated
     bool userUpdated = false;
@@ -264,6 +265,7 @@ class AccountHandler {
         data: {
           "username": username,
           "referral": referralCode,
+          "accept_invites": false,
         },
       ).then((response) async {
         //User

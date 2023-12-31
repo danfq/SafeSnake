@@ -50,8 +50,6 @@ class _SafeSnakeState extends State<SafeSnake> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.user.userMetadata!["referral"]);
-
     //UI
     return Scaffold(
       appBar: MainWidgets(context: context).appBar(
