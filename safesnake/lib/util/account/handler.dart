@@ -39,6 +39,7 @@ class AccountHandler {
         data: {
           "name": currentUser.userMetadata?["username"],
           "accept_invites": currentUser.userMetadata?["accept_invites"],
+          "referral": currentUser.userMetadata?["referral"],
           "email": currentUser.email,
         },
       );
@@ -264,7 +265,8 @@ class AccountHandler {
         password: password,
         data: {
           "username": username,
-          "referral": referralCode,
+          "referral": _referralCode(),
+          "invited_by": referralCode,
           "accept_invites": false,
         },
       ).then((response) async {
@@ -303,26 +305,12 @@ class AccountHandler {
     //Status
     bool status = false;
 
-    //Current User
-    final currentUser = _auth.currentUser;
-
     //Referral Code
-    final referralCode = _referralCode();
+    final referralCode = currentUser?.userMetadata?["referral"];
 
     //Message
     final message =
         "Hi!\n\n${currentUser?.userMetadata!["username"]} has invited you to be one of their Loved Ones.\n\nUse this Referral Code to create your Account: $referralCode";
-
-    //Create Invitation Record
-    await RemoteData(context).addData(
-      table: "invitations",
-      data: {
-        "id": const Uuid().v4(),
-        "created_by": currentUser?.email,
-        "referral": referralCode,
-        "used": false,
-      },
-    );
 
     //Send Invitation
     await Share.share(
