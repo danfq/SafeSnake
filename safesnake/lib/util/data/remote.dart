@@ -32,6 +32,28 @@ class RemoteData {
     }
   }
 
+  ///Get Data from Table
+  Future<List> getData({required String table}) async {
+    //Data
+    List data = [];
+
+    //Attempt to Get Data
+    try {
+      data = await _database.from(table).select();
+    } on PostgrestException catch (error) {
+      if (context.mounted) {
+        //Notify User
+        await LocalNotification(context: context).show(
+          type: NotificationType.failure,
+          message: error.message,
+        );
+      }
+    }
+
+    //Return Data
+    return data;
+  }
+
   ///Update `data` on `table`, where `match` is within `column`
   Future<void> updateData({
     required String table,

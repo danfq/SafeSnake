@@ -6,6 +6,7 @@ import 'package:safesnake/pages/account/account.dart';
 import 'package:safesnake/pages/safesnake.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/data/remote.dart';
+import 'package:safesnake/util/models/loved_one.dart';
 import 'package:safesnake/util/notifications/local.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -44,6 +45,29 @@ class AccountHandler {
         },
       );
     }
+  }
+
+  ///Get Loved Ones as `List<String>`
+  Future<List<String>> lovedOnes() async {
+    //Loved Ones
+    List<String> lovedOnes = [];
+
+    //Referral Code
+    final referral = currentUser?.userMetadata?["referral"];
+
+    //Invitations with Matching Referral Code
+    final invitations = await RemoteData(context).getData(table: "invitations");
+
+    //Filter By Current User's Referral Code
+    for (final invitation in invitations) {
+      if (invitation["referral"] == referral) {
+        //Add Loved One to List
+        lovedOnes.add(invitation["used_by"]);
+      }
+    }
+
+    //Return Loved Ones
+    return lovedOnes;
   }
 
   ///Delete Account

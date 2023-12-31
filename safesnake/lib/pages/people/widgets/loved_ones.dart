@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:safesnake/util/account/handler.dart';
+import 'package:safesnake/util/animations/handler.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/models/loved_one.dart';
 import 'package:safesnake/util/notifications/local.dart';
@@ -12,72 +14,63 @@ class LovedOnes extends StatefulWidget {
 }
 
 class _LovedOnesState extends State<LovedOnes> {
-  ///Loved Ones
-  final lovedOnes =
-      (LocalData.boxData(box: "loved_ones")["list"] ?? []) as List;
-
   @override
   Widget build(BuildContext context) {
-    //Parsed Loved Ones
-    List<LovedOne> parsedLovedOnes = [];
+    return FutureBuilder(
+      future: AccountHandler(context).lovedOnes(),
+      builder: (context, snapshot) {
+        //Loved Ones
+        final lovedOnes = snapshot.data ?? [];
 
-    //Parse Loved Ones
-    if (lovedOnes.isNotEmpty) {
-      parsedLovedOnes = lovedOnes.map((lovedOne) {
-        return LovedOne.fromJSON(lovedOne);
-      }).toList();
-    }
+        //Connection State
+        if (snapshot.connectionState == ConnectionState.done) {
+          //Check Loved Ones
+          if (lovedOnes.isNotEmpty) {
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: lovedOnes.length,
+                itemBuilder: (context, index) {
+                  //Loved One
+                  final lovedOne = lovedOnes[index];
 
-    return parsedLovedOnes.isNotEmpty
-        ? Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: parsedLovedOnes.length,
-              itemBuilder: (context, index) {
-                //Loved One
-                final lovedOne = parsedLovedOnes[index];
-
-                //UI
-                return ListTile(
-                  tileColor: Colors.grey.shade300,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14.0),
+                  //UI
+                  return ListTile(
+                    tileColor: Colors.grey.shade300,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14.0),
+                    ),
+                    title: Text(
+                      lovedOne,
+                      style: const TextStyle(fontSize: 16.0),
+                    ),
+                    trailing: const Icon(Ionicons.ios_checkmark),
+                  );
+                },
+              ),
+            );
+          } else {
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: AnimationsHandler.asset(
+                    animation: "empty",
+                    reverse: true,
                   ),
-                  title: Text(
-                    lovedOne.name,
-                    style: const TextStyle(fontSize: 16.0),
-                  ),
-                  trailing: Icon(
-                    lovedOne.status == LovedOneStatus.invited.name
-                        ? Ionicons.ios_time_outline
-                        : Ionicons.ios_checkmark,
-                  ),
-                  onTap: () async {
-                    switch (lovedOne.status) {
-                      //Invited
-                      case "invited":
-                        await LocalNotification(context: context).show(
-                          type: NotificationType.failure,
-                          message:
-                              "${lovedOne.name} hasn't joined SafeSnake, yet.",
-                        );
-
-                      //Accepted
-                      case "accepted":
-                        await LocalNotification(context: context).show(
-                          type: NotificationType.success,
-                          message:
-                              "${lovedOne.name} has joined SafeSnake, and is a Loved One!",
-                        );
-                    }
-                  },
-                );
-              },
-            ),
-          )
-        : const Center(
-            child: Text("No One Has Joined With a Referral Code Yet"),
+                ),
+                const Text("Looks like you don't have any Loved Ones yet!"),
+              ],
+            );
+          }
+        } else {
+          return Center(
+            child: AnimationsHandler.asset(animation: "loading"),
           );
+        }
+      },
+    );
   }
 }
