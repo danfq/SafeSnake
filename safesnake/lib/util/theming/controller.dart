@@ -28,6 +28,9 @@ class ThemeController {
     //Set Appearance
     mode ? _setDark(context: context) : _setLight(context: context);
 
+    //Status Bar & Navigation Bar
+    statusAndNav(context: context);
+
     //Settings
     final settings = LocalData.boxData(box: "settings");
 
@@ -60,7 +63,7 @@ class ThemeController {
     //Current Theme
     final currentTheme = current(context: context);
 
-    if (!currentTheme) {
+    if (currentTheme) {
       SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(
           systemNavigationBarColor: Color(0xFFFAFAFA),
@@ -70,7 +73,7 @@ class ThemeController {
     } else {
       SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(
-          systemNavigationBarColor: Color(0xFF0D2350),
+          systemNavigationBarColor: Color(0xFF161B22),
           statusBarColor: Color(0xFF131313),
         ),
       );

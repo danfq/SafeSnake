@@ -6,7 +6,6 @@ class Themes {
   ///Light Mode
   static ThemeData light() {
     return ThemeData.light().copyWith(
-      useMaterial3: true,
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0.0,
@@ -44,7 +43,6 @@ class Themes {
   ///Dark Mode
   static ThemeData dark() {
     return ThemeData.dark().copyWith(
-      useMaterial3: true,
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0.0,

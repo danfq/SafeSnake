@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:native_dialog/native_dialog.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/models/loved_one.dart';
+import 'package:safesnake/util/notifications/local.dart';
 
 class LovedOnes extends StatefulWidget {
   const LovedOnes({super.key});
@@ -57,13 +57,18 @@ class _LovedOnesState extends State<LovedOnes> {
                     switch (lovedOne.status) {
                       //Invited
                       case "invited":
-                        await NativeDialog.alert(
-                            "${lovedOne.name} hasn't joined SafeSnake, yet.");
+                        await LocalNotification(context: context).show(
+                          type: NotificationType.failure,
+                          message:
+                              "${lovedOne.name} hasn't joined SafeSnake, yet.",
+                        );
 
                       //Accepted
                       case "accepted":
-                        await NativeDialog.alert(
-                          "${lovedOne.name} has joined SafeSnake, and is a Loved One!",
+                        await LocalNotification(context: context).show(
+                          type: NotificationType.success,
+                          message:
+                              "${lovedOne.name} has joined SafeSnake, and is a Loved One!",
                         );
                     }
                   },

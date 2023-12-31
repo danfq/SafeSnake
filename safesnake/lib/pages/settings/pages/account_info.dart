@@ -76,7 +76,7 @@ class _AccountInfoState extends State<AccountInfo> {
                         leading: const Icon(Ionicons.ios_person_outline),
                         title: const Text("Change Username"),
                         description: const Text(
-                          "You can only do this once.",
+                          "Please don't be weird.",
                         ),
                         onPressed: (context) async {
                           //Change Dialog - Username

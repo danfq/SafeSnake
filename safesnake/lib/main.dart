@@ -7,7 +7,6 @@ import 'package:safesnake/pages/safesnake.dart';
 import 'package:safesnake/util/animations/handler.dart';
 import 'package:safesnake/util/data/env.dart';
 import 'package:safesnake/util/data/local.dart';
-import 'package:safesnake/util/theming/controller.dart';
 import 'package:safesnake/util/theming/themes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

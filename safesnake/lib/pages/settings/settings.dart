@@ -93,12 +93,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                 ),
                 SettingsTile.switchTile(
-                  leading: SvgPicture.asset(
-                    "assets/icons/people.svg",
-                    fit: BoxFit.cover,
-                    width: 24.0,
-                    color: Colors.grey,
-                  ),
+                  leading: const Icon(Ionicons.person_add),
                   initialValue: receiveInvites,
                   onToggle: (mode) {
                     setState(() {
