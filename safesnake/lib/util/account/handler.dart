@@ -52,24 +52,55 @@ class AccountHandler {
     //Loved Ones
     List<String> lovedOnes = [];
 
-    //Referral Code
-    final referral = currentUser?.userMetadata?["referral"];
+    //Current User ID
+    final currentUserID = currentUser?.id;
 
-    //Invitations with Matching Referral Code
+    //Invitations
     final invitations = await RemoteData(context).getData(table: "invitations");
 
-    //Filter By Current User's Referral Code
+    // Filter By Current User's ID as the Creator
     for (final invitation in invitations) {
-      if (invitation["referral"] == referral) {
-        //Add Loved One to List
-        lovedOnes.add(invitation["used_by"]);
+      //Created Referral
+      if (invitation["created_by"] == currentUserID) {
+        final user = await _userByID(id: invitation["used_by"]);
+
+        //Add User
+        lovedOnes.add(user);
+      }
+
+      //Used Referral
+      if (invitation["used_by"] == currentUserID) {
+        final user = await _userByID(id: invitation["created_by"]);
+
+        //Add User
+        lovedOnes.add(user);
       }
     }
 
-    print("$referral | $lovedOnes");
-
-    //Return Loved Ones
+    // Return Loved Ones
     return lovedOnes;
+  }
+
+  ///User by ID
+  Future<String> _userByID({required String id}) async {
+    //Get User Name via ID
+    final users = await RemoteData(context).getData(table: "users");
+
+    //Return Matching User
+    return users.firstWhere((user) {
+      return user["id"] == id;
+    })["name"];
+  }
+
+  ///User by Referral
+  Future<String> _userByReferral({required String referral}) async {
+    // Get User Name via ID
+    final users = await RemoteData(context).getData(table: "users");
+
+    //Return Matching User
+    return users.firstWhere((user) {
+      return user["referral"] == referral;
+    })["name"];
   }
 
   ///Delete Account
@@ -285,13 +316,16 @@ class AccountHandler {
   }) async {
     //Attempt to Create Account
     try {
+      //Referral Code
+      final ownReferral = _referralCode();
+
       //Sign Up
       await _auth.signUp(
         email: email,
         password: password,
         data: {
           "username": username,
-          "referral": _referralCode(),
+          "referral": ownReferral,
           "invited_by": referralCode,
           "accept_invites": false,
         },
@@ -304,16 +338,31 @@ class AccountHandler {
           //Cache User Data
           await cacheUser();
 
-          //Add Referral if Used
+          //Add User to Database
           if (context.mounted) {
             await RemoteData(context).addData(
-              table: "invitations",
-              data: {
-                "id": const Uuid().v4(),
-                "referral": referralCode,
-                "used_by": username.trim(),
-              },
+              table: "users",
+              data: {"id": user.id, "name": username, "referral": ownReferral},
             );
+          }
+
+          //Add Referral if Used
+          if (context.mounted && referralCode!.isNotEmpty) {
+            //User by Referral
+            final userByReferral =
+                await _userByReferral(referral: referralCode);
+
+            //Add Data
+            if (context.mounted) {
+              await RemoteData(context).addData(
+                table: "invitations",
+                data: {
+                  "referral": referralCode,
+                  "used_by": user.id,
+                  "created_by": userByReferral,
+                },
+              );
+            }
           }
 
           //Go Home
@@ -377,16 +426,14 @@ class AccountHandler {
 
   ///Set `referral` Code as Used by `email`
   Future<void> setReferralAsUsed({
-    required String email,
+    required String id,
     required String referral,
   }) async {
-    await RemoteData(context).updateData(
+    await RemoteData(context).addData(
       table: "invitations",
-      column: "referral",
-      match: referral,
       data: {
-        "used_by": email,
-        "used": true,
+        "referral": referral,
+        "used_by": id,
       },
     );
   }

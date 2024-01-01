@@ -37,12 +37,12 @@ class _SafeSnakeState extends State<SafeSnake> {
     super.initState();
 
     //User Referral Code
-    final userReferral = widget.user.userMetadata!["referral"];
+    final String userReferral = widget.user.userMetadata!["invited_by"];
 
     //Set Referral Code as Used - If Not Null
-    if (userReferral != null) {
+    if (userReferral.isNotEmpty) {
       AccountHandler(context).setReferralAsUsed(
-        email: widget.user.email!,
+        id: widget.user.id,
         referral: userReferral,
       );
     }

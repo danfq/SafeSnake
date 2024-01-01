@@ -20,7 +20,7 @@ class RemoteData {
   }) async {
     //Attempt to Set Data
     try {
-      await _database.from(table).insert(data).select();
+      await _database.from(table).upsert(data).select();
     } on PostgrestException catch (error) {
       if (context.mounted) {
         //Notify User

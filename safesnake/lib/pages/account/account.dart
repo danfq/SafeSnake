@@ -32,15 +32,6 @@ class _AccountState extends State<Account> {
   ///Question
   String question = "";
 
-  ///Name
-  String name = "";
-
-  ///E-mail
-  String email = "";
-
-  ///Password
-  String password = "";
-
   ///Set Question
   void setQuestion() {
     //Question Based on Current Step
@@ -55,7 +46,8 @@ class _AccountState extends State<Account> {
 
       //E-mail
       case 2:
-        question = "Nice to meet you, $name!\nWhat's your E-mail?";
+        question =
+            "Nice to meet you, ${usernameController.text}!\nWhat's your E-mail?";
 
       //Password
       case 3:
@@ -194,41 +186,15 @@ class _AccountState extends State<Account> {
             final emailInput = emailController.text.trim();
             final passwordInput = passwordController.text.trim();
 
-            //Check Inputs per Step
-            if (step == 0) {
-              if (nameInput.isNotEmpty) {
-                setState(() {
-                  name = nameInput;
-                });
-              }
-            }
-
-            if (step == 1) {
-              if (emailInput.isNotEmpty) {
-                setState(() {
-                  email = emailInput;
-                });
-              }
-            }
-
-            if (step == 2) {
-              if (passwordInput.isNotEmpty) {
-                setState(() {
-                  password = passwordInput;
-                });
-              }
-            }
-
             //Check All Inputs for Account Creation
-            if (name.isNotEmpty &&
-                email.isNotEmpty &&
-                password.isNotEmpty &&
-                step == 3) {
+            if (nameInput.isNotEmpty &&
+                emailInput.isNotEmpty &&
+                passwordInput.isNotEmpty) {
               //Create Account
               await AccountHandler(context).createAccount(
-                username: name,
-                email: email,
-                password: password,
+                username: nameInput,
+                email: emailInput,
+                password: passwordInput,
                 referralCode: referralCode,
               );
             }

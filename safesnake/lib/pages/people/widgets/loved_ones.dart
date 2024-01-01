@@ -37,7 +37,7 @@ class _LovedOnesState extends State<LovedOnes> {
 
                   //UI
                   return ListTile(
-                    tileColor: Colors.grey.shade300,
+                    tileColor: Theme.of(context).dialogBackgroundColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14.0),
                     ),
