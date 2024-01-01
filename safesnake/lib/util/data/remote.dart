@@ -11,7 +11,7 @@ class RemoteData {
   RemoteData(this.context);
 
   ///Supabase Database Client
-  static final _database = Supabase.instance.client;
+  final instance = Supabase.instance.client;
 
   ///Add `data` on `table`.
   Future<void> addData({
@@ -20,7 +20,7 @@ class RemoteData {
   }) async {
     //Attempt to Set Data
     try {
-      await _database.from(table).upsert(data).select();
+      await instance.from(table).upsert(data).select();
     } on PostgrestException catch (error) {
       if (context.mounted) {
         //Notify User
@@ -39,7 +39,7 @@ class RemoteData {
 
     //Attempt to Get Data
     try {
-      data = await _database.from(table).select();
+      data = await instance.from(table).select();
     } on PostgrestException catch (error) {
       if (context.mounted) {
         //Notify User
@@ -63,7 +63,7 @@ class RemoteData {
   }) async {
     //Attempt to Set Data
     try {
-      await _database.from(table).update(data).eq(column, match).select();
+      await instance.from(table).update(data).eq(column, match).select();
     } on PostgrestException catch (error) {
       if (context.mounted) {
         //Notify User

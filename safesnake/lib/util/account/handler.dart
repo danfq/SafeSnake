@@ -38,6 +38,7 @@ class AccountHandler {
       await LocalData.setData(
         box: "personal",
         data: {
+          "id": currentUser.id,
           "name": currentUser.userMetadata?["username"],
           "accept_invites": currentUser.userMetadata?["accept_invites"],
           "referral": currentUser.userMetadata?["referral"],
@@ -62,7 +63,7 @@ class AccountHandler {
     for (final invitation in invitations) {
       //Created Referral
       if (invitation["created_by"] == currentUserID) {
-        final user = await _userByID(id: invitation["used_by"]);
+        final user = await userByID(id: invitation["used_by"]);
 
         //Add User
         lovedOnes.add(user);
@@ -70,7 +71,7 @@ class AccountHandler {
 
       //Used Referral
       if (invitation["used_by"] == currentUserID) {
-        final user = await _userByID(id: invitation["created_by"]);
+        final user = await userByID(id: invitation["created_by"]);
 
         //Add User
         lovedOnes.add(user);
@@ -82,7 +83,7 @@ class AccountHandler {
   }
 
   ///User by ID
-  Future<Map<String, dynamic>> _userByID({required String id}) async {
+  Future<Map<String, dynamic>> userByID({required String id}) async {
     //Get User Name via ID
     final users = await RemoteData(context).getData(table: "users");
 
