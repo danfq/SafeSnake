@@ -48,9 +48,9 @@ class AccountHandler {
   }
 
   ///Get Loved Ones as `List<String>`
-  Future<List<String>> lovedOnes() async {
+  Future<List<Map<String, dynamic>>> lovedOnes() async {
     //Loved Ones
-    List<String> lovedOnes = [];
+    List<Map<String, dynamic>> lovedOnes = [];
 
     //Current User ID
     final currentUserID = currentUser?.id;
@@ -82,25 +82,39 @@ class AccountHandler {
   }
 
   ///User by ID
-  Future<String> _userByID({required String id}) async {
+  Future<Map<String, dynamic>> _userByID({required String id}) async {
     //Get User Name via ID
     final users = await RemoteData(context).getData(table: "users");
 
-    //Return Matching User
-    return users.firstWhere((user) {
+    //Matching User
+    final matchingUser = users.firstWhere((user) {
       return user["id"] == id;
-    })["name"];
+    });
+
+    //Return User Data
+    return {
+      "id": matchingUser["id"],
+      "name": matchingUser["name"],
+    };
   }
 
   ///User by Referral
-  Future<String> _userByReferral({required String referral}) async {
-    // Get User Name via ID
+  Future<Map<String, dynamic>> _userByReferral({
+    required String referral,
+  }) async {
+    //Get User Name via ID
     final users = await RemoteData(context).getData(table: "users");
 
-    //Return Matching User
-    return users.firstWhere((user) {
+    //Matching User
+    final matchingUser = users.firstWhere((user) {
       return user["referral"] == referral;
-    })["name"];
+    });
+
+    //Return User Data
+    return {
+      "id": matchingUser["id"],
+      "name": matchingUser["name"],
+    };
   }
 
   ///Delete Account

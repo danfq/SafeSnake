@@ -42,7 +42,7 @@ class _LovedOnesState extends State<LovedOnes> {
                       borderRadius: BorderRadius.circular(14.0),
                     ),
                     title: Text(
-                      lovedOne,
+                      lovedOne["name"],
                       style: const TextStyle(fontSize: 16.0),
                     ),
                     trailing: const Icon(Ionicons.ios_checkmark),
