@@ -5,9 +5,7 @@ import 'package:pull_down_button/pull_down_button.dart';
 import 'package:safesnake/pages/chat/chat.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/animations/handler.dart';
-import 'package:safesnake/util/data/local.dart';
-import 'package:safesnake/util/models/loved_one.dart';
-import 'package:safesnake/util/notifications/local.dart';
+import 'package:safesnake/util/chat/handler.dart';
 
 class LovedOnes extends StatefulWidget {
   const LovedOnes({super.key});
@@ -51,16 +49,37 @@ class _LovedOnesState extends State<LovedOnes> {
                     buttonBuilder: (context, showMenu) {
                       return ListTile(
                         onLongPress: showMenu,
-                        onTap: () {
-                          //Go to Loved One Chat
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => LovedOneChat(
-                                lovedOne: lovedOne,
-                              ),
-                            ),
+                        onTap: () async {
+                          //User ID
+                          final userID = AccountHandler(context)
+                              .currentUser!
+                              .id
+                              .toUpperCase()
+                              .substring(0, 8);
+
+                          //Loved One Sub-ID
+                          final lovedOneSubID = (lovedOne["id"] as String)
+                              .toUpperCase()
+                              .substring(0, 8);
+
+                          //Chat Data
+                          final chat = await ChatHandler(context).newChatByID(
+                            userID: userID,
+                            lovedOneID: lovedOneSubID,
                           );
+
+                          //Go to Loved One Chat
+                          if (context.mounted) {
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => LovedOneChat(
+                                  lovedOne: lovedOne["name"],
+                                  chat: chat!,
+                                ),
+                              ),
+                            );
+                          }
                         },
                         tileColor: Theme.of(context).dialogBackgroundColor,
                         shape: RoundedRectangleBorder(

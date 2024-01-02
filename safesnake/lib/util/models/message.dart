@@ -5,8 +5,6 @@ class Message {
   final String chatID;
   final String content;
   final int sentAt;
-  final int deliveredAt;
-  final bool read;
   final String sender;
   final String? replyTo;
 
@@ -16,8 +14,6 @@ class Message {
     required this.chatID,
     required this.content,
     required this.sentAt,
-    required this.deliveredAt,
-    required this.read,
     required this.sender,
     this.replyTo,
   });
@@ -29,8 +25,6 @@ class Message {
       "chat": chatID,
       "content": content,
       "sent_at": sentAt,
-      "delivered_at": deliveredAt,
-      "read": read,
       "sender": sender,
       "reply_to": replyTo,
     };
@@ -43,8 +37,6 @@ class Message {
       chatID: json["chat"],
       content: json["decrypted_content"],
       sentAt: json["sent_at"],
-      deliveredAt: json["delivered_at"],
-      read: json["read"],
       sender: json["sender"],
       replyTo: json["reply_to"],
     );

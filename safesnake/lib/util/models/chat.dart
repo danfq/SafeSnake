@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:safesnake/pages/chat/chat.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/data/remote.dart';
@@ -74,15 +72,6 @@ class Chat extends StatelessWidget {
             if (userData != null) {
               //UI
               return ListTile(
-                onTap: () async {
-                  //Updated Chat
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => LovedOneChat(lovedOne: userData),
-                    ),
-                  );
-                },
                 title: Text(
                   userData["name"],
                   style: const TextStyle(

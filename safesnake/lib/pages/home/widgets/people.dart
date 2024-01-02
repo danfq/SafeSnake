@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:safesnake/pages/people/people.dart';
-import 'package:safesnake/util/models/loved_one.dart';
 
 class People extends StatelessWidget {
   const People({super.key, required this.lovedOnes});

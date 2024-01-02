@@ -7,14 +7,24 @@ import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/theming/controller.dart';
 import 'package:safesnake/util/widgets/main.dart';
 
-class Intro extends StatelessWidget {
+class Intro extends StatefulWidget {
   const Intro({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<Intro> createState() => _IntroState();
+}
+
+class _IntroState extends State<Intro> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     //Immersion
     ThemeController.statusAndNav(context: context);
+  }
 
+  @override
+  Widget build(BuildContext context) {
     //UI
     return Scaffold(
       appBar: MainWidgets(context: context).appBar(

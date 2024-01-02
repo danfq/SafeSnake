@@ -1,4 +1,3 @@
-import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/data/remote.dart';
 import 'package:safesnake/util/models/chat.dart';
 import 'package:safesnake/util/models/message.dart';
@@ -49,59 +48,51 @@ class ChatHandler {
   }
 
   ///Start New Chat by `userID`
-  Future<Chat?> newChatByID({required String userID}) async {
+  Future<Chat?> newChatByID({
+    required String userID,
+    required String lovedOneID,
+  }) async {
     //Chat
     Chat? chatData;
 
-    //Users
-    final users = RemoteData(context)
-        .instance
-        .from("decrypted_users")
-        .select()
-        .ilike("id", "%$userID%");
-
     //Check if Such Chat Already Exists
-    final userChats = RemoteData(context)
+    final userChats = await RemoteData(context)
         .instance
         .from("chats")
         .select()
-        .eq("person_one", userID)
-        .or("person_two.eq.$userID")
+        .or("person_one.eq.$userID,person_two.eq.$userID")
         .order("latest_message_timestamp", ascending: false);
 
-    //Check if User Exists
-    if ((await users).isNotEmpty && (await users).length == 1) {
-      //User Exists
-      if ((await userChats).isEmpty) {
-        //Chat Doesn't Exist - Create New
-        final newChatID = const Uuid().v4();
+    //Check if Chat Exists
+    if (userChats.isEmpty) {
+      //Chat Doesn't Exist - Create New
+      final newChatID = const Uuid().v4();
 
-        //Current User
-        final currentUser = LocalData.boxData(box: "user");
+      final chat = Chat(
+        id: newChatID,
+        personOne: userID,
+        personTwo: lovedOneID,
+        latestMessage: "",
+        latestMessageTimestamp: 0,
+      );
 
-        final chat = Chat(
-          id: newChatID,
-          personOne: currentUser["id"].split("-").first.toUpperCase(),
-          personTwo: userID,
-          latestMessage: "",
-          latestMessageTimestamp: 0,
-        );
-
-        if (context.mounted) {
-          await RemoteData(context)
-              .instance
-              .from("chats")
-              .insert(chat.toJSON())
-              .select()
-              .then((_) => chatData = chat);
-        }
-      } else {
-        //Chat Exists - Return Null
-        return null;
+      if (context.mounted) {
+        await RemoteData(context)
+            .instance
+            .from("chats")
+            .insert(chat.toJSON())
+            .select()
+            .then((_) => chatData = chat);
       }
+
+      //Set Chat Data
+      chatData = chat;
     } else {
-      //User Doesn't Exist
-      return null;
+      //Set Chat Data
+      chatData = Chat.fromJSON(userChats.first);
+
+      //Chat Exists - Return Chat
+      return chatData;
     }
 
     //Return Chat ID (or Null)
@@ -153,8 +144,6 @@ class ChatHandler {
               chatID: chatID,
               content: messageItem["decrypted_content"],
               sentAt: messageItem["sent_at"],
-              deliveredAt: messageItem["delivered_at"],
-              read: messageItem["read"],
               sender: messageItem["sender"],
               replyTo: messageItem["reply_to"],
             );
@@ -183,8 +172,6 @@ class ChatHandler {
         "chat": message.chatID,
         "content": message.content,
         "sent_at": message.sentAt,
-        "delivered_at": message.deliveredAt,
-        "read": message.read,
         "sender": message.sender,
         "reply_to": message.replyTo,
       },

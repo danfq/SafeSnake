@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/account/login.dart';
 import 'package:safesnake/util/account/handler.dart';
+import 'package:safesnake/util/theming/controller.dart';
 import 'package:safesnake/util/widgets/input.dart';
 import 'package:safesnake/util/widgets/main.dart';
 
@@ -114,6 +115,13 @@ class _AccountState extends State<Account> {
 
     //Question
     setQuestion();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    ThemeController.statusAndNav(context: context);
   }
 
   @override

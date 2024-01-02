@@ -6,7 +6,6 @@ import 'package:safesnake/pages/account/account.dart';
 import 'package:safesnake/pages/safesnake.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/data/remote.dart';
-import 'package:safesnake/util/models/loved_one.dart';
 import 'package:safesnake/util/notifications/local.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

@@ -7,6 +7,7 @@ class LocalData {
   ///Hive Boxes
   static final _boxes = <String>[
     "intro",
+    "colors",
     "loved_ones",
     "personal",
     "settings",

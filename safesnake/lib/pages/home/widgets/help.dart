@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:safesnake/pages/help/help.dart';
 import 'package:safesnake/util/data/local.dart';
-import 'package:safesnake/util/help/handler.dart';
-import 'package:safesnake/util/models/loved_one.dart';
 
 class AskForHelp extends StatefulWidget {
   const AskForHelp({super.key, required this.lovedOnes});
