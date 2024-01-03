@@ -1,5 +1,6 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:safesnake/firebase_options.dart';
 import 'package:safesnake/pages/account/account.dart';
@@ -20,6 +21,23 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  ///Background Notification
+  @pragma("vm:entry-point")
+  Future<void> onBackground(RemoteMessage message) async {
+    if (message.notification != null) {
+      final notification = message.notification!;
+
+      //Check if Everything is Not Null
+      if (notification.title != null && notification.body != null) {
+        //Send Notification
+        await RemoteNotifications.showNotif(notification);
+      }
+    }
+  }
+
+  //Listen for Messages - Background
+  FirebaseMessaging.onBackgroundMessage(onBackground);
 
   //Load Environment Variables
   await EnvVars.load();

@@ -33,7 +33,7 @@ class AccountHandler {
   User? get currentUser => _auth.currentUser;
 
   ///Cache User Data Locally
-  static Future<void> cacheUser() async {
+  Future<void> cacheUser() async {
     //Current User
     final currentUser = _auth.currentUser;
 
@@ -42,7 +42,15 @@ class AccountHandler {
       //FCM Token
       final fcm = await fcmToken();
 
-      //Cache User
+      //Update FCM Token
+      await RemoteData.updateData(
+        table: "users",
+        column: "id",
+        match: currentUser.id,
+        data: {"fcm": fcm},
+      );
+
+      //Cache User Locally
       await LocalData.setData(
         box: "personal",
         data: {
@@ -74,22 +82,12 @@ class AccountHandler {
   }
 
   ///Listen for Firebase Messages
-  static void fcmListen(BuildContext context) {
+  static void fcmListen() {
     //Listen for Messages - Foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       //Send Notification
       await RemoteNotifications.showNotif(message.notification!);
     });
-
-    //Listen for Messages - Background
-    FirebaseMessaging.onBackgroundMessage(_onBackground);
-  }
-
-  ///Background Notification
-  @pragma("vm:entry-point")
-  static Future<void> _onBackground(RemoteMessage message) async {
-    //Send Notification
-    await RemoteNotifications.showNotif(message.notification!);
   }
 
   ///Get Loved Ones as `List<String>`
@@ -101,7 +99,7 @@ class AccountHandler {
     final currentUserID = currentUser?.id;
 
     //Invitations
-    final invitations = await RemoteData(context).getData(table: "invitations");
+    final invitations = await RemoteData.getData(table: "invitations");
 
     // Filter By Current User's ID as the Creator
     for (final invitation in invitations) {
@@ -129,7 +127,7 @@ class AccountHandler {
   ///User by ID
   Future<Map<String, dynamic>> userByID({required String id}) async {
     //Get User Name via ID
-    final users = await RemoteData(context).getData(table: "users");
+    final users = await RemoteData.getData(table: "users");
 
     //Matching User
     final matchingUser = users.firstWhere((user) {
@@ -148,7 +146,7 @@ class AccountHandler {
     required String referral,
   }) async {
     //Get User Name via ID
-    final users = await RemoteData(context).getData(table: "users");
+    final users = await RemoteData.getData(table: "users");
 
     //Matching User
     final matchingUser = users.firstWhere((user) {
@@ -201,7 +199,7 @@ class AccountHandler {
                     onWaitingProcess: () async {
                       if (currentUser != null) {
                         //Add Deletion Request
-                        await RemoteData(context).addData(
+                        await RemoteData.addData(
                           table: "delete_requests",
                           data: {
                             "id": const Uuid().v4(),
@@ -397,11 +395,19 @@ class AccountHandler {
           //Cache User Data
           await cacheUser();
 
+          //FCM Token
+          final token = await fcmToken();
+
           //Add User to Database
           if (context.mounted) {
-            await RemoteData(context).addData(
+            await RemoteData.addData(
               table: "users",
-              data: {"id": user.id, "name": username, "referral": ownReferral},
+              data: {
+                "id": user.id,
+                "name": username,
+                "referral": ownReferral,
+                "fcm": token,
+              },
             );
           }
 
@@ -413,7 +419,7 @@ class AccountHandler {
 
             //Add Data
             if (context.mounted) {
-              await RemoteData(context).addData(
+              await RemoteData.addData(
                 table: "invitations",
                 data: {
                   "referral": referralCode,
@@ -488,7 +494,7 @@ class AccountHandler {
     required String id,
     required String referral,
   }) async {
-    await RemoteData(context).addData(
+    await RemoteData.addData(
       table: "invitations",
       data: {
         "referral": referral,

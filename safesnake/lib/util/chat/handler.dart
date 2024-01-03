@@ -16,10 +16,7 @@ class ChatHandler {
   Stream<List<Chat>> allChatsByID({
     required String userID,
   }) {
-    return RemoteData(context)
-        .instance
-        .from("chats")
-        .stream(primaryKey: ["id"]).map(
+    return RemoteData.instance.from("chats").stream(primaryKey: ["id"]).map(
       (chats) {
         //All Chats
         List<Chat> allChats = [];
@@ -56,8 +53,7 @@ class ChatHandler {
     Chat? chatData;
 
     //Check if Such Chat Already Exists
-    final userChats = await RemoteData(context)
-        .instance
+    final userChats = await RemoteData.instance
         .from("chats")
         .select()
         .or("person_one.eq.$userID,person_two.eq.$userID")
@@ -77,8 +73,7 @@ class ChatHandler {
       );
 
       if (context.mounted) {
-        await RemoteData(context)
-            .instance
+        await RemoteData.instance
             .from("chats")
             .insert(chat.toJSON())
             .select()
@@ -105,8 +100,7 @@ class ChatHandler {
     Message? message;
 
     //Get Message Data from ID
-    final messageData = await RemoteData(context)
-        .instance
+    final messageData = await RemoteData.instance
         .from("decrypted_messages")
         .select()
         .eq("id", id);
@@ -129,8 +123,7 @@ class ChatHandler {
     List<Message> allMessages = [];
 
     //Chat Messages
-    return RemoteData(context)
-        .instance
+    return RemoteData.instance
         .from("decrypted_messages")
         .stream(primaryKey: ["id"])
         .eq("chat", chatID)
@@ -166,7 +159,7 @@ class ChatHandler {
   }) async {
     //Add Message to Database
     final addedMessage =
-        await RemoteData(context).instance.from("decrypted_messages").insert(
+        await RemoteData.instance.from("decrypted_messages").insert(
       {
         "id": message.id,
         "chat": message.chatID,
@@ -179,7 +172,7 @@ class ChatHandler {
 
     //Update Latest Chat Message
     if (context.mounted) {
-      await RemoteData(context).instance.from("chats").update(
+      await RemoteData.instance.from("chats").update(
         {
           "latest_message": message.id,
           "latest_message_timestamp": message.sentAt,
@@ -192,6 +185,6 @@ class ChatHandler {
 
   ///Delete Message by ID
   Future<void> deleteMessage({required String id}) async {
-    await RemoteData(context).instance.from("messages").delete().eq("id", id);
+    await RemoteData.instance.from("messages").delete().eq("id", id);
   }
 }

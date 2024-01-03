@@ -4,17 +4,18 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 ///Remote Data
 class RemoteData {
-  ///Context
-  final BuildContext context;
+  ///Context Global Key
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  ///Remote Data
-  RemoteData(this.context);
+  ///Current Context
+  static BuildContext get context =>
+      navigatorKey.currentState!.overlay!.context;
 
   ///Supabase Database Client
-  final instance = Supabase.instance.client;
+  static final instance = Supabase.instance.client;
 
   ///Add `data` on `table`.
-  Future<void> addData({
+  static Future<void> addData({
     required String table,
     required Map<String, dynamic> data,
   }) async {
@@ -33,7 +34,7 @@ class RemoteData {
   }
 
   ///Get Data from Table
-  Future<List> getData({required String table}) async {
+  static Future<List> getData({required String table}) async {
     //Data
     List data = [];
 
@@ -55,7 +56,7 @@ class RemoteData {
   }
 
   ///Update `data` on `table`, where `match` is within `column`
-  Future<void> updateData({
+  static Future<void> updateData({
     required String table,
     required String column,
     required String match,

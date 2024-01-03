@@ -31,8 +31,13 @@ class _SafeSnakeState extends State<SafeSnake> {
     //Immersion
     ThemeController.statusAndNav(context: context);
 
-    //Cache User
-    AccountHandler.cacheUser();
+    if (context.mounted) {
+      //Cache User
+      AccountHandler(context).cacheUser();
+
+      //Listen for Firebase Messages
+      AccountHandler.fcmListen();
+    }
   }
 
   @override
@@ -50,11 +55,13 @@ class _SafeSnakeState extends State<SafeSnake> {
       );
     }
 
-    //Cache User
-    AccountHandler.cacheUser();
+    if (context.mounted) {
+      //Cache User
+      AccountHandler(context).cacheUser();
 
-    //Listen for Firebase Messages
-    AccountHandler.fcmListen(context);
+      //Listen for Firebase Messages
+      AccountHandler.fcmListen();
+    }
   }
 
   @override

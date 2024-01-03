@@ -26,9 +26,6 @@ class LocalData {
 
     //Open Boxes
     await openBoxes();
-
-    //Re-Cache User Data
-    await AccountHandler.cacheUser();
   }
 
   ///Open Hive Boxes

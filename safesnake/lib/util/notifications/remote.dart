@@ -34,8 +34,6 @@ class RemoteNotifications {
 
   ///Show Notification
   static Future<void> showNotif(RemoteNotification notif) async {
-    debugPrint(notif.body);
-
     await _service.show(
       14,
       notif.title,

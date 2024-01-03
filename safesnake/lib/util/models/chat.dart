@@ -80,8 +80,7 @@ class Chat extends StatelessWidget {
                   ),
                 ),
                 subtitle: FutureBuilder(
-                  future: RemoteData(context)
-                      .instance
+                  future: RemoteData.instance
                       .from("decrypted_messages")
                       .select()
                       .eq("chat", id),
