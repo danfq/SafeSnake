@@ -1,9 +1,9 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:safesnake/pages/account/account.dart';
 import 'package:safesnake/pages/intro/intro.dart';
 import 'package:safesnake/pages/safesnake.dart';
-import 'package:safesnake/util/animations/handler.dart';
 import 'package:safesnake/util/data/env.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/theming/themes.dart';
@@ -13,6 +13,9 @@ import 'package:tbib_splash_screen/splash_screen_view.dart';
 void main() async {
   //Ensure Widgets Binding is Initialized
   WidgetsFlutterBinding.ensureInitialized();
+
+  //Initialize Firebase
+  await Firebase.initializeApp();
 
   //Load Environment Variables
   await EnvVars.load();

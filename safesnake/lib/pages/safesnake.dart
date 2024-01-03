@@ -30,6 +30,9 @@ class _SafeSnakeState extends State<SafeSnake> {
 
     //Immersion
     ThemeController.statusAndNav(context: context);
+
+    //Cache User
+    AccountHandler.cacheUser();
   }
 
   @override
@@ -46,6 +49,12 @@ class _SafeSnakeState extends State<SafeSnake> {
         referral: userReferral,
       );
     }
+
+    //Cache User
+    AccountHandler.cacheUser();
+
+    //Listen for Firebase Messages
+    AccountHandler.fcmListen();
   }
 
   @override

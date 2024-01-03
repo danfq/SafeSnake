@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_exit_app/flutter_exit_app.dart';
@@ -23,6 +24,9 @@ class AccountHandler {
   ///Supabase Auth Client
   static final _auth = Supabase.instance.client.auth;
 
+  ///Firebase Messaging
+  static final _firebaseMessaging = FirebaseMessaging.instance;
+
   ///Current User
   User? get currentUser => _auth.currentUser;
 
@@ -33,6 +37,9 @@ class AccountHandler {
 
     //Check if User isn't Null
     if (currentUser != null) {
+      //FCM Token
+      final fcm = await fcmToken();
+
       //Cache User
       await LocalData.setData(
         box: "personal",
@@ -42,9 +49,33 @@ class AccountHandler {
           "accept_invites": currentUser.userMetadata?["accept_invites"],
           "referral": currentUser.userMetadata?["referral"],
           "email": currentUser.email,
+          "fcm": fcm,
         },
       );
     }
+  }
+
+  ///Get FCM Token
+  static Future<String> fcmToken() async {
+    String userToken = "";
+
+    //Request Permission
+    await _firebaseMessaging.requestPermission();
+
+    //Get Token
+    await _firebaseMessaging.getToken().then((String? token) {
+      userToken = token ?? "";
+    });
+
+    //Return Token
+    return userToken;
+  }
+
+  ///Listen for Firebase Messages
+  static Future<void> fcmListen() async {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("Received message: $message");
+    });
   }
 
   ///Get Loved Ones as `List<String>`
