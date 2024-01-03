@@ -1,6 +1,7 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:safesnake/firebase_options.dart';
 import 'package:safesnake/pages/account/account.dart';
 import 'package:safesnake/pages/intro/intro.dart';
 import 'package:safesnake/pages/safesnake.dart';
@@ -15,7 +16,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //Initialize Firebase
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   //Load Environment Variables
   await EnvVars.load();

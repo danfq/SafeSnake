@@ -67,14 +67,16 @@ class AccountHandler {
       userToken = token ?? "";
     });
 
+    print(userToken);
+
     //Return Token
     return userToken;
   }
 
   ///Listen for Firebase Messages
-  static Future<void> fcmListen() async {
+  static void fcmListen() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("Received message: $message");
+      print("Received message: ${message.notification?.title}");
     });
   }
 

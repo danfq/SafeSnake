@@ -103,7 +103,7 @@ class UtilDialog {
 
                         //Update Local User Cache
                         if (context.mounted) {
-                          await AccountHandler(context).cacheUser();
+                          await AccountHandler.cacheUser();
                         }
 
                         //Close Dialog

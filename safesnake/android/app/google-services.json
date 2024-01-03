@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "240055649561",
+    "project_id": "safesnake-app",
+    "storage_bucket": "safesnake-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240055649561:android:8d748023149bb4b61ab188",
+        "android_client_info": {
+          "package_name": "io.github.danfq.safesnake"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKy5vW5V93CPyPTEEJQqlrGqhIx3z9JQw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
