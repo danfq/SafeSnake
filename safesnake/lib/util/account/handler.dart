@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,14 +44,6 @@ class AccountHandler {
       //FCM Token
       final fcm = await fcmToken();
 
-      //Update FCM Token
-      await RemoteData.updateData(
-        table: "users",
-        column: "id",
-        match: currentUser.id,
-        data: {"fcm": fcm},
-      );
-
       //Cache User Locally
       await LocalData.setData(
         box: "personal",
@@ -62,6 +56,14 @@ class AccountHandler {
           "fcm": fcm,
         },
       );
+
+      //Update Database
+      await RemoteData.updateData(
+        table: "users",
+        column: "id",
+        match: currentUser.id,
+        data: {"fcm": fcm},
+      );
     }
   }
 
@@ -72,10 +74,33 @@ class AccountHandler {
     //Request Permission
     await _firebaseMessaging.requestPermission();
 
-    //Get Token
-    await _firebaseMessaging.getToken().then((String? token) {
-      userToken = token ?? "";
-    });
+    //Get APNs Token if iOS Device
+    if (Platform.isIOS) {
+      await _firebaseMessaging.getAPNSToken().then((_) async {
+        //Get FCM Token
+        await _firebaseMessaging.getToken().then((String? token) {
+          userToken = token ?? "";
+        });
+      });
+    } else {
+      //Get FCM Token
+      await _firebaseMessaging.getToken().then((String? token) {
+        userToken = token ?? "";
+      });
+    }
+
+    //Current User
+    final currentUser = _auth.currentUser;
+
+    //Update FCM Token
+    if (currentUser != null) {
+      await RemoteData.updateData(
+        table: "users",
+        column: "id",
+        match: currentUser.id,
+        data: {"fcm": userToken},
+      );
+    }
 
     //Return Token
     return userToken;
@@ -85,9 +110,28 @@ class AccountHandler {
   static void fcmListen() {
     //Listen for Messages - Foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print(message);
+
       //Send Notification
       await RemoteNotifications.showNotif(message.notification!);
     });
+
+    //Listen for Messages - Background
+    FirebaseMessaging.onBackgroundMessage(_onBackground);
+  }
+
+  ///Background Notification
+  @pragma("vm:entry-point")
+  static Future<void> _onBackground(RemoteMessage message) async {
+    if (message.notification != null) {
+      final notification = message.notification!;
+
+      //Check if Everything is Not Null
+      if (notification.title != null && notification.body != null) {
+        //Send Notification
+        await RemoteNotifications.showNotif(notification);
+      }
+    }
   }
 
   ///Get Loved Ones as `List<String>`

@@ -44,7 +44,6 @@ class RemoteNotifications {
           "SafeSnake",
         ),
         iOS: DarwinNotificationDetails(
-          presentAlert: true,
           presentSound: true,
         ),
       ),

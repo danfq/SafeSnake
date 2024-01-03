@@ -6,6 +6,7 @@ import 'package:safesnake/firebase_options.dart';
 import 'package:safesnake/pages/account/account.dart';
 import 'package:safesnake/pages/intro/intro.dart';
 import 'package:safesnake/pages/safesnake.dart';
+import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/data/env.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/notifications/remote.dart';
@@ -17,28 +18,6 @@ void main() async {
   //Ensure Widgets Binding is Initialized
   WidgetsFlutterBinding.ensureInitialized();
 
-  //Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  ///Background Notification
-  @pragma("vm:entry-point")
-  Future<void> onBackground(RemoteMessage message) async {
-    if (message.notification != null) {
-      final notification = message.notification!;
-
-      //Check if Everything is Not Null
-      if (notification.title != null && notification.body != null) {
-        //Send Notification
-        await RemoteNotifications.showNotif(notification);
-      }
-    }
-  }
-
-  //Listen for Messages - Background
-  FirebaseMessaging.onBackgroundMessage(onBackground);
-
   //Load Environment Variables
   await EnvVars.load();
 
@@ -48,11 +27,19 @@ void main() async {
     anonKey: EnvVars.get(name: "SUPABASE_KEY"),
   );
 
+  //Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ).then((_) async {
+    //Handle APNs Token
+    await AccountHandler.fcmToken();
+
+    //Initialize Notification Service
+    await RemoteNotifications.init();
+  });
+
   //Initialize Local Storage
   await LocalData.init();
-
-  //Initialize Notification Service
-  await RemoteNotifications.init();
 
   //Intro Status
   final introStatus = LocalData.boxData(box: "intro")["status"] ?? false;
