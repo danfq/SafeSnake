@@ -31,6 +31,8 @@ class MainWidgets {
     return AppBar(
       title: title,
       automaticallyImplyLeading: allowBack ?? true,
+      scrolledUnderElevation: 0.0,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       leading: finalLeading,
       centerTitle: centerTitle,
       actions: actions,

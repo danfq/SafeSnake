@@ -9,14 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.1"
-  another_flutter_splash_screen:
-    dependency: "direct main"
+  animated_text_kit:
+    dependency: transitive
     description:
-      name: another_flutter_splash_screen
-      sha256: "99372a8c95839c7276f3399a637e8844f67fe1e7487036420a28a5a6abd7f179"
+      name: animated_text_kit
+      sha256: "37392a5376c9a1a503b02463c38bc0342ef814ddbb8f9977bc90f2a84b22fa92"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "4.2.2"
   app_links:
     dependency: transitive
     description:
@@ -797,6 +797,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.2"
+  tbib_splash_screen:
+    dependency: "direct main"
+    description:
+      name: tbib_splash_screen
+      sha256: "2d4c6e16477d30bcda8e23629536ae4a3e66be870a1df4dc1ac065eaefb4880e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   term_glyph:
     dependency: transitive
     description:

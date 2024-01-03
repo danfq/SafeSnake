@@ -1,5 +1,4 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:safesnake/pages/account/account.dart';
 import 'package:safesnake/pages/intro/intro.dart';
@@ -9,6 +8,7 @@ import 'package:safesnake/util/data/env.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/theming/themes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:tbib_splash_screen/splash_screen_view.dart';
 
 void main() async {
   //Ensure Widgets Binding is Initialized
@@ -45,19 +45,18 @@ void main() async {
         return MaterialApp(
           theme: light,
           darkTheme: dark,
-          home: FlutterSplashScreen.fadeIn(
-            childWidget: AnimationsHandler.asset(animation: "corn"),
-            useImmersiveMode: true,
-            duration: const Duration(seconds: 4),
-            animationCurve: Curves.easeInOut,
-            backgroundColor: !currentTheme
-                ? const Color(0xFFFAFAFA)
-                : const Color(0xFF161B22),
-            nextScreen: introStatus
+          home: SplashScreenView(
+            navigateWhere: true,
+            imageSrc: "assets/anim/corn.json",
+            navigateRoute: introStatus
                 ? currentUser != null
                     ? SafeSnake(user: currentUser)
                     : const Account()
                 : const Intro(),
+            duration: const Duration(seconds: 4),
+            backgroundColor: !currentTheme
+                ? const Color(0xFFFAFAFA)
+                : const Color(0xFF161B22),
           ),
         );
       },
