@@ -2,12 +2,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_exit_app/flutter_exit_app.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/account/account.dart';
 import 'package:safesnake/pages/safesnake.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/data/remote.dart';
 import 'package:safesnake/util/notifications/local.dart';
+import 'package:safesnake/util/notifications/remote.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
@@ -67,17 +69,27 @@ class AccountHandler {
       userToken = token ?? "";
     });
 
-    print(userToken);
-
     //Return Token
     return userToken;
   }
 
   ///Listen for Firebase Messages
-  static void fcmListen() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("Received message: ${message.notification?.title}");
+  static void fcmListen(BuildContext context) {
+    //Listen for Messages - Foreground
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      //Send Notification
+      await RemoteNotifications.showNotif(message.notification!);
     });
+
+    //Listen for Messages - Background
+    FirebaseMessaging.onBackgroundMessage(_onBackground);
+  }
+
+  ///Background Notification
+  @pragma("vm:entry-point")
+  static Future<void> _onBackground(RemoteMessage message) async {
+    //Send Notification
+    await RemoteNotifications.showNotif(message.notification!);
   }
 
   ///Get Loved Ones as `List<String>`

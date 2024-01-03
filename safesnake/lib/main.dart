@@ -7,6 +7,7 @@ import 'package:safesnake/pages/intro/intro.dart';
 import 'package:safesnake/pages/safesnake.dart';
 import 'package:safesnake/util/data/env.dart';
 import 'package:safesnake/util/data/local.dart';
+import 'package:safesnake/util/notifications/remote.dart';
 import 'package:safesnake/util/theming/themes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:tbib_splash_screen/splash_screen_view.dart';
@@ -31,6 +32,9 @@ void main() async {
 
   //Initialize Local Storage
   await LocalData.init();
+
+  //Initialize Notification Service
+  await RemoteNotifications.init();
 
   //Intro Status
   final introStatus = LocalData.boxData(box: "intro")["status"] ?? false;

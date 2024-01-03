@@ -54,7 +54,7 @@ class _SafeSnakeState extends State<SafeSnake> {
     AccountHandler.cacheUser();
 
     //Listen for Firebase Messages
-    AccountHandler.fcmListen();
+    AccountHandler.fcmListen(context);
   }
 
   @override
