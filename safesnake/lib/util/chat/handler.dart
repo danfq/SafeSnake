@@ -1,17 +1,21 @@
+import 'dart:convert';
+
+import 'package:safesnake/util/data/constants.dart';
 import 'package:safesnake/util/data/remote.dart';
 import 'package:safesnake/util/models/chat.dart';
 import 'package:safesnake/util/models/message.dart';
 import 'package:flutter/material.dart';
+import 'package:safesnake/util/notifications/local.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 ///Chat Handler
 class ChatHandler {
-  ///Context Global Key
-  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  ///Context
+  BuildContext context;
 
-  ///Current Context
-  static BuildContext get context =>
-      navigatorKey.currentState!.overlay!.context;
+  ///Chat Handler
+  ChatHandler(this.context);
 
   ///All Chats - by `userID`
   static Stream<List<Chat>> allChatsByID({
@@ -46,7 +50,7 @@ class ChatHandler {
   }
 
   ///Start New Chat by `userID`
-  static Future<Chat?> newChatByID({
+  Future<Chat?> newChatByID({
     required String userID,
     required String lovedOneID,
   }) async {
@@ -155,8 +159,9 @@ class ChatHandler {
   }
 
   ///Send `message`
-  static Future<Message?> sendMessage({
+  Future<Message?> sendMessage({
     required Message message,
+    required String receiverFCM,
   }) async {
     //Add Message to Database
     final addedMessage =
@@ -171,8 +176,8 @@ class ChatHandler {
       },
     ).select();
 
-    //Update Latest Chat Message
     if (context.mounted) {
+      //Update Latest Chat Message
       await RemoteData.instance.from("chats").update(
         {
           "latest_message": message.id,
@@ -182,6 +187,58 @@ class ChatHandler {
     }
 
     return addedMessage.isNotEmpty ? message : null;
+  }
+
+  ///Send Notification to FCM Token
+  static Future<void> sendNotification({
+    required BuildContext context,
+    required String fcmToken,
+    required String title,
+    required String body,
+    bool? isNormalMessage,
+  }) async {
+    const String serverKey = Constants.firebaseServerKey;
+    const String fcmEndpoint = "https://fcm.googleapis.com/fcm/send";
+
+    final Map<String, dynamic> message = {
+      "to": fcmToken,
+      "data": {
+        "title": title,
+        "body": body,
+      },
+      "notification": {
+        "title": title,
+        "body": body,
+      },
+    };
+
+    //Request
+    final http.Response response = await http.post(
+      Uri.parse(fcmEndpoint),
+      headers: <String, String>{
+        "Content-Type": "application/json",
+        "Authorization": "key=$serverKey",
+      },
+      body: jsonEncode(message),
+    );
+
+    if (context.mounted) {
+      if (response.statusCode == 200) {
+        if (!(isNormalMessage ?? false)) {
+          await LocalNotification(context: context).show(
+            type: NotificationType.success,
+            message: "Notified Loved One",
+          );
+        }
+      } else {
+        if (!(isNormalMessage ?? false)) {
+          await LocalNotification(context: context).show(
+            type: NotificationType.failure,
+            message: "Failed to Notify Loved One",
+          );
+        }
+      }
+    }
   }
 
   ///Delete Message by ID

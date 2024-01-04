@@ -236,11 +236,37 @@ class _LovedOneChatState extends State<LovedOneChat> {
                                     sendingMessage = true;
                                   });
 
+                                  //Sender Data
+                                  final senderData =
+                                      await AccountHandler(context).userByID(
+                                    id: currentUser,
+                                  );
+
+                                  //Receiver Data
+                                  final receiverData =
+                                      await AccountHandler(context).userByName(
+                                    name: widget.lovedOne,
+                                  );
+
                                   //Send Message
                                   try {
-                                    await ChatHandler.sendMessage(
-                                      message: message,
-                                    );
+                                    if (mounted) {
+                                      await ChatHandler(context).sendMessage(
+                                        message: message,
+                                        receiverFCM: receiverData["fcm"],
+                                      );
+                                    }
+
+                                    //Notify User
+                                    if (mounted) {
+                                      await ChatHandler.sendNotification(
+                                        context: context,
+                                        fcmToken: receiverData["fcm"],
+                                        title: "New Message",
+                                        body:
+                                            "${senderData["name"]}: ${message.content}",
+                                      );
+                                    }
 
                                     //Add Message to List
                                     messages.insert(0, message);

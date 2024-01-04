@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:safesnake/firebase_options.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/chat/handler.dart';
+import 'package:safesnake/util/data/constants.dart';
 import 'package:safesnake/util/models/loved_one.dart';
 import 'package:safesnake/util/models/message.dart';
+import 'package:safesnake/util/notifications/local.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 ///Help Handler
 class HelpHandler {
@@ -149,32 +155,45 @@ class HelpHandler {
     );
 
     //Chat
-    final chat = await ChatHandler.newChatByID(
-      userID: currentUser.id,
-      lovedOneID: lovedOneData["id"],
-    );
+    if (context.mounted) {
+      //User ID
+      final userID = currentUser.id.substring(0, 8).toUpperCase();
 
-    //Chat ID
-    final chatID = chat?.id;
+      //Loved One ID
+      final lovedOneID =
+          (lovedOneData["id"] as String).substring(0, 8).toUpperCase();
 
-    //Send Message to Loved One
-    await ChatHandler.sendMessage(
-      message: Message(
-        id: const Uuid().v4(),
-        chatID: chatID!,
-        content: content,
-        sentAt: DateTime.now().millisecondsSinceEpoch,
-        sender: currentUser.id,
-      ),
-    );
+      final chat = await ChatHandler(context).newChatByID(
+        userID: userID,
+        lovedOneID: lovedOneID,
+      );
+
+      //Chat ID
+      final chatID = chat?.id;
+
+      //Send Message to Loved One
+      if (context.mounted) {
+        await ChatHandler(context).sendMessage(
+          message: Message(
+            id: const Uuid().v4(),
+            chatID: chatID!,
+            content: content,
+            sentAt: DateTime.now().millisecondsSinceEpoch,
+            sender: currentUser.id,
+          ),
+          receiverFCM: lovedOneData["fcm"],
+        );
+      }
+    }
 
     //Notify Loved One
-    await FirebaseMessaging.instance.sendMessage(
-      to: lovedOneData["fcm"],
-      data: {
-        "title": "Hey, ${lovedOne.name}!",
-        "body": "$userName needs your help!",
-      },
-    );
+    if (context.mounted) {
+      await ChatHandler.sendNotification(
+        context: context,
+        fcmToken: lovedOneData["fcm"],
+        title: "$userName needs your help!",
+        body: content,
+      );
+    }
   }
 }

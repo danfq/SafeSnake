@@ -63,7 +63,7 @@ class _LovedOnesState extends State<LovedOnes> {
                               .substring(0, 8);
 
                           //Chat Data
-                          final chat = await ChatHandler.newChatByID(
+                          final chat = await ChatHandler(context).newChatByID(
                             userID: userID,
                             lovedOneID: lovedOneSubID,
                           );

@@ -485,7 +485,7 @@ class AccountHandler {
                 data: {
                   "referral": referralCode,
                   "used_by": user.id,
-                  "created_by": userByReferral,
+                  "created_by": userByReferral["id"],
                 },
               );
             }
