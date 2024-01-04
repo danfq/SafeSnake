@@ -1,12 +1,17 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:safesnake/util/account/handler.dart';
+import 'package:safesnake/util/chat/handler.dart';
 import 'package:safesnake/util/models/loved_one.dart';
+import 'package:safesnake/util/models/message.dart';
+import 'package:uuid/uuid.dart';
 
 ///Help Handler
 class HelpHandler {
   ///Show Help Bottom Sheet
   static Future<void> showHelpSheet({
     required BuildContext context,
+    required String helpContent,
   }) async {
     //Loved Ones
     final lovedOnes = await AccountHandler(context).lovedOnes();
@@ -54,7 +59,7 @@ class HelpHandler {
                     Padding(
                       padding: const EdgeInsets.only(right: 20.0),
                       child: TextButton(
-                        onPressed: lovedOnes.isNotEmpty ? () {} : null,
+                        onPressed: lovedOnes.isNotEmpty ? () async {} : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).cardColor,
                         ),
@@ -83,8 +88,13 @@ class HelpHandler {
                           children: parsedLovedOnes.map(
                             (lovedOne) {
                               return GestureDetector(
-                                onTap: () {
-                                  //Set
+                                onTap: () async {
+                                  //Send to Loved One
+                                  await _sendHelpRequest(
+                                    context: context,
+                                    lovedOne: lovedOne,
+                                    content: helpContent,
+                                  );
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -121,5 +131,50 @@ class HelpHandler {
         },
       );
     }
+  }
+
+  ///Send Help Request to Loved One
+  static Future<void> _sendHelpRequest({
+    required BuildContext context,
+    required LovedOne lovedOne,
+    required String content,
+  }) async {
+    //Current User
+    final currentUser = AccountHandler(context).currentUser;
+    final userName = currentUser!.userMetadata!["username"];
+
+    //Loved One
+    final lovedOneData = await AccountHandler(context).userByName(
+      name: lovedOne.name.trim(),
+    );
+
+    //Chat
+    final chat = await ChatHandler.newChatByID(
+      userID: currentUser.id,
+      lovedOneID: lovedOneData["id"],
+    );
+
+    //Chat ID
+    final chatID = chat?.id;
+
+    //Send Message to Loved One
+    await ChatHandler.sendMessage(
+      message: Message(
+        id: const Uuid().v4(),
+        chatID: chatID!,
+        content: content,
+        sentAt: DateTime.now().millisecondsSinceEpoch,
+        sender: currentUser.id,
+      ),
+    );
+
+    //Notify Loved One
+    await FirebaseMessaging.instance.sendMessage(
+      to: lovedOneData["fcm"],
+      data: {
+        "title": "Hey, ${lovedOne.name}!",
+        "body": "$userName needs your help!",
+      },
+    );
   }
 }

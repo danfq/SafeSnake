@@ -56,7 +56,7 @@ class _LovedOneChatState extends State<LovedOneChat> {
 
   ///Fetch Replied Message Content by `messageID`
   Future<void> fetchRepliedMessageContent(String messageID) async {
-    final repliedMessage = await ChatHandler(context).messageByID(
+    final repliedMessage = await ChatHandler.messageByID(
       id: messageID,
     );
     setState(() {
@@ -81,7 +81,7 @@ class _LovedOneChatState extends State<LovedOneChat> {
             //Chat
             Expanded(
               child: StreamBuilder(
-                stream: ChatHandler(context).chatMessages(
+                stream: ChatHandler.chatMessages(
                   chatID: widget.chat.id,
                   onNewMessages: (newMessages) async {
                     if (mounted) {
@@ -238,7 +238,7 @@ class _LovedOneChatState extends State<LovedOneChat> {
 
                                   //Send Message
                                   try {
-                                    await ChatHandler(context).sendMessage(
+                                    await ChatHandler.sendMessage(
                                       message: message,
                                     );
 

@@ -110,8 +110,6 @@ class AccountHandler {
   static void fcmListen() {
     //Listen for Messages - Foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print(message);
-
       //Send Notification
       await RemoteNotifications.showNotif(message.notification!);
     });
@@ -182,6 +180,25 @@ class AccountHandler {
     return {
       "id": matchingUser["id"],
       "name": matchingUser["name"],
+      "fcm": matchingUser["fcm"],
+    };
+  }
+
+  ///User by Name
+  Future<Map<String, dynamic>> userByName({required String name}) async {
+    //Get User Name via ID
+    final users = await RemoteData.getData(table: "users");
+
+    //Matching User
+    final matchingUser = users.firstWhere((user) {
+      return user["name"] == name;
+    });
+
+    //Return User Data
+    return {
+      "id": matchingUser["id"],
+      "name": matchingUser["name"],
+      "fcm": matchingUser["fcm"],
     };
   }
 

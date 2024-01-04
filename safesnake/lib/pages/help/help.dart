@@ -46,7 +46,10 @@ class Help extends StatelessWidget {
                         (item) => InkWell(
                           onTap: () async {
                             //Show Help Menu
-                            await HelpHandler.showHelpSheet(context: context);
+                            await HelpHandler.showHelpSheet(
+                              context: context,
+                              helpContent: item.trim(),
+                            );
                           },
                           borderRadius: BorderRadius.circular(14.0),
                           child: Card(

@@ -146,7 +146,7 @@ class _ChatItemState extends State<ChatItem> {
                         ElevatedButton(
                           onPressed: () async {
                             //Delete Message
-                            await ChatHandler(context).deleteMessage(
+                            await ChatHandler.deleteMessage(
                               id: widget.message.id,
                             );
                           },

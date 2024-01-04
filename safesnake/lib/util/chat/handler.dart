@@ -6,14 +6,15 @@ import 'package:uuid/uuid.dart';
 
 ///Chat Handler
 class ChatHandler {
-  ///Context
-  BuildContext context;
+  ///Context Global Key
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  ///Chat Handler
-  ChatHandler(this.context);
+  ///Current Context
+  static BuildContext get context =>
+      navigatorKey.currentState!.overlay!.context;
 
   ///All Chats - by `userID`
-  Stream<List<Chat>> allChatsByID({
+  static Stream<List<Chat>> allChatsByID({
     required String userID,
   }) {
     return RemoteData.instance.from("chats").stream(primaryKey: ["id"]).map(
@@ -45,7 +46,7 @@ class ChatHandler {
   }
 
   ///Start New Chat by `userID`
-  Future<Chat?> newChatByID({
+  static Future<Chat?> newChatByID({
     required String userID,
     required String lovedOneID,
   }) async {
@@ -95,7 +96,7 @@ class ChatHandler {
   }
 
   ///Message Data - by `id`
-  Future<Message?> messageByID({required String id}) async {
+  static Future<Message?> messageByID({required String id}) async {
     //Message
     Message? message;
 
@@ -115,7 +116,7 @@ class ChatHandler {
   }
 
   ///Chat Messages Stream - by `chatID`
-  Stream<List<Message>> chatMessages({
+  static Stream<List<Message>> chatMessages({
     required String chatID,
     required Function(List<Message> messages) onNewMessages,
   }) {
@@ -154,7 +155,7 @@ class ChatHandler {
   }
 
   ///Send `message`
-  Future<Message?> sendMessage({
+  static Future<Message?> sendMessage({
     required Message message,
   }) async {
     //Add Message to Database
@@ -184,7 +185,7 @@ class ChatHandler {
   }
 
   ///Delete Message by ID
-  Future<void> deleteMessage({required String id}) async {
+  static Future<void> deleteMessage({required String id}) async {
     await RemoteData.instance.from("messages").delete().eq("id", id);
   }
 }
