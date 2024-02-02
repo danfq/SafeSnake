@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/util/data/constants.dart';
-import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/help/handler.dart';
 import 'package:safesnake/util/widgets/main.dart';
 

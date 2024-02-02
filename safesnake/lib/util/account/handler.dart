@@ -4,7 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_exit_app/flutter_exit_app.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/account/account.dart';
 import 'package:safesnake/pages/safesnake.dart';

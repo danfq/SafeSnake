@@ -1,16 +1,10 @@
-import 'dart:convert';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:safesnake/firebase_options.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/chat/handler.dart';
-import 'package:safesnake/util/data/constants.dart';
 import 'package:safesnake/util/models/loved_one.dart';
 import 'package:safesnake/util/models/message.dart';
-import 'package:safesnake/util/notifications/local.dart';
 import 'package:uuid/uuid.dart';
-import 'package:http/http.dart' as http;
 
 ///Help Handler
 class HelpHandler {

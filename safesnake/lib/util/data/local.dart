@@ -1,6 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:safesnake/util/account/handler.dart';
 
 ///Local Data
 class LocalData {
