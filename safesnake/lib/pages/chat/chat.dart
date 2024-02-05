@@ -270,12 +270,12 @@ class _LovedOneChatState extends State<LovedOneChat> {
                                       );
                                     }
 
+                                    //Clear Input Field
+                                    chatInputController.clear();
+
                                     //Add Message to List
                                     messages.insert(0, message);
                                     _chatKey.currentState?.insertItem(0);
-
-                                    //Clear Input Field
-                                    chatInputController.clear();
                                   } catch (error) {
                                     //debugPrint(error.toString());
                                   } finally {
