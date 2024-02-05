@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:safesnake/pages/people/pages/add_by_code.dart';
 import 'package:safesnake/pages/people/widgets/loved_ones.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/notifications/local.dart';
@@ -24,20 +26,65 @@ class PeoplePage extends StatelessWidget {
             padding: const EdgeInsets.only(right: 10.0),
             child: IconButton(
               onPressed: () async {
-                //Invitation Status
-                final inviteSent = await AccountHandler(context).invitePerson();
+                //Show Bottom Sheet
+                await showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          //Send Invitation
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                //Close Sheet
+                                Navigator.pop(context);
 
-                //Notify Based on Status
-                if (context.mounted) {
-                  await LocalNotification(context: context).show(
-                    type: inviteSent
-                        ? NotificationType.success
-                        : NotificationType.failure,
-                    message: inviteSent
-                        ? "Invitation Sent!"
-                        : "Failed to Send Invitation",
-                  );
-                }
+                                //Invite Person
+                                await AccountHandler(context).invitePerson();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).dialogBackgroundColor,
+                              ),
+                              child: const Text("Invite Loved Ones"),
+                            ),
+                          ),
+
+                          //Or
+                          const Text("OR"),
+
+                          //Enter Code
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                //Close Sheet
+                                Navigator.pop(context);
+
+                                //Go to AddByCode
+                                await Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => const AddByCode(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).dialogBackgroundColor,
+                              ),
+                              child: const Text("Enter Code Manually"),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
               },
               tooltip: "Invite Loved One",
               icon: const Icon(Ionicons.ios_add),

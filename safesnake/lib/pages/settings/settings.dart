@@ -77,7 +77,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
             //Account
             SettingsSection(
-              title: const Text("My Account"),
+              title: const Text("Your Account"),
               tiles: [
                 SettingsTile.navigation(
                   leading: const Icon(Ionicons.ios_person),

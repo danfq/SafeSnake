@@ -203,6 +203,8 @@ class _LovedOneChatState extends State<LovedOneChat> {
                         child: Input(
                           controller: chatInputController,
                           placeholder: "Write a message...",
+                          backgroundColor:
+                              Theme.of(context).dialogBackgroundColor,
                           onChanged: (content) => setState(() {}),
                         ),
                       ),

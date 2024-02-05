@@ -23,7 +23,7 @@ class _AccountInfoState extends State<AccountInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainWidgets(context: context).appBar(
-        title: const Text("Account Information"),
+        title: const Text("Your Account"),
       ),
       body: SafeArea(
         child: Column(

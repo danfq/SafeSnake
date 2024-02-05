@@ -10,6 +10,7 @@ class Input extends StatefulWidget {
     this.centerPlaceholder = false,
     this.isPassword = false,
     this.isEmail = false,
+    this.backgroundColor,
     this.onChanged,
   });
 
@@ -27,6 +28,9 @@ class Input extends StatefulWidget {
 
   ///E-mail
   final bool isEmail;
+
+  ///Background Color
+  final Color? backgroundColor;
 
   ///On Changed
   final Function(String input)? onChanged;
@@ -51,7 +55,7 @@ class _InputState extends State<Input> {
         textAlign:
             widget.centerPlaceholder ? TextAlign.center : TextAlign.start,
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
+          color: widget.backgroundColor ?? Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(14.0),
         ),
         keyboardType:

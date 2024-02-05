@@ -47,49 +47,52 @@ class _LovedOnesState extends State<LovedOnes> {
                       ];
                     },
                     buttonBuilder: (context, showMenu) {
-                      return ListTile(
-                        onLongPress: showMenu,
-                        onTap: () async {
-                          //User ID
-                          final userID = AccountHandler(context)
-                              .currentUser!
-                              .id
-                              .toUpperCase()
-                              .substring(0, 8);
+                      return Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: ListTile(
+                          onLongPress: showMenu,
+                          onTap: () async {
+                            //User ID
+                            final userID = AccountHandler(context)
+                                .currentUser!
+                                .id
+                                .toUpperCase()
+                                .substring(0, 8);
 
-                          //Loved One Sub-ID
-                          final lovedOneSubID = (lovedOne["id"] as String)
-                              .toUpperCase()
-                              .substring(0, 8);
+                            //Loved One Sub-ID
+                            final lovedOneSubID = (lovedOne["id"] as String)
+                                .toUpperCase()
+                                .substring(0, 8);
 
-                          //Chat Data
-                          final chat = await ChatHandler(context).newChatByID(
-                            userID: userID,
-                            lovedOneID: lovedOneSubID,
-                          );
-
-                          //Go to Loved One Chat
-                          if (context.mounted) {
-                            Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) => LovedOneChat(
-                                  lovedOne: lovedOne["name"],
-                                  chat: chat!,
-                                ),
-                              ),
+                            //Chat Data
+                            final chat = await ChatHandler(context).newChatByID(
+                              userID: userID,
+                              lovedOneID: lovedOneSubID,
                             );
-                          }
-                        },
-                        tileColor: Theme.of(context).dialogBackgroundColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14.0),
+
+                            //Go to Loved One Chat
+                            if (context.mounted) {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => LovedOneChat(
+                                    lovedOne: lovedOne["name"],
+                                    chat: chat!,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          tileColor: Theme.of(context).dialogBackgroundColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14.0),
+                          ),
+                          title: Text(
+                            lovedOne["name"],
+                            style: const TextStyle(fontSize: 16.0),
+                          ),
+                          trailing: const Icon(Ionicons.ios_chatbox),
                         ),
-                        title: Text(
-                          lovedOne["name"],
-                          style: const TextStyle(fontSize: 16.0),
-                        ),
-                        trailing: const Icon(Ionicons.ios_chatbox),
                       );
                     },
                   );

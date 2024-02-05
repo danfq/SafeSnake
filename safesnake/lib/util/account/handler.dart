@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +141,7 @@ class AccountHandler {
     //Invitations
     final invitations = await RemoteData.getData(table: "invitations");
 
-    // Filter By Current User's ID as the Creator
+    //Filter By Current User's ID as the Creator and Used
     for (final invitation in invitations) {
       //Created Referral
       if (invitation["created_by"] == currentUserID) {
@@ -202,7 +201,7 @@ class AccountHandler {
   }
 
   ///User by Referral
-  Future<Map<String, dynamic>> _userByReferral({
+  Future<Map<String, dynamic>?> _userByReferral({
     required String referral,
   }) async {
     //Get User Name via ID
@@ -214,10 +213,12 @@ class AccountHandler {
     });
 
     //Return User Data
-    return {
-      "id": matchingUser["id"],
-      "name": matchingUser["name"],
-    };
+    return matchingUser != null
+        ? {
+            "id": matchingUser["id"],
+            "name": matchingUser["name"],
+          }
+        : null;
   }
 
   ///Delete Account
@@ -482,9 +483,10 @@ class AccountHandler {
               await RemoteData.addData(
                 table: "invitations",
                 data: {
+                  "id": const Uuid().v4(),
                   "referral": referralCode,
                   "used_by": user.id,
-                  "created_by": userByReferral["id"],
+                  "created_by": userByReferral?["id"],
                 },
               );
             }
@@ -527,8 +529,40 @@ class AccountHandler {
     //Send Invitation
     await Share.share(
       message,
-      subject: "SafeSnake | Invitation", //E-mail Invitation
+      subject: "SafeSnake | Invitation",
     ).then((_) => status = true);
+
+    //Return Status
+    return status;
+  }
+
+  ///Invite Person
+  Future<bool> addPersonByReferral({required String referral}) async {
+    //Status
+    bool status = false;
+
+    //Check Referral Code
+    final user = await _userByReferral(referral: referral);
+
+    //Add User Referral (Not Own One)
+    if (user != null && user["id"] != currentUser?.id) {
+      await RemoteData.addData(
+        table: "invitations",
+        data: {
+          "id": const Uuid().v4(),
+          "referral": referral,
+          "used_by": currentUser?.id,
+          "created_by": user["id"],
+        },
+      ).then((_) => Navigator.pop(context));
+    } else {
+      if (context.mounted) {
+        LocalNotification(context: context).show(
+          type: NotificationType.failure,
+          message: "Invalid Referral",
+        );
+      }
+    }
 
     //Return Status
     return status;
@@ -557,6 +591,7 @@ class AccountHandler {
     await RemoteData.addData(
       table: "invitations",
       data: {
+        "id": const Uuid().v4(),
         "referral": referral,
         "used_by": id,
       },
