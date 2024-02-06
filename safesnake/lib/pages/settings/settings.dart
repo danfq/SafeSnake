@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/settings/pages/account_info.dart';
+import 'package:safesnake/pages/settings/pages/team/team.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/theming/controller.dart';
@@ -90,6 +91,49 @@ class _SettingsPageState extends State<SettingsPage> {
                       context,
                       CupertinoPageRoute(
                         builder: (context) => const AccountInfo(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+
+            //Team & Licenses
+            SettingsSection(
+              title: const Text("Team & Licenses"),
+              tiles: [
+                SettingsTile.navigation(
+                  leading: const Icon(Ionicons.ios_people),
+                  title: const Text("Team"),
+                  onPressed: (context) {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(builder: (context) => const Team()),
+                    );
+                  },
+                ),
+                SettingsTile.navigation(
+                  leading: const Icon(Ionicons.ios_document),
+                  title: const Text("Licenses"),
+                  onPressed: (context) {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => LicensePage(
+                          applicationName: "SafeSnake",
+                          applicationIcon: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(14.0),
+                              child: Image.asset(
+                                "assets/logo.png",
+                                height: 80.0,
+                                filterQuality: FilterQuality.high,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     );
                   },

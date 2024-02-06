@@ -43,6 +43,7 @@ dependencies:
   firebase_core: ^2.24.2
   flutter_local_notifications: ^16.3.0
   http: ^1.1.2
+  url_launcher: ^6.2.4
 
 dev_dependencies:
   flutter_test:
@@ -59,6 +60,9 @@ flutter:
 
     # Environment Variables
     - .env
+
+    # Base
+    - assets/
 
     # Animations
     - assets/anim/
