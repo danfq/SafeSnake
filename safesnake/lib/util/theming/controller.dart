@@ -2,12 +2,40 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:safesnake/util/data/local.dart';
+import 'package:safesnake/util/theming/themes.dart';
 
 ///Theme Controller
 class ThemeController {
   ///Current Theme
   static bool current({required BuildContext context}) {
     return Theme.of(context).brightness == Brightness.dark;
+  }
+
+  ///Set Orange Mode
+  static void setOrangeMode({
+    required BuildContext context,
+    required bool mode,
+  }) {
+    //Activate or Deactivate
+    _orangeMode(context: context, mode: mode);
+  }
+
+  ///Activate or Deactivate Orange Mode
+  static void _orangeMode({required BuildContext context, required bool mode}) {
+    //Themes
+    final orangeThemeLight = Themes.orangeModeLight;
+    final orangeThemeDark = Themes.orangeModeDark;
+
+    //Switch On or Off
+    switch (mode) {
+      case true:
+        AdaptiveTheme.of(context)
+            .setTheme(light: orangeThemeLight, dark: orangeThemeDark);
+
+      case false:
+        AdaptiveTheme.of(context)
+            .setTheme(light: Themes.light, dark: Themes.dark);
+    }
   }
 
   ///Easy Toggle
