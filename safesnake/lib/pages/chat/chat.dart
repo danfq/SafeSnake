@@ -69,6 +69,9 @@ class _LovedOneChatState extends State<LovedOneChat> {
     ///Current User
     final String currentUser = AccountHandler(context).currentUser!.id;
 
+    //Chat ID
+    final String chatID = widget.chat.id;
+
     //UI
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -82,7 +85,7 @@ class _LovedOneChatState extends State<LovedOneChat> {
             Expanded(
               child: StreamBuilder(
                 stream: ChatHandler.chatMessages(
-                  chatID: widget.chat.id,
+                  chatID: chatID,
                   onNewMessages: (newMessages) async {
                     if (mounted) {
                       setState(() {
@@ -277,7 +280,7 @@ class _LovedOneChatState extends State<LovedOneChat> {
                                     messages.insert(0, message);
                                     _chatKey.currentState?.insertItem(0);
                                   } catch (error) {
-                                    //debugPrint(error.toString());
+                                    debugPrint(error.toString());
                                   } finally {
                                     setState(() {
                                       sendingMessage = false;

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/chat/handler.dart';

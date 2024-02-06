@@ -57,10 +57,10 @@ class ChatHandler {
     Chat? chatData;
 
     //Check if Such Chat Already Exists
-    final userChats = await RemoteData.instance
+    final List userChats = await RemoteData.instance
         .from("chats")
         .select()
-        .or("person_one.eq.$userID,person_two.eq.$userID")
+        .or("person_one.eq.$lovedOneID,person_two.eq.$lovedOneID")
         .order("latest_message_timestamp", ascending: false);
 
     //Check if Chat Exists
