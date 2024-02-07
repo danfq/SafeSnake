@@ -55,7 +55,7 @@ class RemoteData {
   }
 
   ///Update `data` on `table`, where `match` is within `column`
-  Future<void> updateData({
+  static Future<void> updateData({
     required String table,
     required String column,
     required String match,
@@ -63,15 +63,13 @@ class RemoteData {
   }) async {
     //Attempt to Set Data
     try {
-      await instance.from(table).update(data).eq(column, match).select();
+      await Supabase.instance.client
+          .from(table)
+          .update(data)
+          .eq(column, match)
+          .select();
     } on PostgrestException catch (error) {
-      if (context.mounted) {
-        //Notify User
-        await LocalNotification(context: context).show(
-          type: NotificationType.failure,
-          message: error.message,
-        );
-      }
+      debugPrint(error.message);
     }
   }
 }

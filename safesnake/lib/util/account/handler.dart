@@ -56,7 +56,7 @@ class AccountHandler {
       );
 
       //Update Database
-      await RemoteData(context).updateData(
+      await RemoteData.updateData(
         table: "users",
         column: "id",
         match: currentUser.id,
@@ -66,7 +66,7 @@ class AccountHandler {
   }
 
   ///Get FCM Token
-  Future<String> fcmToken() async {
+  static Future<String> fcmToken() async {
     String userToken = "";
 
     //Request Permission
@@ -92,7 +92,7 @@ class AccountHandler {
 
     //Update FCM Token
     if (currentUser != null) {
-      await RemoteData(context).updateData(
+      await RemoteData.updateData(
         table: "users",
         column: "id",
         match: currentUser.id,
@@ -172,6 +172,25 @@ class AccountHandler {
     //Matching User
     final matchingUser = users.firstWhere((user) {
       return user["id"] == id;
+    });
+
+    //Return User Data
+    return {
+      "id": matchingUser["id"],
+      "name": matchingUser["name"],
+      "fcm": matchingUser["fcm"],
+    };
+  }
+
+  ///User by Referral
+  Future<Map<String, dynamic>> userByReferral(
+      {required String referral}) async {
+    //Get User Name via ID
+    final users = await RemoteData(context).getData(table: "users");
+
+    //Matching User
+    final matchingUser = users.firstWhere((user) {
+      return user["referral"] == referral;
     });
 
     //Return User Data
@@ -588,14 +607,54 @@ class AccountHandler {
     required String id,
     required String referral,
   }) async {
-    await RemoteData(context).addData(
-      table: "invitations",
-      data: {
-        "id": const Uuid().v4(),
-        "referral": referral,
-        "used_by": id,
-      },
-    );
+    //User By Referral
+    final user = await userByReferral(referral: referral);
+
+    //Referral Status
+    final referralStatus = await checkReferralUsage(id: id, referral: referral);
+
+    if (!referralStatus) {
+      await RemoteData(context).addData(
+        table: "invitations",
+        data: {
+          "id": const Uuid().v4(),
+          "referral": referral,
+          "used_by": id,
+          "created_by": user["id"],
+        },
+      );
+    }
+  }
+
+  ///Check if Referral Has Been Used
+  Future<bool> checkReferralUsage({
+    required String id,
+    required String referral,
+  }) async {
+    //Referral Status
+    bool status = false;
+
+    //Referral Data
+    final data = await RemoteData(context).getData(table: "invitations");
+
+    //Check Data
+    if (data.isNotEmpty) {
+      //Filter By ID & Referral
+      for (final item in data) {
+        print("ITEM: $item");
+
+        if (item["used_by"] == id && item["referral"] == referral ||
+            item["created_by"] == id && item["referral"] == referral) {
+          //Set Status as Used
+          status = true;
+        } else {
+          status = false;
+        }
+      }
+    }
+
+    //Return Status
+    return status;
   }
 }
 
