@@ -641,8 +641,6 @@ class AccountHandler {
     if (data.isNotEmpty) {
       //Filter By ID & Referral
       for (final item in data) {
-        print("ITEM: $item");
-
         if (item["used_by"] == id && item["referral"] == referral ||
             item["created_by"] == id && item["referral"] == referral) {
           //Set Status as Used

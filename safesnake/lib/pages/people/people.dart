@@ -4,7 +4,6 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/people/pages/add_by_code.dart';
 import 'package:safesnake/pages/people/widgets/loved_ones.dart';
 import 'package:safesnake/util/account/handler.dart';
-import 'package:safesnake/util/notifications/local.dart';
 import 'package:safesnake/util/widgets/main.dart';
 
 class PeoplePage extends StatelessWidget {
