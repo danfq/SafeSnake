@@ -56,7 +56,7 @@ class AccountHandler {
       );
 
       //Update Database
-      await RemoteData.updateData(
+      await RemoteData(context).updateData(
         table: "users",
         column: "id",
         match: currentUser.id,
@@ -66,7 +66,7 @@ class AccountHandler {
   }
 
   ///Get FCM Token
-  static Future<String> fcmToken() async {
+  Future<String> fcmToken() async {
     String userToken = "";
 
     //Request Permission
@@ -92,7 +92,7 @@ class AccountHandler {
 
     //Update FCM Token
     if (currentUser != null) {
-      await RemoteData.updateData(
+      await RemoteData(context).updateData(
         table: "users",
         column: "id",
         match: currentUser.id,
@@ -139,7 +139,7 @@ class AccountHandler {
     final currentUserID = currentUser?.id;
 
     //Invitations
-    final invitations = await RemoteData.getData(table: "invitations");
+    final invitations = await RemoteData(context).getData(table: "invitations");
 
     //Filter By Current User's ID as the Creator and Used
     for (final invitation in invitations) {
@@ -167,7 +167,7 @@ class AccountHandler {
   ///User by ID
   Future<Map<String, dynamic>> userByID({required String id}) async {
     //Get User Name via ID
-    final users = await RemoteData.getData(table: "users");
+    final users = await RemoteData(context).getData(table: "users");
 
     //Matching User
     final matchingUser = users.firstWhere((user) {
@@ -185,7 +185,7 @@ class AccountHandler {
   ///User by Name
   Future<Map<String, dynamic>> userByName({required String name}) async {
     //Get User Name via ID
-    final users = await RemoteData.getData(table: "users");
+    final users = await RemoteData(context).getData(table: "users");
 
     //Matching User
     final matchingUser = users.firstWhere((user) {
@@ -205,7 +205,7 @@ class AccountHandler {
     required String referral,
   }) async {
     //Get User Name via ID
-    final users = await RemoteData.getData(table: "users");
+    final users = await RemoteData(context).getData(table: "users");
 
     //Matching User
     final matchingUser = users.firstWhere((user) {
@@ -260,7 +260,7 @@ class AccountHandler {
                     onWaitingProcess: () async {
                       if (currentUser != null) {
                         //Add Deletion Request
-                        await RemoteData.addData(
+                        await RemoteData(context).addData(
                           table: "delete_requests",
                           data: {
                             "id": const Uuid().v4(),
@@ -461,7 +461,7 @@ class AccountHandler {
 
           //Add User to Database
           if (context.mounted) {
-            await RemoteData.addData(
+            await RemoteData(context).addData(
               table: "users",
               data: {
                 "id": user.id,
@@ -480,7 +480,7 @@ class AccountHandler {
 
             //Add Data
             if (context.mounted) {
-              await RemoteData.addData(
+              await RemoteData(context).addData(
                 table: "invitations",
                 data: {
                   "id": const Uuid().v4(),
@@ -546,7 +546,7 @@ class AccountHandler {
 
     //Add User Referral (Not Own One)
     if (user != null && user["id"] != currentUser?.id) {
-      await RemoteData.addData(
+      await RemoteData(context).addData(
         table: "invitations",
         data: {
           "id": const Uuid().v4(),
@@ -588,7 +588,7 @@ class AccountHandler {
     required String id,
     required String referral,
   }) async {
-    await RemoteData.addData(
+    await RemoteData(context).addData(
       table: "invitations",
       data: {
         "id": const Uuid().v4(),

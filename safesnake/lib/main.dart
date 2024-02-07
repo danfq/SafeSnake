@@ -30,8 +30,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   ).then((_) async {
+    //Context
+    final globalKey = GlobalKey();
+    final context = globalKey.currentContext!;
+
     //Handle APNs Token
-    await AccountHandler.fcmToken();
+    await AccountHandler(context).fcmToken();
 
     //Initialize Notification Service
     await RemoteNotifications.init();

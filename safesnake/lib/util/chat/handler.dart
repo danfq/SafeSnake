@@ -17,10 +17,13 @@ class ChatHandler {
   ChatHandler(this.context);
 
   ///All Chats - by `userID`
-  static Stream<List<Chat>> allChatsByID({
+  Stream<List<Chat>> allChatsByID({
     required String userID,
   }) {
-    return RemoteData.instance.from("chats").stream(primaryKey: ["id"]).map(
+    return RemoteData(context)
+        .instance
+        .from("chats")
+        .stream(primaryKey: ["id"]).map(
       (chats) {
         //All Chats
         List<Chat> allChats = [];
@@ -57,7 +60,8 @@ class ChatHandler {
     Chat? chatData;
 
     //Check if Such Chat Already Exists
-    final List userChats = await RemoteData.instance
+    final List userChats = await RemoteData(context)
+        .instance
         .from("chats")
         .select()
         .or("person_one.eq.$lovedOneID,person_two.eq.$lovedOneID")
@@ -77,7 +81,8 @@ class ChatHandler {
       );
 
       if (context.mounted) {
-        await RemoteData.instance
+        await RemoteData(context)
+            .instance
             .from("chats")
             .insert(chat.toJSON())
             .select()
@@ -99,12 +104,15 @@ class ChatHandler {
   }
 
   ///Message Data - by `id`
-  static Future<Message?> messageByID({required String id}) async {
+  Future<Message?> messageByID({
+    required String id,
+  }) async {
     //Message
     Message? message;
 
     //Get Message Data from ID
-    final messageData = await RemoteData.instance
+    final messageData = await RemoteData(context)
+        .instance
         .from("decrypted_messages")
         .select()
         .eq("id", id);
@@ -119,7 +127,7 @@ class ChatHandler {
   }
 
   ///Chat Messages Stream - by `chatID`
-  static Stream<List<Message>> chatMessages({
+  Stream<List<Message>> chatMessages({
     required String chatID,
     required Function(List<Message> messages) onNewMessages,
   }) {
@@ -127,7 +135,8 @@ class ChatHandler {
     List<Message> allMessages = [];
 
     //Chat Messages
-    return RemoteData.instance
+    return RemoteData(context)
+        .instance
         .from("decrypted_messages")
         .stream(primaryKey: ["id"])
         .eq("chat", chatID)
@@ -164,7 +173,7 @@ class ChatHandler {
   }) async {
     //Add Message to Database
     final addedMessage =
-        await RemoteData.instance.from("decrypted_messages").insert(
+        await RemoteData(context).instance.from("decrypted_messages").insert(
       {
         "id": message.id,
         "chat": message.chatID,
@@ -177,7 +186,7 @@ class ChatHandler {
 
     if (context.mounted) {
       //Update Latest Chat Message
-      await RemoteData.instance.from("chats").update(
+      await RemoteData(context).instance.from("chats").update(
         {
           "latest_message": message.id,
           "latest_message_timestamp": message.sentAt,
@@ -241,7 +250,7 @@ class ChatHandler {
   }
 
   ///Delete Message by ID
-  static Future<void> deleteMessage({required String id}) async {
-    await RemoteData.instance.from("messages").delete().eq("id", id);
+  Future<void> deleteMessage({required String id}) async {
+    await RemoteData(context).instance.from("messages").delete().eq("id", id);
   }
 }
