@@ -3,6 +3,7 @@ import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/chat/handler.dart';
 import 'package:safesnake/util/models/loved_one.dart';
 import 'package:safesnake/util/models/message.dart';
+import 'package:safesnake/util/notifications/local.dart';
 import 'package:uuid/uuid.dart';
 
 ///Help Handler
@@ -68,6 +69,16 @@ class HelpHandler {
                                     content: helpContent,
                                   );
                                 }
+
+                                //Alert User
+                                LocalNotifications.toast(
+                                  message: "Notified All",
+                                );
+
+                                //Close Sheet
+                                if (context.mounted) {
+                                  Navigator.pop(context);
+                                }
                               }
                             : null,
                         style: ElevatedButton.styleFrom(
@@ -105,6 +116,16 @@ class HelpHandler {
                                     lovedOne: lovedOne,
                                     content: helpContent,
                                   );
+
+                                  //Alert User
+                                  LocalNotifications.toast(
+                                    message: "Notified ${lovedOne.name}",
+                                  );
+
+                                  //Close Sheet
+                                  if (context.mounted) {
+                                    Navigator.pop(context);
+                                  }
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(

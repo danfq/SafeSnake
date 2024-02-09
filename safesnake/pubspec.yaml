@@ -30,7 +30,6 @@ dependencies:
   flutter_keyboard_visibility: ^5.4.1
   icons_launcher: ^2.1.5
   swipeable_button_view: ^0.0.2
-  m_toast: ^0.2.4
   flutter_exit_app: ^1.1.2
   uuid: ^4.2.1
   contacts_service: ^0.6.3
@@ -45,6 +44,7 @@ dependencies:
   http: ^1.1.2
   url_launcher: ^6.2.4
   confirm_dialog: ^1.0.3
+  fluttertoast: ^8.2.4
 
 dev_dependencies:
   flutter_test:

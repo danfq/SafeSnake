@@ -437,13 +437,7 @@ class AccountHandler {
         }
       });
     } on AuthException catch (error) {
-      if (context.mounted) {
-        //Notify User
-        LocalNotification(context: context).show(
-          type: NotificationType.failure,
-          message: error.message,
-        );
-      }
+      LocalNotifications.toast(message: error.message);
     }
   }
 
@@ -526,13 +520,7 @@ class AccountHandler {
         }
       });
     } on AuthException catch (error) {
-      if (context.mounted) {
-        //Notify User
-        LocalNotification(context: context).show(
-          type: NotificationType.failure,
-          message: error.message,
-        );
-      }
+      LocalNotifications.toast(message: error.message);
     }
   }
 
@@ -583,20 +571,10 @@ class AccountHandler {
           },
         ).then((_) => Navigator.pop(context));
       } else {
-        if (context.mounted) {
-          LocalNotification(context: context).show(
-            type: NotificationType.failure,
-            message: "Invalid Referral",
-          );
-        }
+        LocalNotifications.toast(message: "Invalid Referral");
       }
     } else {
-      if (context.mounted) {
-        LocalNotification(context: context).show(
-          type: NotificationType.failure,
-          message: "Invalid Referral",
-        );
-      }
+      LocalNotifications.toast(message: "Invalid Referral");
     }
 
     //Return Status

@@ -1,42 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:m_toast/m_toast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-///Local Notification
-class LocalNotification {
-  ///Context
-  final BuildContext context;
-
-  ///Local Notification
-  LocalNotification({required this.context});
-
-  ///Show Notification with Custom `message`, by `type`
-  Future<void> show({
-    required NotificationType type,
-    required String message,
-  }) async {
-    //Toast Service
-    final ShowMToast toast = ShowMToast(context);
-
-    //Show Toast by Type
-    switch (type) {
-      //Success
-      case NotificationType.success:
-        toast.successToast(
-          message: message,
-          alignment: Alignment.bottomCenter,
-          textColor: Colors.black,
-        );
-
-      //Failure
-      case NotificationType.failure:
-        toast.errorToast(
-          message: message,
-          alignment: Alignment.bottomCenter,
-          textColor: Colors.black,
-        );
-    }
+///Local Notifications
+class LocalNotifications {
+  ///Show Platform-Adaptive Toast with `message`
+  static void toast({required String message}) async {
+    await Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      fontSize: 16.0,
+    );
   }
 }
-
-///Notification Type
-enum NotificationType { success, failure }

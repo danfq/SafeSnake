@@ -24,10 +24,7 @@ class RemoteData {
     } on PostgrestException catch (error) {
       if (context.mounted) {
         //Notify User
-        await LocalNotification(context: context).show(
-          type: NotificationType.failure,
-          message: error.message,
-        );
+        LocalNotifications.toast(message: error.message);
       }
     }
   }
@@ -43,10 +40,7 @@ class RemoteData {
     } on PostgrestException catch (error) {
       if (context.mounted) {
         //Notify User
-        await LocalNotification(context: context).show(
-          type: NotificationType.failure,
-          message: error.message,
-        );
+        LocalNotifications.toast(message: error.message);
       }
     }
 

@@ -220,8 +220,8 @@ class ChatHandler {
       },
     };
 
-    //Request
-    final http.Response response = await http.post(
+    //Send Notification
+    await http.post(
       Uri.parse(fcmEndpoint),
       headers: <String, String>{
         "Content-Type": "application/json",
@@ -229,24 +229,6 @@ class ChatHandler {
       },
       body: jsonEncode(message),
     );
-
-    if (context.mounted) {
-      if (response.statusCode == 200) {
-        if (!(isNormalMessage ?? false)) {
-          await LocalNotification(context: context).show(
-            type: NotificationType.success,
-            message: "Notified Loved One",
-          );
-        }
-      } else {
-        if (!(isNormalMessage ?? false)) {
-          await LocalNotification(context: context).show(
-            type: NotificationType.failure,
-            message: "Failed to Notify Loved One",
-          );
-        }
-      }
-    }
   }
 
   ///Delete Message by ID

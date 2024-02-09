@@ -80,12 +80,7 @@ class _AccountInfoState extends State<AccountInfo> {
                       );
 
                       //Notify User
-                      if (context.mounted) {
-                        await LocalNotification(context: context).show(
-                          type: NotificationType.success,
-                          message: "Copied Your Referral Code",
-                        );
-                      }
+                      LocalNotifications.toast(message: "Copied!");
                     },
                     style: IconButton.styleFrom(
                       backgroundColor: Colors.grey.shade600,
