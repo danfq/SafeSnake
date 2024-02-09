@@ -45,6 +45,8 @@ dependencies:
   url_launcher: ^6.2.4
   confirm_dialog: ^1.0.3
   fluttertoast: ^8.2.4
+  flutter_chat_ui: ^1.6.12
+  flutter_chat_types: ^3.6.2
 
 dev_dependencies:
   flutter_test:

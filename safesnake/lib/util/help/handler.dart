@@ -199,7 +199,7 @@ class HelpHandler {
       //Send Message to Loved One
       if (context.mounted) {
         await ChatHandler(context).sendMessage(
-          message: Message(
+          message: MessageData(
             id: const Uuid().v4(),
             chatID: chatID!,
             content: content,

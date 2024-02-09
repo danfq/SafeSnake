@@ -19,11 +19,11 @@ class ChatItem extends StatefulWidget {
     this.repliedContent,
   });
 
-  final Message message;
+  final MessageData message;
   final bool isCurrentUser;
   final bool isLastInGroup;
   final FocusNode keyboardFocusNode;
-  final Function(Message message) onReply;
+  final Function(MessageData message) onReply;
   final String? repliedContent;
 
   @override

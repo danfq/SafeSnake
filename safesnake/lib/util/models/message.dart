@@ -1,5 +1,5 @@
 ///Chat Message
-class Message {
+class MessageData {
   //Fields
   final String id;
   final String chatID;
@@ -9,7 +9,7 @@ class Message {
   final String? replyTo;
 
   //Chat Message
-  const Message({
+  const MessageData({
     required this.id,
     required this.chatID,
     required this.content,
@@ -31,8 +31,8 @@ class Message {
   }
 
   ///JSON Object to `Message`
-  factory Message.fromJSON(Map<String, dynamic> json) {
-    return Message(
+  factory MessageData.fromJSON(Map<String, dynamic> json) {
+    return MessageData(
       id: json["id"],
       chatID: json["chat"],
       content: json["decrypted_content"],

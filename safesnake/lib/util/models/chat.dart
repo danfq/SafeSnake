@@ -3,14 +3,14 @@ import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/data/remote.dart';
 
-class Chat extends StatelessWidget {
+class ChatData extends StatelessWidget {
   final String id;
   final String personOne;
   final String personTwo;
   final String latestMessage;
   final int latestMessageTimestamp;
 
-  const Chat({
+  const ChatData({
     super.key,
     required this.id,
     required this.personOne,
@@ -31,8 +31,8 @@ class Chat extends StatelessWidget {
   }
 
   ///JSON Object to `Chat`
-  factory Chat.fromJSON(Map<String, dynamic> json) {
-    return Chat(
+  factory ChatData.fromJSON(Map<String, dynamic> json) {
+    return ChatData(
       id: json["id"],
       personOne: json["person_one"],
       personTwo: json["person_two"],

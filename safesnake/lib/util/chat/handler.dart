@@ -1,12 +1,13 @@
 import 'dart:convert';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:safesnake/util/data/constants.dart';
 import 'package:safesnake/util/data/remote.dart';
 import 'package:safesnake/util/models/chat.dart';
 import 'package:safesnake/util/models/message.dart';
 import 'package:flutter/material.dart';
-import 'package:safesnake/util/notifications/local.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 ///Chat Handler
 class ChatHandler {
@@ -17,7 +18,7 @@ class ChatHandler {
   ChatHandler(this.context);
 
   ///All Chats - by `userID`
-  Stream<List<Chat>> allChatsByID({
+  Stream<List<ChatData>> allChatsByID({
     required String userID,
   }) {
     return RemoteData(context)
@@ -26,12 +27,12 @@ class ChatHandler {
         .stream(primaryKey: ["id"]).map(
       (chats) {
         //All Chats
-        List<Chat> allChats = [];
+        List<ChatData> allChats = [];
 
         //Parse Chats
         for (final chatData in chats) {
           //Chat
-          final chat = Chat(
+          final chat = ChatData(
             id: chatData["id"],
             personOne: chatData["person_one"],
             personTwo: chatData["person_two"],
@@ -52,12 +53,12 @@ class ChatHandler {
   }
 
   ///Start New Chat by `userID`
-  Future<Chat?> newChatByID({
+  Future<ChatData?> newChatByID({
     required String userID,
     required String lovedOneID,
   }) async {
     //Chat
-    Chat? chatData;
+    ChatData? chatData;
 
     //Check if Such Chat Already Exists
     final List userChats = await RemoteData(context)
@@ -72,7 +73,7 @@ class ChatHandler {
       //Chat Doesn't Exist - Create New
       final newChatID = const Uuid().v4();
 
-      final chat = Chat(
+      final chat = ChatData(
         id: newChatID,
         personOne: userID,
         personTwo: lovedOneID,
@@ -93,7 +94,7 @@ class ChatHandler {
       chatData = chat;
     } else {
       //Set Chat Data
-      chatData = Chat.fromJSON(userChats.first);
+      chatData = ChatData.fromJSON(userChats.first);
 
       //Chat Exists - Return Chat
       return chatData;
@@ -104,11 +105,11 @@ class ChatHandler {
   }
 
   ///Message Data - by `id`
-  Future<Message?> messageByID({
+  Future<MessageData?> messageByID({
     required String id,
   }) async {
     //Message
-    Message? message;
+    MessageData? message;
 
     //Get Message Data from ID
     final messageData = await RemoteData(context)
@@ -119,7 +120,7 @@ class ChatHandler {
 
     //Check if Message Exists
     if (messageData.isNotEmpty) {
-      message = Message.fromJSON(messageData.first);
+      message = MessageData.fromJSON(messageData.first);
     }
 
     //Return Message
@@ -127,12 +128,12 @@ class ChatHandler {
   }
 
   ///Chat Messages Stream - by `chatID`
-  Stream<List<Message>> chatMessages({
+  Stream<List<types.Message>> chatMessages({
     required String chatID,
-    required Function(List<Message> messages) onNewMessages,
+    required Function(List<types.Message> messages) onNewMessages,
   }) {
     //All Messages
-    List<Message> allMessages = [];
+    List<types.Message> allMessages = [];
 
     //Chat Messages
     return RemoteData(context)
@@ -145,30 +146,24 @@ class ChatHandler {
           //Parse Messages
           for (final messageItem in messages) {
             //Message
-            final message = Message(
+            final message = types.TextMessage(
               id: messageItem["id"],
-              chatID: chatID,
-              content: messageItem["decrypted_content"],
-              sentAt: messageItem["sent_at"],
-              sender: messageItem["sender"],
-              replyTo: messageItem["reply_to"],
+              text: messageItem["decrypted_content"],
+              author: types.User(id: messageItem["sender"]),
             );
 
             //Update Messages
             allMessages.add(message);
           }
 
-          //Update Stream
-          onNewMessages(allMessages);
-
-          //Return Chats Stream
+          //Return Messages
           return allMessages;
         });
   }
 
   ///Send `message`
-  Future<Message?> sendMessage({
-    required Message message,
+  Future<MessageData?> sendMessage({
+    required MessageData message,
     required String receiverFCM,
   }) async {
     //Add Message to Database
