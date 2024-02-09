@@ -17,7 +17,7 @@ class LovedOneChat extends StatefulWidget {
   });
 
   ///Loved One
-  final String lovedOne;
+  final Map<String, dynamic> lovedOne;
 
   ///Chat Data
   final Chat chat;
@@ -76,7 +76,39 @@ class _LovedOneChatState extends State<LovedOneChat> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: MainWidgets(context: context).appBar(
-        title: Text(widget.lovedOne),
+        title: Text(widget.lovedOne["name"]),
+        actions: [
+          //Information
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: IconButton(
+              onPressed: () async {
+                //Loved One
+                final lovedOne = widget.lovedOne;
+
+                //Clean ID
+                final id =
+                    (lovedOne["id"] as String).split("-").first.toUpperCase();
+
+                //Show Information
+                await showAdaptiveDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(
+                        lovedOne["name"],
+                        textAlign: TextAlign.center,
+                      ),
+                      content: Text("ID: $id", textAlign: TextAlign.center),
+                    );
+                  },
+                );
+              },
+              icon: const Icon(Ionicons.ios_information_circle),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -250,7 +282,7 @@ class _LovedOneChatState extends State<LovedOneChat> {
                                   //Receiver Data
                                   final receiverData =
                                       await AccountHandler(context).userByName(
-                                    name: widget.lovedOne,
+                                    name: widget.lovedOne["name"],
                                   );
 
                                   //Send Message

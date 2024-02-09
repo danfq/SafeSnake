@@ -160,8 +160,11 @@ class AccountHandler {
       }
     }
 
-    // Return Loved Ones
-    return lovedOnes;
+    //Clear Duplicates
+    final noDuplicates = lovedOnes.toSet().toList();
+
+    //Return Loved Ones
+    return noDuplicates;
   }
 
   ///User by ID
@@ -565,15 +568,28 @@ class AccountHandler {
 
     //Add User Referral (Not Own One)
     if (user != null && user["id"] != currentUser?.id) {
-      await RemoteData(context).addData(
-        table: "invitations",
-        data: {
-          "id": const Uuid().v4(),
-          "referral": referral,
-          "used_by": currentUser?.id,
-          "created_by": user["id"],
-        },
-      ).then((_) => Navigator.pop(context));
+      //Check if Already Used
+      final used =
+          await checkReferralUsage(id: currentUser!.id, referral: referral);
+
+      if (!used) {
+        await RemoteData(context).addData(
+          table: "invitations",
+          data: {
+            "id": const Uuid().v4(),
+            "referral": referral,
+            "used_by": currentUser?.id,
+            "created_by": user["id"],
+          },
+        ).then((_) => Navigator.pop(context));
+      } else {
+        if (context.mounted) {
+          LocalNotification(context: context).show(
+            type: NotificationType.failure,
+            message: "Invalid Referral",
+          );
+        }
+      }
     } else {
       if (context.mounted) {
         LocalNotification(context: context).show(
