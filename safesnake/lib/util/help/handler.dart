@@ -58,7 +58,18 @@ class HelpHandler {
                     Padding(
                       padding: const EdgeInsets.only(right: 20.0),
                       child: TextButton(
-                        onPressed: lovedOnes.isNotEmpty ? () async {} : null,
+                        onPressed: lovedOnes.isNotEmpty
+                            ? () async {
+                                //Notify All
+                                for (final lovedOne in lovedOnes) {
+                                  await _sendHelpRequest(
+                                    context: context,
+                                    lovedOne: LovedOne.fromJSON(lovedOne),
+                                    content: helpContent,
+                                  );
+                                }
+                              }
+                            : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).cardColor,
                         ),
