@@ -41,6 +41,14 @@ class Team extends StatelessWidget {
         position: "iOS QA Testing",
         url: "https://instagram.com/seni_satarp",
       ),
+
+      //Inês Costa
+      TeamMember(
+        icon: Fontisto.test_tube_alt,
+        name: "Inês Costa",
+        position: "iOS QA Testing",
+        url: "https://instagram.com/1nescosta",
+      ),
     ];
 
     //UI
