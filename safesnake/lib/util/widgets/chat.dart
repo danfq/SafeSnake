@@ -207,7 +207,7 @@ class _ChatItemState extends State<ChatItem> {
             else
               Container(),
 
-            // Chat Message
+            //Chat Message
             AnimatedContainer(
               duration: const Duration(milliseconds: 400),
               child: BubbleSpecialThree(
@@ -226,6 +226,7 @@ class _ChatItemState extends State<ChatItem> {
                           ? Colors.black
                           : Colors.white
                       : Colors.white,
+                  fontSize: 16.0,
                 ),
                 tail: widget.isLastInGroup,
               ),

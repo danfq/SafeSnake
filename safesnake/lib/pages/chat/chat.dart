@@ -287,6 +287,12 @@ class _LovedOneChatState extends State<LovedOneChat> {
 
                                   //Send Message
                                   try {
+                                    //Clear Input Field
+                                    chatInputController.clear();
+
+                                    //Add Message to List
+                                    messages.insert(0, message);
+
                                     if (mounted) {
                                       await ChatHandler(context).sendMessage(
                                         message: message,
@@ -305,11 +311,6 @@ class _LovedOneChatState extends State<LovedOneChat> {
                                       );
                                     }
 
-                                    //Clear Input Field
-                                    chatInputController.clear();
-
-                                    //Add Message to List
-                                    messages.insert(0, message);
                                     _chatKey.currentState?.insertItem(0);
                                   } catch (error) {
                                     debugPrint(error.toString());
