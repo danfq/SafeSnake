@@ -2,6 +2,7 @@ import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pull_down_button/pull_down_button.dart';
+import 'package:safesnake/util/accessibility/tts.dart';
 import 'package:safesnake/util/chat/handler.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/models/message.dart';
@@ -84,6 +85,9 @@ class _ChatItemState extends State<ChatItem> {
           renderBox.size.center(Offset.zero),
         );
 
+        //TTS
+        final ttsMode = LocalData.boxData(box: "accessibility")["tts"] ?? false;
+
         setState(() {
           messageFocused = true;
         });
@@ -112,6 +116,17 @@ class _ChatItemState extends State<ChatItem> {
                 //Set Reply Status
                 widget.onReply(widget.message);
               },
+            ),
+
+            //TTS
+            PullDownMenuItem(
+              title: "Speak Message",
+              icon: MaterialCommunityIcons.text_to_speech,
+              onTap: ttsMode
+                  ? () async {
+                      await TTSEngine.speak(message: widget.message.content);
+                    }
+                  : null,
             ),
 
             //Delete Message - Only Own Messages

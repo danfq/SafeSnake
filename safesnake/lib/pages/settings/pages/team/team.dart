@@ -22,7 +22,7 @@ class Team extends StatelessWidget {
       TeamMember(
         icon: Ionicons.ios_brush,
         name: "VEIGA",
-        position: "Design & QA Testing",
+        position: "Design & iOS QA Testing",
         url: "https://instagram.com/veigadesigns",
       ),
 

@@ -5,6 +5,7 @@ import 'package:safesnake/firebase_options.dart';
 import 'package:safesnake/pages/account/account.dart';
 import 'package:safesnake/pages/intro/intro.dart';
 import 'package:safesnake/pages/safesnake.dart';
+import 'package:safesnake/util/accessibility/tts.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/data/env.dart';
 import 'package:safesnake/util/data/local.dart';
@@ -39,6 +40,9 @@ void main() async {
 
   //Initialize Local Storage
   await LocalData.init();
+
+  ///Initialize TTS Engine
+  await TTSEngine.init();
 
   //Intro Status
   final introStatus = LocalData.boxData(box: "intro")["status"] ?? false;

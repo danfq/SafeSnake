@@ -9,6 +9,7 @@ class LocalData {
     "colors",
     "loved_ones",
     "personal",
+    "accessibility",
     "settings",
   ];
 
