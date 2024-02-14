@@ -128,12 +128,12 @@ class ChatHandler {
   }
 
   ///Chat Messages Stream - by `chatID`
-  Stream<List<types.Message>> chatMessages({
+  Stream<List<MessageData>> chatMessages({
     required String chatID,
-    required Function(List<types.Message> messages) onNewMessages,
+    required Function(List<MessageData> messages) onNewMessages,
   }) {
     //All Messages
-    List<types.Message> allMessages = [];
+    List<MessageData> allMessages = [];
 
     //Chat Messages
     return RemoteData(context)
@@ -146,17 +146,23 @@ class ChatHandler {
           //Parse Messages
           for (final messageItem in messages) {
             //Message
-            final message = types.TextMessage(
+            final message = MessageData(
               id: messageItem["id"],
-              text: messageItem["decrypted_content"],
-              author: types.User(id: messageItem["sender"]),
+              chatID: chatID,
+              content: messageItem["decrypted_content"],
+              sentAt: messageItem["sent_at"],
+              sender: messageItem["sender"],
+              replyTo: messageItem["reply_to"],
             );
 
             //Update Messages
             allMessages.add(message);
           }
 
-          //Return Messages
+          //Update Stream
+          onNewMessages(allMessages);
+
+          //Return Chats Stream
           return allMessages;
         });
   }

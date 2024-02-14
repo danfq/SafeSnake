@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/chat/handler.dart';
 import 'package:safesnake/util/models/chat.dart';
 import 'package:safesnake/util/models/message.dart';
+import 'package:safesnake/util/widgets/chat.dart';
+import 'package:safesnake/util/widgets/input.dart';
 import 'package:safesnake/util/widgets/main.dart';
 import 'package:uuid/uuid.dart';
 
@@ -30,48 +30,47 @@ class _LovedOneChatState extends State<LovedOneChat> {
   ///Chat Input Controller
   TextEditingController chatInputController = TextEditingController();
 
+  ///Chat Input Focus Node
+  final FocusNode _chatInputFocusNode = FocusNode();
+
+  ///Chat List Key
+  final GlobalKey<AnimatedListState> _chatKey = GlobalKey<AnimatedListState>();
+
   ///Messages
-  List<types.Message> _messages = [];
+  List<MessageData> messages = [];
 
-  ///Add Message
-  void _addMessage(types.Message message) {
+  ///Message In Focus Status
+  bool messageInFocusStatus = false;
+
+  ///Message In Focus
+  Widget? messageInFocus;
+
+  ///Sending Message Status
+  bool sendingMessage = false;
+
+  ///Message Replying
+  MessageData? messageReplying;
+
+  ///Replied Messages Contents
+  Map<String, String?> repliedMessageContents = {};
+
+  ///Fetch Replied Message Content by `messageID`
+  Future<void> fetchRepliedMessageContent(String messageID) async {
+    final repliedMessage = await ChatHandler(context).messageByID(
+      id: messageID,
+    );
     setState(() {
-      _messages.insert(0, message);
+      repliedMessageContents[messageID] = repliedMessage!.content;
     });
-  }
-
-  ///On Message Sent
-  Future<void> _onMessageSent({
-    required String currentUser,
-    required types.PartialText message,
-  }) async {
-    final textMessage = types.TextMessage(
-      author: types.User(id: currentUser),
-      createdAt: DateTime.now().millisecondsSinceEpoch,
-      id: const Uuid().v4(),
-      text: message.text,
-    );
-
-    //Add to UI
-    _addMessage(textMessage);
-
-    //Send Message
-    ChatHandler(context).sendMessage(
-      message: MessageData(
-        id: const Uuid().v4(),
-        chatID: widget.chat.id,
-        content: message.text,
-        sentAt: DateTime.now().millisecondsSinceEpoch,
-        sender: currentUser,
-      ),
-      receiverFCM: widget.lovedOne["fcm"],
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     ///Current User
     final String currentUser = AccountHandler(context).currentUser!.id;
+
+    //Chat ID
+    final String chatID = widget.chat.id;
 
     //UI
     return Scaffold(
@@ -112,48 +111,224 @@ class _LovedOneChatState extends State<LovedOneChat> {
         ],
       ),
       body: SafeArea(
-        child: StreamBuilder(
-          stream: ChatHandler(context).chatMessages(
-            chatID: widget.chat.id,
-            onNewMessages: (newMessages) {
-              setState(() {
-                _messages = [..._messages, ...newMessages];
-              });
-            },
-          ),
-          builder: (context, snapshot) {
-            //Check Connection
-            if (snapshot.connectionState == ConnectionState.active) {
-              //Messages
-              final messages = snapshot.data;
+        child: Column(
+          children: [
+            //Chat
+            Expanded(
+              child: StreamBuilder(
+                stream: ChatHandler(context).chatMessages(
+                  chatID: chatID,
+                  onNewMessages: (newMessages) async {
+                    if (mounted) {
+                      setState(() {
+                        messages = [...messages, ...newMessages];
+                      });
+                    }
 
-              return messages != null
-                  ? Chat(
-                      messages: messages,
-                      onSendPressed: (message) async {
-                        await _onMessageSent(
-                          currentUser: currentUser,
-                          message: message,
+                    //Get Replied Messages Content
+                    for (final message in newMessages) {
+                      if (message.replyTo != null &&
+                          !repliedMessageContents.containsKey(
+                            message.replyTo!,
+                          )) {
+                        await fetchRepliedMessageContent(message.replyTo!);
+                      }
+                    }
+                  },
+                ),
+                builder: (context, snapshot) {
+                  //No Data
+                  if (!snapshot.hasData) {
+                    return Container();
+                  }
+
+                  //Chats
+                  messages = snapshot.data!;
+
+                  //Messages
+                  return messages.isNotEmpty
+                      ? ListView.builder(
+                          reverse: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: messages.length,
+                          itemBuilder: (context, index) {
+                            //Message
+                            final message = messages[index];
+
+                            //Check Current User
+                            final isCurrentUser = message.sender == currentUser;
+
+                            //Check if Last in Group
+                            bool isLastInGroup = true;
+                            if (index > 0) {
+                              final previousMessage = messages[index - 1];
+                              isLastInGroup =
+                                  previousMessage.sender != message.sender;
+                            }
+
+                            //Replied Message Content
+                            final repliedMessageContent =
+                                repliedMessageContents[message.replyTo ?? ""];
+
+                            //Chat Bubble
+                            final chatBubble = DefaultTextHeightBehavior(
+                              textHeightBehavior: const TextHeightBehavior(),
+                              child: ChatItem(
+                                message: message,
+                                isCurrentUser: isCurrentUser,
+                                isLastInGroup: isLastInGroup,
+                                keyboardFocusNode: _chatInputFocusNode,
+                                onReply: (messageID) {
+                                  setState(() {
+                                    messageReplying = messageID;
+                                  });
+                                },
+                                repliedContent: repliedMessageContent,
+                              ),
+                            );
+
+                            //Display Chat Bubble
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                bottom: isLastInGroup ? 14.0 : 0.0,
+                              ),
+                              child: chatBubble,
+                            );
+                          },
+                        )
+                      : const Center(
+                          child: Text("No Messages"),
                         );
-                      },
-                      user: types.User(id: currentUser),
-                      theme: DefaultChatTheme(
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        primaryColor: Theme.of(context).colorScheme.secondary,
-                        secondaryColor: Colors.grey.shade300,
-                        inputBackgroundColor: Theme.of(context)
-                            .dialogBackgroundColor
-                            .withOpacity(0.8),
-                        inputTextColor:
-                            Theme.of(context).textTheme.bodyMedium!.color!,
+                },
+              ),
+            ),
+
+            //Chat Input
+            Column(
+              children: [
+                //Replying Status
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  height: messageReplying != null ? 40.0 : 0.0,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    shape: BoxShape.rectangle,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(14.0),
+                      topRight: Radius.circular(14.0),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      messageReplying?.content ?? "",
+                      style: const TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                ),
+
+                //Input
+                Row(
+                  children: [
+                    //Input
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Input(
+                          controller: chatInputController,
+                          placeholder: "Write a message...",
+                          backgroundColor:
+                              Theme.of(context).dialogBackgroundColor,
+                          onChanged: (content) => setState(() {}),
+                        ),
                       ),
-                    )
-                  : const Center(child: Text("Error Fetching Messages"));
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
+                    ),
+
+                    //Send Message
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: IconButton(
+                        icon: const Icon(Ionicons.ios_send),
+                        onPressed: chatInputController.text.trim().isNotEmpty
+                            ? () async {
+                                //Message Content
+                                final messageContent =
+                                    chatInputController.text.trim();
+
+                                //Check Message Content
+                                if (messageContent.isNotEmpty) {
+                                  //Message
+                                  final message = MessageData(
+                                    id: const Uuid().v4(),
+                                    chatID: widget.chat.id,
+                                    content: messageContent,
+                                    sentAt:
+                                        DateTime.now().millisecondsSinceEpoch,
+                                    sender: currentUser,
+                                    replyTo: messageReplying?.id,
+                                  );
+
+                                  setState(() {
+                                    sendingMessage = true;
+                                  });
+
+                                  //Sender Data
+                                  final senderData =
+                                      await AccountHandler(context).userByID(
+                                    id: currentUser,
+                                  );
+
+                                  //Receiver Data
+                                  final receiverData =
+                                      await AccountHandler(context).userByName(
+                                    name: widget.lovedOne["name"],
+                                  );
+
+                                  //Send Message
+                                  try {
+                                    if (mounted) {
+                                      await ChatHandler(context).sendMessage(
+                                        message: message,
+                                        receiverFCM: receiverData["fcm"],
+                                      );
+                                    }
+
+                                    //Notify User
+                                    if (mounted) {
+                                      await ChatHandler.sendNotification(
+                                        context: context,
+                                        fcmToken: receiverData["fcm"],
+                                        title: "New Message",
+                                        body:
+                                            "${senderData["name"]}: ${message.content}",
+                                      );
+                                    }
+
+                                    //Clear Input Field
+                                    chatInputController.clear();
+
+                                    //Add Message to List
+                                    messages.insert(0, message);
+                                    _chatKey.currentState?.insertItem(0);
+                                  } catch (error) {
+                                    debugPrint(error.toString());
+                                  } finally {
+                                    setState(() {
+                                      sendingMessage = false;
+                                      messageReplying = null;
+                                    });
+                                  }
+                                }
+                              }
+                            : null,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
