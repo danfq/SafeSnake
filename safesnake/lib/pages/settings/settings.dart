@@ -20,6 +20,9 @@ class _SettingsPageState extends State<SettingsPage> {
   //Accessibility
   bool ttsStatus = LocalData.boxData(box: "accessibility")["tts"] ?? false;
 
+  //Extras
+  bool colorfulMode = LocalData.boxData(box: "settings")["colorful"] ?? false;
+
   @override
   Widget build(BuildContext context) {
     //Current Theme
@@ -31,166 +34,161 @@ class _SettingsPageState extends State<SettingsPage> {
             false;
 
     //UI
-    return PopScope(
-      onPopInvoked: (didPop) async {
-        //Save Data
-        await LocalData.setData(
-          box: "settings",
-          data: {
-            "invites": acceptInvites,
-          },
-        );
-
-        await LocalData.setData(
-          box: "accessibility",
-          data: {
-            "tts": ttsStatus,
-          },
-        );
-      },
-      child: Scaffold(
-        appBar: MainWidgets(context: context).appBar(
-          onBack: () async {
-            //Save Data
-            await LocalData.setData(
-              box: "settings",
-              data: {
-                "invites": acceptInvites,
-              },
-            );
-
-            await LocalData.setData(
-              box: "accessibility",
-              data: {
-                "tts": ttsStatus,
-              },
-            );
-
-            //Go Back
-            if (mounted) {
-              Navigator.pop(context);
-            }
-          },
-          title: const Text("Settings"),
-        ),
-        body: SafeArea(
-          child: SettingsList(
-            lightTheme: SettingsThemeData(
-              settingsListBackground: Theme.of(context).scaffoldBackgroundColor,
+    return Scaffold(
+      appBar: MainWidgets(context: context).appBar(
+        title: const Text("Settings"),
+      ),
+      body: SafeArea(
+        child: SettingsList(
+          lightTheme: SettingsThemeData(
+            settingsListBackground: Theme.of(context).scaffoldBackgroundColor,
+          ),
+          darkTheme: SettingsThemeData(
+            settingsListBackground: Theme.of(context).scaffoldBackgroundColor,
+          ),
+          physics: const BouncingScrollPhysics(),
+          sections: [
+            //UI
+            SettingsSection(
+              title: const Text("UI & Visuals"),
+              tiles: [
+                //Theme
+                SettingsTile.switchTile(
+                  initialValue: currentTheme,
+                  onToggle: (mode) => ThemeController.setAppearance(
+                    context: context,
+                    mode: mode,
+                  ),
+                  leading: currentTheme
+                      ? const Icon(Ionicons.ios_sunny)
+                      : const Icon(Ionicons.ios_moon),
+                  title: const Text("Theme"),
+                  description: Text(currentTheme ? "Dark Mode" : "Light Mode"),
+                ),
+              ],
             ),
-            darkTheme: SettingsThemeData(
-              settingsListBackground: Theme.of(context).scaffoldBackgroundColor,
+
+            //Account
+            SettingsSection(
+              title: const Text("Your Account"),
+              tiles: [
+                SettingsTile.navigation(
+                  leading: const Icon(Ionicons.ios_person),
+                  title: const Text("Information"),
+                  description: const Text(
+                    "See and change all your Account Information.",
+                  ),
+                  onPressed: (context) {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => const AccountInfo(),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
-            physics: const BouncingScrollPhysics(),
-            sections: [
-              //UI
-              SettingsSection(
-                title: const Text("UI & Visuals"),
-                tiles: [
-                  //Theme
-                  SettingsTile.switchTile(
-                    initialValue: currentTheme,
-                    onToggle: (mode) => ThemeController.setAppearance(
-                      context: context,
-                      mode: mode,
-                    ),
-                    leading: currentTheme
-                        ? const Icon(Ionicons.ios_sunny)
-                        : const Icon(Ionicons.ios_moon),
-                    title: const Text("Theme"),
-                    description:
-                        Text(currentTheme ? "Dark Mode" : "Light Mode"),
-                  ),
-                ],
-              ),
 
-              //Account
-              SettingsSection(
-                title: const Text("Your Account"),
-                tiles: [
-                  SettingsTile.navigation(
-                    leading: const Icon(Ionicons.ios_person),
-                    title: const Text("Information"),
-                    description: const Text(
-                      "See and change all your Account Information.",
-                    ),
-                    onPressed: (context) {
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => const AccountInfo(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+            //Accessibility
+            SettingsSection(
+              title: const Text("Accessibility"),
+              tiles: [
+                SettingsTile.switchTile(
+                  initialValue: ttsStatus,
+                  onToggle: (mode) {
+                    //Update UI
+                    setState(() {
+                      ttsStatus = mode;
+                    });
 
-              //Accessibility
-              SettingsSection(
-                title: const Text("Accessibility"),
-                tiles: [
-                  SettingsTile.switchTile(
-                    initialValue: ttsStatus,
-                    onToggle: (mode) {
-                      //Update UI
-                      setState(() {
-                        ttsStatus = mode;
-                      });
-                    },
-                    leading: const Icon(MaterialCommunityIcons.text_to_speech),
-                    title: const Text("Text-to-Speech"),
-                    description: const Text(
-                      "Enables Text-to-Speech on Help Items & Messages.",
-                    ),
-                  )
-                ],
-              ),
-
-              //Team & Licenses
-              SettingsSection(
-                title: const Text("Team & Licenses"),
-                tiles: [
-                  SettingsTile.navigation(
-                    leading: const Icon(Ionicons.ios_people),
-                    title: const Text("Team"),
-                    onPressed: (context) {
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(builder: (context) => const Team()),
-                      );
-                    },
+                    //Update Data
+                    LocalData.updateValue(
+                      box: "accessibility",
+                      item: "tts",
+                      value: ttsStatus,
+                    );
+                  },
+                  leading: const Icon(MaterialCommunityIcons.text_to_speech),
+                  title: const Text("Text-to-Speech"),
+                  description: const Text(
+                    "Enables Text-to-Speech on Help Items & Messages.",
                   ),
-                  SettingsTile.navigation(
-                    leading: const Icon(Ionicons.ios_document),
-                    title: const Text("Licenses"),
-                    onPressed: (context) {
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => LicensePage(
-                            applicationName: "SafeSnake",
-                            applicationIcon: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(14.0),
-                                child: Image.asset(
-                                  "assets/logo.png",
-                                  height: 80.0,
-                                  filterQuality: FilterQuality.high,
-                                  fit: BoxFit.cover,
-                                ),
+                )
+              ],
+            ),
+
+            //Extras
+            SettingsSection(
+              title: const Text("Extras"),
+              tiles: [
+                SettingsTile.switchTile(
+                  initialValue: colorfulMode,
+                  onToggle: (mode) {
+                    //Update UI
+                    setState(() {
+                      colorfulMode = mode;
+                    });
+
+                    //Update Data
+                    LocalData.updateValue(
+                      box: "settings",
+                      item: "colorful",
+                      value: colorfulMode,
+                    );
+                  },
+                  leading: const Icon(Ionicons.ios_brush),
+                  title: const Text("Colorful Mode"),
+                  description: const Text(
+                    "Makes the App a lot more colorful!",
+                  ),
+                )
+              ],
+            ),
+
+            //Team & Licenses
+            SettingsSection(
+              title: const Text("Team & Licenses"),
+              tiles: [
+                SettingsTile.navigation(
+                  leading: const Icon(Ionicons.ios_people),
+                  title: const Text("Team"),
+                  onPressed: (context) {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(builder: (context) => const Team()),
+                    );
+                  },
+                ),
+                SettingsTile.navigation(
+                  leading: const Icon(Ionicons.ios_document),
+                  title: const Text("Licenses"),
+                  onPressed: (context) {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => LicensePage(
+                          applicationName: "SafeSnake",
+                          applicationIcon: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(14.0),
+                              child: Image.asset(
+                                "assets/logo.png",
+                                height: 80.0,
+                                filterQuality: FilterQuality.high,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

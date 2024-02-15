@@ -47,6 +47,19 @@ class LocalData {
     await localBox.putAll(data);
   }
 
+  ///Update Value
+  static Future<void> updateValue({
+    required String box,
+    required String item,
+    required dynamic value,
+  }) async {
+    //Box
+    final localBox = Hive.box(box);
+
+    //Update Value
+    localBox.put(item, value);
+  }
+
   ///Get Box Data
   static Map<dynamic, dynamic> boxData({required String box}) {
     //Box

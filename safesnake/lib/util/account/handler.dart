@@ -598,22 +598,24 @@ class AccountHandler {
 
   ///Set `referral` Code as Used by `email`
   Future<void> setReferralAsUsed({
-    required String id,
     required String referral,
   }) async {
     //User By Referral
     final user = await userByReferral(referral: referral);
 
     //Referral Status
-    final referralStatus = await checkReferralUsage(id: id, referral: referral);
+    final referralStatus = await checkReferralUsage(
+      id: currentUser!.id,
+      referral: referral,
+    );
 
-    if (!referralStatus) {
+    if (referralStatus == false) {
       await RemoteData(context).addData(
         table: "invitations",
         data: {
           "id": const Uuid().v4(),
           "referral": referral,
-          "used_by": id,
+          "used_by": currentUser!.id,
           "created_by": user["id"],
         },
       );

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:safesnake/util/accessibility/tts.dart';
 import 'package:safesnake/util/data/constants.dart';
@@ -10,6 +11,21 @@ class Help extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Colorful Mode
+    final bool colorfulMode =
+        LocalData.boxData(box: "settings")["colorful"] ?? false;
+
+    //Random Pastel Color
+    Color randomPastelColor() {
+      //Random RGB Pastel Colors
+      int red = Random().nextInt(128) + 128;
+      int green = Random().nextInt(128) + 100;
+      int blue = Random().nextInt(128) + 100;
+
+      //Random Pastel Color
+      return Color.fromRGBO(red, green, blue, 1);
+    }
+
     //Help Options
     List<String> helpOptions = HelpItems.all;
 
@@ -64,6 +80,9 @@ class Help extends StatelessWidget {
                           },
                           borderRadius: BorderRadius.circular(14.0),
                           child: Card(
+                            color: colorfulMode
+                                ? randomPastelColor()
+                                : Theme.of(context).cardColor,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Center(

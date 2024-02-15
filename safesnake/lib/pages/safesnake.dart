@@ -1,6 +1,4 @@
-import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:safesnake/pages/home/home.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/animations/handler.dart';
@@ -50,10 +48,7 @@ class _SafeSnakeState extends State<SafeSnake> {
 
     //Set Referral Code as Used - If Not Null
     if (userReferral.isNotEmpty) {
-      AccountHandler(context).setReferralAsUsed(
-        id: widget.user.id,
-        referral: userReferral,
-      );
+      AccountHandler(context).setReferralAsUsed(referral: userReferral);
     }
 
     if (context.mounted) {
@@ -84,32 +79,6 @@ class _SafeSnakeState extends State<SafeSnake> {
             ),
           ],
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: InkWell(
-              onTap: () async {
-                final confirmed = await confirm(
-                  context,
-                  title: const Text("Orange Mode"),
-                  content: const Text("Everything will be a lot shinier!"),
-                  textOK: const Text("Activate!"),
-                );
-
-                //Check if Confirmed
-                if (confirmed && mounted) {
-                  //Set Orange Mode
-                  ThemeController.setOrangeMode(context: context, mode: true);
-                }
-              },
-              borderRadius: BorderRadius.circular(14.0),
-              child: SvgPicture.asset(
-                "assets/icons/orange.svg",
-                width: 28.0,
-              ),
-            ),
-          ),
-        ],
       ),
       body: const SafeArea(child: Home()),
     );

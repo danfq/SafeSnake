@@ -11,7 +11,11 @@ class TTSEngine {
     //Default Voice -  Android Only
     if (Platform.isAndroid) {
       final defaultVoice = await _tts.getDefaultVoice;
-      await _tts.setVoice(defaultVoice);
+
+      await _tts.setVoice({
+        "name": defaultVoice["name"],
+        "locale": defaultVoice["locale"],
+      });
     }
 
     //Set Voice Properties
