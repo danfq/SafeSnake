@@ -15,6 +15,9 @@ class Help extends StatelessWidget {
     final bool colorfulMode =
         LocalData.boxData(box: "settings")["colorful"] ?? false;
 
+    //TTS
+    final ttsMode = LocalData.boxData(box: "accessibility")["tts"] ?? false;
+
     //Random Pastel Color
     Color randomPastelColor() {
       //Random RGB Pastel Colors
@@ -28,9 +31,6 @@ class Help extends StatelessWidget {
 
     //Help Options
     List<String> helpOptions = HelpItems.all;
-
-    //Shuffle Help Options
-    helpOptions.shuffle();
 
     //UI
     return Scaffold(
@@ -61,11 +61,6 @@ class Help extends StatelessWidget {
                       .map(
                         (item) => InkWell(
                           onLongPress: () async {
-                            //TTS
-                            final ttsMode = LocalData.boxData(
-                                    box: "accessibility")["tts"] ??
-                                false;
-
                             //Check Text to Speech
                             if (ttsMode) {
                               await TTSEngine.speak(message: item);

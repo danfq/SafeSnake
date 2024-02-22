@@ -87,8 +87,7 @@ class _LovedOneChatState extends State<LovedOneChat> {
                 final lovedOne = widget.lovedOne;
 
                 //Clean ID
-                final id =
-                    (lovedOne["id"] as String).split("-").first.toUpperCase();
+                final id = widget.chat.id.split("-").first.toUpperCase();
 
                 //Show Information
                 await showAdaptiveDialog(
@@ -100,7 +99,10 @@ class _LovedOneChatState extends State<LovedOneChat> {
                         lovedOne["name"],
                         textAlign: TextAlign.center,
                       ),
-                      content: Text("ID: $id", textAlign: TextAlign.center),
+                      content: Text(
+                        "Chat ID: $id",
+                        textAlign: TextAlign.center,
+                      ),
                     );
                   },
                 );
