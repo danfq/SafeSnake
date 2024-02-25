@@ -104,7 +104,7 @@ class Themes {
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Color(0xFF008080),
     ),
-    textTheme: GoogleFonts.poppinsTextTheme().apply(
+    textTheme: GoogleFonts.montserratTextTheme().apply(
       displayColor: const Color(0xFF1F2A33),
       bodyColor: const Color(0xFF1F2A33),
     ),
@@ -145,7 +145,7 @@ class Themes {
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Color(0xFF008080),
     ),
-    textTheme: GoogleFonts.poppinsTextTheme().apply(
+    textTheme: GoogleFonts.montserratTextTheme().apply(
       displayColor: const Color(0xFFFAFAFA),
       bodyColor: const Color(0xFFFAFAFA),
     ),
