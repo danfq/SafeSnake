@@ -47,22 +47,28 @@ class _SafeSnakeState extends State<SafeSnake> {
     final String userReferral = widget.user.userMetadata!["invited_by"];
 
     //Set Referral Code as Used - If Not Null
-    if (userReferral.isNotEmpty) {
-      AccountHandler(context).setReferralAsUsed(referral: userReferral);
-    }
+    setReferralAsUsed(referral: userReferral);
+  }
 
-    if (context.mounted) {
-      //Cache User
-      AccountHandler(context).cacheUser();
+  ///Set Referral as Used
+  Future<void> setReferralAsUsed({required String referral}) async {
+    //Check Referral
+    if (referral.isNotEmpty) {
+      //Used
+      final used = await AccountHandler(context).checkReferralUsage(
+        id: AccountHandler(context).currentUser!.id,
+        referral: referral,
+      );
 
-      //Listen for Firebase Messages
-      AccountHandler.fcmListen();
+      //Set as Used if Not Used Before
+      if (!used && context.mounted) {
+        await AccountHandler(context).setReferralAsUsed(referral: referral);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    //UI
     return Scaffold(
       appBar: MainWidgets(context: context).appBar(
         allowBack: false,
