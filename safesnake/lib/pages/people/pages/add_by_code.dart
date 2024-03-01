@@ -44,11 +44,9 @@ class _AddByCodeState extends State<AddByCode> {
                   //Check Referral Code
                   if (referral.isNotEmpty) {
                     //Add Loved One
-                    await AccountHandler(context)
-                        .addPersonByReferral(
-                          referral: referral,
-                        )
-                        .then((_) => setState(() {}));
+                    await AccountHandler.addPersonByReferral(
+                      referral: referral,
+                    ).then((_) => setState(() {}));
                   }
                 },
                 child: const Text("Add Loved One"),

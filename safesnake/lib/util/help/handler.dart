@@ -14,7 +14,7 @@ class HelpHandler {
     required String helpContent,
   }) async {
     //Loved Ones
-    final lovedOnes = await AccountHandler(context).lovedOnes();
+    final lovedOnes = await AccountHandler.lovedOnes(context: context);
 
     //Parsed Loved Ones
     final parsedLovedOnes = lovedOnes
@@ -171,11 +171,11 @@ class HelpHandler {
     required String content,
   }) async {
     //Current User
-    final currentUser = AccountHandler(context).currentUser;
+    final currentUser = AccountHandler.currentUser;
     final userName = currentUser!.userMetadata!["username"];
 
     //Loved One
-    final lovedOneData = await AccountHandler(context).userByName(
+    final lovedOneData = await AccountHandler.userByName(
       name: lovedOne.name.trim(),
     );
 

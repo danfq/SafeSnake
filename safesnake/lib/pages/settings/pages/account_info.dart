@@ -44,7 +44,7 @@ class _AccountInfoState extends State<AccountInfo> {
                   subtitle: Text(accountData["email"]),
                   trailing: IconButton(
                     onPressed: () async {
-                      await AccountHandler(context).signOut();
+                      await AccountHandler.signOut();
                     },
                     style: IconButton.styleFrom(
                       backgroundColor: Colors.grey.shade600,
@@ -157,7 +157,7 @@ class _AccountInfoState extends State<AccountInfo> {
                           "This will notify our Admins of your choice.\nIf you change your mind, you may contact us.\n\nOtherwise, all your Data will be deleted, including Help Logs.",
                         ),
                         onPressed: (context) async {
-                          await AccountHandler(context).deleteAccount();
+                          await AccountHandler.deleteAccount();
                         },
                       ),
                     ],

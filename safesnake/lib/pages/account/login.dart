@@ -39,7 +39,7 @@ class _LoginState extends State<Login> {
             //Check E-mail & Password
             if (email.isNotEmpty && password.isNotEmpty) {
               //Sign In with E-mail & Password
-              await AccountHandler(context).signIn(
+              await AccountHandler.signIn(
                 email: email,
                 password: password,
               );

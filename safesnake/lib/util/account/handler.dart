@@ -2,8 +2,10 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/route_manager.dart';
 import 'package:safesnake/pages/account/account.dart';
 import 'package:safesnake/pages/safesnake.dart';
 import 'package:safesnake/util/data/local.dart';
@@ -17,12 +19,6 @@ import 'package:uuid/uuid.dart';
 
 ///Account Handler
 class AccountHandler {
-  ///Context
-  final BuildContext context;
-
-  ///Account Handler
-  AccountHandler(this.context);
-
   ///Supabase Auth Client
   static final _auth = Supabase.instance.client.auth;
 
@@ -30,10 +26,10 @@ class AccountHandler {
   static final _firebaseMessaging = FirebaseMessaging.instance;
 
   ///Current User
-  User? get currentUser => _auth.currentUser;
+  static User? get currentUser => _auth.currentUser;
 
   ///Cache User Data Locally
-  Future<void> cacheUser() async {
+  static Future<void> cacheUser() async {
     //Current User
     final currentUser = _auth.currentUser;
 
@@ -131,7 +127,9 @@ class AccountHandler {
   }
 
   ///Get Loved Ones as `List<String>`
-  Future<List<Map<String, dynamic>>> lovedOnes() async {
+  static Future<List<Map<String, dynamic>>> lovedOnes({
+    required BuildContext context,
+  }) async {
     //Loved Ones
     List<Map<String, dynamic>> lovedOnes = [];
 
@@ -139,13 +137,18 @@ class AccountHandler {
     final currentUserID = currentUser?.id;
 
     //Invitations
-    final invitations = await RemoteData(context).getData(table: "invitations");
+    final invitations = await RemoteData(context).getData(
+      table: "invitations",
+    );
 
     //Filter By Current User's ID as the Creator and Used
     for (final invitation in invitations) {
       //Created Referral
       if (invitation["created_by"] == currentUserID) {
-        final user = await userByID(id: invitation["used_by"]);
+        final user = await userByID(
+          context: context,
+          id: invitation["used_by"],
+        );
 
         //Add User
         lovedOnes.add(user);
@@ -153,7 +156,10 @@ class AccountHandler {
 
       //Used Referral
       if (invitation["used_by"] == currentUserID) {
-        final user = await userByID(id: invitation["created_by"]);
+        final user = await userByID(
+          context: context,
+          id: invitation["created_by"],
+        );
 
         //Add User
         lovedOnes.add(user);
@@ -168,7 +174,10 @@ class AccountHandler {
   }
 
   ///User by ID
-  Future<Map<String, dynamic>> userByID({required String id}) async {
+  static Future<Map<String, dynamic>> userByID({
+    required BuildContext context,
+    required String id,
+  }) async {
     //Get User Name via ID
     final users = await RemoteData(context).getData(table: "users");
 
@@ -186,10 +195,10 @@ class AccountHandler {
   }
 
   ///User by Referral
-  Future<Map<String, dynamic>> userByReferral(
+  static Future<Map<String, dynamic>> userByReferral(
       {required String referral}) async {
     //Get User Name via ID
-    final users = await RemoteData(context).getData(table: "users");
+    final users = await RemoteData(Get.context!).getData(table: "users");
 
     //Matching User
     final matchingUser = users.firstWhere((user) {
@@ -205,9 +214,9 @@ class AccountHandler {
   }
 
   ///User by Name
-  Future<Map<String, dynamic>> userByName({required String name}) async {
+  static Future<Map<String, dynamic>> userByName({required String name}) async {
     //Get User Name via ID
-    final users = await RemoteData(context).getData(table: "users");
+    final users = await RemoteData(Get.context!).getData(table: "users");
 
     //Matching User
     final matchingUser = users.firstWhere((user) {
@@ -223,11 +232,11 @@ class AccountHandler {
   }
 
   ///User by Referral
-  Future<Map<String, dynamic>?> _userByReferral({
+  static Future<Map<String, dynamic>?> _userByReferral({
     required String referral,
   }) async {
     //Get User Name via ID
-    final users = await RemoteData(context).getData(table: "users");
+    final users = await RemoteData(Get.context!).getData(table: "users");
 
     //Matching User
     final matchingUser = users.firstWhere((user) {
@@ -246,10 +255,10 @@ class AccountHandler {
   ///Delete Account
   ///
   ///This action is PERMANENT
-  Future<void> deleteAccount() async {
+  static Future<void> deleteAccount() async {
     //Show Sign Out Sheet
     await showModalBottomSheet(
-      context: context,
+      context: Get.context!,
       builder: (context) {
         return SizedBox(
           width: double.infinity,
@@ -311,10 +320,10 @@ class AccountHandler {
   ///Sign Out
   ///
   ///Takes the User back to `Account`
-  Future<void> signOut() async {
+  static Future<void> signOut() async {
     //Show Sign Out Sheet
     await showModalBottomSheet(
-      context: context,
+      context: Get.context!,
       builder: (context) {
         return SizedBox(
           width: double.infinity,
@@ -368,7 +377,7 @@ class AccountHandler {
   }
 
   ///Update User Data
-  Future<bool> updateData({
+  static Future<bool> updateData({
     String? email,
     String? password,
     Map<String, dynamic>? data,
@@ -404,7 +413,7 @@ class AccountHandler {
   }
 
   ///Sign In with `email` and `password`
-  Future<void> signIn({
+  static Future<void> signIn({
     required String email,
     required String password,
   }) async {
@@ -425,9 +434,9 @@ class AccountHandler {
           await cacheUser();
 
           //Go Home
-          if (context.mounted) {
+          if (Get.context!.mounted) {
             Navigator.pushAndRemoveUntil(
-              context,
+              Get.context!,
               CupertinoPageRoute(
                 builder: (context) => SafeSnake(user: user),
               ),
@@ -442,7 +451,7 @@ class AccountHandler {
   }
 
   ///Create Account with `username`, `email` and `password`
-  Future<void> createAccount({
+  static Future<void> createAccount({
     required String username,
     required String email,
     required String password,
@@ -476,8 +485,8 @@ class AccountHandler {
           final token = await fcmToken();
 
           //Add User to Database
-          if (context.mounted) {
-            await RemoteData(context).addData(
+          if (Get.context!.mounted) {
+            await RemoteData(Get.context!).addData(
               table: "users",
               data: {
                 "id": user.id,
@@ -489,14 +498,14 @@ class AccountHandler {
           }
 
           //Add Referral if Used
-          if (context.mounted && referralCode!.isNotEmpty) {
+          if (Get.context!.mounted && referralCode!.isNotEmpty) {
             //User by Referral
             final userByReferral =
                 await _userByReferral(referral: referralCode);
 
             //Add Data
-            if (context.mounted) {
-              await RemoteData(context).addData(
+            if (Get.context!.mounted) {
+              await RemoteData(Get.context!).addData(
                 table: "invitations",
                 data: {
                   "id": const Uuid().v4(),
@@ -509,9 +518,9 @@ class AccountHandler {
           }
 
           //Go Home
-          if (context.mounted) {
+          if (Get.context!.mounted) {
             Navigator.pushReplacement(
-              context,
+              Get.context!,
               CupertinoPageRoute(
                 builder: (context) => SafeSnake(user: user),
               ),
@@ -525,7 +534,7 @@ class AccountHandler {
   }
 
   ///Invite Person
-  Future<bool> invitePerson() async {
+  static Future<bool> invitePerson() async {
     //Status
     bool status = false;
 
@@ -547,7 +556,7 @@ class AccountHandler {
   }
 
   ///Invite Person
-  Future<bool> addPersonByReferral({required String referral}) async {
+  static Future<bool> addPersonByReferral({required String referral}) async {
     //Status
     bool status = false;
 
@@ -561,7 +570,7 @@ class AccountHandler {
           await checkReferralUsage(id: currentUser!.id, referral: referral);
 
       if (!used) {
-        await RemoteData(context).addData(
+        await RemoteData(Get.context!).addData(
           table: "invitations",
           data: {
             "id": const Uuid().v4(),
@@ -569,7 +578,7 @@ class AccountHandler {
             "used_by": currentUser?.id,
             "created_by": user["id"],
           },
-        ).then((_) => Navigator.pop(context));
+        ).then((_) => Navigator.pop(Get.context!));
       } else {
         LocalNotifications.toast(message: "Invalid Referral");
       }
@@ -582,7 +591,7 @@ class AccountHandler {
   }
 
   ///Generate Referral Code Based on UUID V4
-  String _referralCode() {
+  static String _referralCode() {
     //UUID
     final uuid = const Uuid().v4();
 
@@ -597,7 +606,7 @@ class AccountHandler {
   }
 
   ///Set `referral` Code as Used by `email`
-  Future<void> setReferralAsUsed({
+  static Future<void> setReferralAsUsed({
     required String referral,
   }) async {
     //User By Referral
@@ -610,7 +619,7 @@ class AccountHandler {
     );
 
     if (referralStatus == false) {
-      await RemoteData(context).addData(
+      await RemoteData(Get.context!).addData(
         table: "invitations",
         data: {
           "id": const Uuid().v4(),
@@ -623,7 +632,7 @@ class AccountHandler {
   }
 
   ///Check if Referral Has Been Used
-  Future<bool> checkReferralUsage({
+  static Future<bool> checkReferralUsage({
     required String id,
     required String referral,
   }) async {
@@ -631,7 +640,7 @@ class AccountHandler {
     bool status = false;
 
     //Referral Data
-    final data = await RemoteData(context).getData(table: "invitations");
+    final data = await RemoteData(Get.context!).getData(table: "invitations");
 
     //Check Data
     if (data.isNotEmpty) {

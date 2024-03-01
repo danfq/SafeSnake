@@ -67,7 +67,7 @@ class _LovedOneChatState extends State<LovedOneChat> {
   @override
   Widget build(BuildContext context) {
     ///Current User
-    final String currentUser = AccountHandler(context).currentUser!.id;
+    final String currentUser = AccountHandler.currentUser!.id;
 
     //Chat ID
     final String chatID = widget.chat.id;
@@ -277,13 +277,14 @@ class _LovedOneChatState extends State<LovedOneChat> {
 
                                   //Sender Data
                                   final senderData =
-                                      await AccountHandler(context).userByID(
+                                      await AccountHandler.userByID(
+                                    context: context,
                                     id: currentUser,
                                   );
 
                                   //Receiver Data
                                   final receiverData =
-                                      await AccountHandler(context).userByName(
+                                      await AccountHandler.userByName(
                                     name: widget.lovedOne["name"],
                                   );
 

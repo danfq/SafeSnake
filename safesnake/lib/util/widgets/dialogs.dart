@@ -81,21 +81,21 @@ class UtilDialog {
                         switch (type) {
                           case DialogType.username:
                             if (context.mounted) {
-                              await AccountHandler(context).updateData(
+                              await AccountHandler.updateData(
                                 data: {"username": input},
                               );
                             }
 
                           case DialogType.email:
                             if (context.mounted) {
-                              await AccountHandler(context).updateData(
+                              await AccountHandler.updateData(
                                 email: input,
                               );
                             }
 
                           case DialogType.password:
                             if (context.mounted) {
-                              await AccountHandler(context).updateData(
+                              await AccountHandler.updateData(
                                 password: input,
                               );
                             }
@@ -103,7 +103,7 @@ class UtilDialog {
 
                         //Update Local User Cache
                         if (context.mounted) {
-                          await AccountHandler(context).cacheUser();
+                          await AccountHandler.cacheUser();
                         }
 
                         //Close Dialog

@@ -18,7 +18,7 @@ class _LovedOnesState extends State<LovedOnes> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: AccountHandler(context).lovedOnes(),
+      future: AccountHandler.lovedOnes(context: context),
       builder: (context, snapshot) {
         //Loved Ones
         final lovedOnes = snapshot.data;
@@ -42,9 +42,7 @@ class _LovedOnesState extends State<LovedOnes> {
                     child: ListTile(
                       onTap: () async {
                         //User ID
-                        final userID = AccountHandler(context)
-                            .currentUser!
-                            .id
+                        final userID = AccountHandler.currentUser!.id
                             .toUpperCase()
                             .substring(0, 8);
 

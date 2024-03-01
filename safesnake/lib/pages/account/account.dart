@@ -199,7 +199,7 @@ class _AccountState extends State<Account> {
                 emailInput.isNotEmpty &&
                 passwordInput.isNotEmpty) {
               //Create Account
-              await AccountHandler(context).createAccount(
+              await AccountHandler.createAccount(
                 username: nameInput,
                 email: emailInput,
                 password: passwordInput,

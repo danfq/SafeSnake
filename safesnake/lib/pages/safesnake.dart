@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:safesnake/pages/home/home.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/animations/handler.dart';
@@ -32,7 +33,7 @@ class _SafeSnakeState extends State<SafeSnake> {
 
     if (context.mounted) {
       //Cache User
-      AccountHandler(context).cacheUser();
+      AccountHandler.cacheUser();
 
       //Listen for Firebase Messages
       AccountHandler.fcmListen();
@@ -55,14 +56,16 @@ class _SafeSnakeState extends State<SafeSnake> {
     //Check Referral
     if (referral.isNotEmpty) {
       //Used
-      final used = await AccountHandler(context).checkReferralUsage(
-        id: AccountHandler(context).currentUser!.id,
+      final used = await AccountHandler.checkReferralUsage(
+        id: widget.user.id,
         referral: referral,
       );
 
       //Set as Used if Not Used Before
-      if (!used && context.mounted) {
-        await AccountHandler(context).setReferralAsUsed(referral: referral);
+      if (!used) {
+        await AccountHandler.setReferralAsUsed(
+          referral: referral,
+        );
       }
     }
   }

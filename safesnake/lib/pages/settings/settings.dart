@@ -30,8 +30,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     //Accept Invites Status
     bool acceptInvites =
-        AccountHandler(context).currentUser?.userMetadata?["accept_invites"] ??
-            false;
+        AccountHandler.currentUser?.userMetadata?["accept_invites"] ?? false;
 
     //UI
     return Scaffold(

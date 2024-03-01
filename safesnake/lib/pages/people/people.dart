@@ -43,7 +43,7 @@ class PeoplePage extends StatelessWidget {
                                 Navigator.pop(context);
 
                                 //Invite Person
-                                await AccountHandler(context).invitePerson();
+                                await AccountHandler.invitePerson();
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
