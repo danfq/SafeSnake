@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:safesnake/pages/home/widgets/help.dart';
 import 'package:safesnake/pages/home/widgets/people.dart';
 import 'package:safesnake/pages/home/widgets/settings.dart';
+import 'package:safesnake/pages/home/widgets/suicide.dart';
 import 'package:safesnake/util/data/local.dart';
 
 class Home extends StatefulWidget {
@@ -34,6 +35,9 @@ class _HomeState extends State<Home> {
             People(lovedOnes: lovedOnes),
           ],
         ),
+
+        //Suicide Call
+        const SuicideCall(),
       ],
     );
   }

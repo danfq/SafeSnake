@@ -49,6 +49,7 @@ dependencies:
   flutter_chat_types: ^3.6.2
   flutter_tts: ^3.8.5
   get: ^4.6.6
+  flutter_phone_direct_caller: ^2.1.1
 
 dev_dependencies:
   flutter_test:

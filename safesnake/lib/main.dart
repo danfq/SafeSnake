@@ -1,6 +1,7 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:safesnake/firebase_options.dart';
 import 'package:safesnake/pages/account/account.dart';
 import 'package:safesnake/pages/intro/intro.dart';
@@ -60,7 +61,7 @@ void main() async {
       dark: Themes.dark,
       initial: AdaptiveThemeMode.light,
       builder: (light, dark) {
-        return MaterialApp(
+        return GetMaterialApp(
           theme: light,
           darkTheme: dark,
           home: SplashScreenView(

@@ -434,15 +434,7 @@ class AccountHandler {
           await cacheUser();
 
           //Go Home
-          if (Get.context!.mounted) {
-            Navigator.pushAndRemoveUntil(
-              Get.context!,
-              CupertinoPageRoute(
-                builder: (context) => SafeSnake(user: user),
-              ),
-              (route) => false,
-            );
-          }
+          Get.offAll(() => SafeSnake(user: user));
         }
       });
     } on AuthException catch (error) {
