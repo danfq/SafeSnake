@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/settings/pages/account_info.dart';
 import 'package:safesnake/pages/settings/pages/team/team.dart';
-import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/theming/controller.dart';
 import 'package:safesnake/util/widgets/main.dart';
@@ -27,10 +26,6 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     //Current Theme
     final currentTheme = ThemeController.current(context: context);
-
-    //Accept Invites Status
-    bool acceptInvites =
-        AccountHandler.currentUser?.userMetadata?["accept_invites"] ?? false;
 
     //UI
     return Scaffold(

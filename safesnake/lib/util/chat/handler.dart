@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:safesnake/util/data/constants.dart';
 import 'package:safesnake/util/data/remote.dart';
 import 'package:safesnake/util/models/chat.dart';
@@ -7,7 +6,6 @@ import 'package:safesnake/util/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 ///Chat Handler
 class ChatHandler {
