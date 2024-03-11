@@ -11,14 +11,17 @@ class SuicideCall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 40.0),
+      padding: const EdgeInsets.only(left: 30.0),
       child: PressableDough(
         child: GestureDetector(
           onTap: () async {
             await Get.defaultDialog(
               title: "Are you sure?",
-              content: const Text(
-                "A call will be made to the National Suicide Hotline.",
+              content: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "A call will be made to the National Suicide Hotline.",
+                ),
               ),
               cancel: TextButton(
                 onPressed: () => Get.back(),
@@ -43,8 +46,8 @@ class SuicideCall extends StatelessWidget {
             radius: 60.0,
             child: Center(
               child: Icon(
-                Ionicons.ios_call,
-                size: 30.0,
+                Ionicons.ios_alert_circle_outline,
+                size: 50.0,
                 color: Colors.white,
               ),
             ),
