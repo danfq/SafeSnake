@@ -20,10 +20,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        //Top Spacing
-        const SizedBox(height: 140.0),
-
         //Ask for Help
         AskForHelp(lovedOnes: lovedOnes),
 
