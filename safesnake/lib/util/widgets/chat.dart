@@ -1,6 +1,7 @@
 import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/route_manager.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:safesnake/util/accessibility/tts.dart';
 import 'package:safesnake/util/chat/handler.dart';
@@ -131,6 +132,7 @@ class _ChatItemState extends State<ChatItem> {
 
             //Delete Message - Only Own Messages
             PullDownMenuItem(
+              enabled: widget.isCurrentUser,
               title: "Delete",
               icon: Ionicons.ios_trash,
               onTap: () async {
@@ -170,6 +172,23 @@ class _ChatItemState extends State<ChatItem> {
                       ],
                     );
                   },
+                );
+              },
+            ),
+
+            //Information
+            PullDownMenuItem(
+              title: "Information",
+              icon: Ionicons.ios_information,
+              onTap: () async {
+                await Get.defaultDialog(
+                  title: "Message Info",
+                  content: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Sent At: ${DateTime.fromMillisecondsSinceEpoch(widget.message.sentAt)}",
+                    ),
+                  ),
                 );
               },
             ),

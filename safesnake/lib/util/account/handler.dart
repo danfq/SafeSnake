@@ -432,6 +432,12 @@ class AccountHandler {
           //Cache User Data
           await cacheUser();
 
+          //Set Referral as Used
+          if (user.userMetadata!["invited_by"] != null) {
+            //Set Referral Code as Used - If Not Null
+            setReferralAsUsed(referral: user.userMetadata!["invited_by"]);
+          }
+
           //Go Home
           Get.offAll(() => SafeSnake(user: user));
         }

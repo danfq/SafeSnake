@@ -40,36 +40,6 @@ class _SafeSnakeState extends State<SafeSnake> {
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    //User Referral Code
-    final String userReferral = widget.user.userMetadata!["invited_by"];
-
-    //Set Referral Code as Used - If Not Null
-    setReferralAsUsed(referral: userReferral);
-  }
-
-  ///Set Referral as Used
-  Future<void> setReferralAsUsed({required String referral}) async {
-    //Check Referral
-    if (referral.isNotEmpty) {
-      //Used
-      final used = await AccountHandler.checkReferralUsage(
-        id: widget.user.id,
-        referral: referral,
-      );
-
-      //Set as Used if Not Used Before
-      if (!used) {
-        await AccountHandler.setReferralAsUsed(
-          referral: referral,
-        );
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainWidgets(context: context).appBar(
