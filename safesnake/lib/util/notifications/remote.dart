@@ -1,19 +1,14 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/route_manager.dart';
+import 'package:safesnake/util/help/handler.dart';
 
 ///Remote Notifications
 class RemoteNotifications {
   ///Service
   static final FlutterLocalNotificationsPlugin _service =
       FlutterLocalNotificationsPlugin();
-
-  ///Context Global Key
-  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-  ///Current Context
-  static BuildContext get context =>
-      navigatorKey.currentState!.overlay!.context;
 
   ///Initialize Service
   static Future<void> init() async {
@@ -34,20 +29,28 @@ class RemoteNotifications {
 
   ///Show Notification
   static Future<void> showNotif(RemoteNotification notif) async {
+    //Show Notification
     await _service.show(
       14,
       notif.title,
       notif.body,
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
           "safesnake_14",
           "SafeSnake",
+          importance: notif.title == "Quick!"
+              ? Importance.high
+              : Importance.defaultImportance,
         ),
-        iOS: DarwinNotificationDetails(
-          presentSound: true,
-        ),
+        iOS: const DarwinNotificationDetails(),
       ),
     );
+
+    //Check for High-Alert Mode
+    if (notif.title == "Quick!") {
+      //Play Alert
+      await HelpHandler.highAlertNotif();
+    }
   }
 
   ///On Notification Response
@@ -61,7 +64,7 @@ class RemoteNotifications {
     String? payload,
   ) async {
     await showAdaptiveDialog(
-      context: context,
+      context: Get.context!,
       barrierDismissible: true,
       builder: (BuildContext context) => AlertDialog(
         title: Text(title ?? "SafeSnake"),

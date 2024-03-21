@@ -53,7 +53,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     context: context,
                     mode: mode,
                   ),
-                  leading: currentTheme
+                  leading: !currentTheme
                       ? const Icon(Ionicons.ios_sunny)
                       : const Icon(Ionicons.ios_moon),
                   title: const Text("Theme"),

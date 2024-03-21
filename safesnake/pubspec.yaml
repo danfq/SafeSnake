@@ -50,6 +50,7 @@ dependencies:
   flutter_tts: ^3.8.5
   get: ^4.6.6
   flutter_phone_direct_caller: ^2.1.1
+  just_audio: ^0.9.36
 
 dev_dependencies:
   flutter_test:
@@ -75,3 +76,6 @@ flutter:
 
     # Icons
     - assets/icons/
+
+    # Audio
+    - assets/audio/

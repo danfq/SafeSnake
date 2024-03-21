@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/chat/handler.dart';
 import 'package:safesnake/util/models/loved_one.dart';
@@ -8,6 +10,36 @@ import 'package:uuid/uuid.dart';
 
 ///Help Handler
 class HelpHandler {
+  ///High-Alert Warning
+  static Future<void> highAlertWarning({
+    required String name,
+    required String userName,
+    required String userFCM,
+  }) async {
+    //Send Notification
+    await ChatHandler.sendNotification(
+      context: Get.context!,
+      fcmToken: userFCM,
+      title: "Quick!",
+      body: "$name needs you right now!",
+    ).then((_) {
+      LocalNotifications.toast(message: "$userName notified!");
+    });
+  }
+
+  ///High-Alert Notification
+  static Future<void> highAlertNotif() async {
+    //Player
+    final player = AudioPlayer();
+
+    //Asset & Volume
+    await player.setAsset("assets/audio/alert.ogg");
+    await player.setVolume(1.0);
+
+    //Play
+    await player.play();
+  }
+
   ///Show Help Bottom Sheet
   static Future<void> showHelpSheet({
     required BuildContext context,

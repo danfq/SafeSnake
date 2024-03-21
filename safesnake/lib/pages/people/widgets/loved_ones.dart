@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/route_manager.dart';
 import 'package:safesnake/pages/chat/chat.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/animations/handler.dart';
 import 'package:safesnake/util/chat/handler.dart';
+import 'package:safesnake/util/help/handler.dart';
 
 class LovedOnes extends StatefulWidget {
   const LovedOnes({super.key});
@@ -77,7 +79,43 @@ class _LovedOnesState extends State<LovedOnes> {
                         lovedOne["name"],
                         style: const TextStyle(fontSize: 16.0),
                       ),
-                      trailing: const Icon(Ionicons.ios_chatbox),
+                      trailing: IconButton.filled(
+                        onPressed: () async {
+                          //Confirmation
+                          await Get.defaultDialog(
+                            title: "High Alert",
+                            content: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Do you want to contact ${lovedOne["name"]} urgently?",
+                              ),
+                            ),
+                            confirm: ElevatedButton(
+                              onPressed: () async {
+                                //Contact Urgently
+                                await HelpHandler.highAlertWarning(
+                                  name: AccountHandler
+                                      .currentUser?.userMetadata!["username"],
+                                  userName: lovedOne["name"],
+                                  userFCM: lovedOne["fcm"],
+                                );
+
+                                //Close
+                                Get.back();
+                              },
+                              child: const Text("Confirm"),
+                            ),
+                            cancel: TextButton(
+                              onPressed: () => Get.back(),
+                              child: const Text("Cancel"),
+                            ),
+                          );
+                        },
+                        style: IconButton.styleFrom(
+                          backgroundColor: Theme.of(context).cardColor,
+                        ),
+                        icon: const Icon(Ionicons.ios_alert_circle_outline),
+                      ),
                     ),
                   );
                 },
