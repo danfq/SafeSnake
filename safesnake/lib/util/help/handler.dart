@@ -238,7 +238,6 @@ class HelpHandler {
             sentAt: DateTime.now().millisecondsSinceEpoch,
             sender: currentUser.id,
           ),
-          receiverFCM: lovedOneData["fcm"],
         );
       }
     }

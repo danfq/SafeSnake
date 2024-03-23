@@ -299,7 +299,6 @@ class _LovedOneChatState extends State<LovedOneChat> {
                                     if (mounted) {
                                       await ChatHandler(context).sendMessage(
                                         message: message,
-                                        receiverFCM: receiverData["fcm"],
                                       );
                                     }
 

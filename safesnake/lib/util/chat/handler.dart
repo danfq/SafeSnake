@@ -166,10 +166,7 @@ class ChatHandler {
   }
 
   ///Send `message`
-  Future<MessageData?> sendMessage({
-    required MessageData message,
-    required String receiverFCM,
-  }) async {
+  Future<MessageData?> sendMessage({required MessageData message}) async {
     //Add Message to Database
     final addedMessage =
         await RemoteData(context).instance.from("decrypted_messages").insert(
