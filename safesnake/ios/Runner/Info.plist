@@ -8,6 +8,9 @@
 		<string>tel</string>
 	</array>
 
+	<key>NSMicrophoneUsageDescription</key>
+	<string>No Usage</string>
+
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
