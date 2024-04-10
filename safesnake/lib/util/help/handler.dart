@@ -60,6 +60,7 @@ class HelpHandler {
       await showModalBottomSheet(
         context: context,
         showDragHandle: true,
+        isScrollControlled: true,
         builder: (context) {
           return Container(
             width: double.infinity,

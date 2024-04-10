@@ -141,9 +141,11 @@ class _HelpState extends State<Help> {
                   _helpMode = !_helpMode;
                 });
               },
-              icon: Icon(_helpMode
-                  ? Ionicons.ios_grid_outline
-                  : Ionicons.ios_list_outline),
+              icon: Icon(
+                _helpMode
+                    ? Ionicons.ios_grid_outline
+                    : Ionicons.ios_list_outline,
+              ),
             ),
           ),
         ],
