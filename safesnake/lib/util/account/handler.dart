@@ -542,10 +542,22 @@ class AccountHandler {
     final message =
         "Hi!\n\n${currentUser?.userMetadata!["username"]} has invited you to be one of their Loved Ones.\n\nUse this Referral Code to create your Account: $referralCode";
 
+    //Get Position of Source View
+    final RenderBox renderBox = Get.context!.findRenderObject() as RenderBox;
+    final position = renderBox.localToGlobal(Offset.zero);
+    final size = renderBox.size;
+
+    //Share Rect
+    final rect = Rect.fromPoints(
+      position,
+      position + size.bottomCenter(Offset.zero),
+    );
+
     //Send Invitation
     await Share.share(
       message,
       subject: "SafeSnake | Invitation",
+      sharePositionOrigin: rect,
     ).then((_) => status = true);
 
     //Return Status

@@ -64,6 +64,7 @@ void main() async {
         return GetMaterialApp(
           theme: light,
           darkTheme: dark,
+          debugShowCheckedModeBanner: false,
           home: SplashScreenView(
             navigateWhere: true,
             imageSrc: "assets/anim/corn.json",

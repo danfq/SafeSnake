@@ -35,7 +35,7 @@ class _AccountInfoState extends State<AccountInfo> {
               child: Card(
                 child: ListTile(
                   title: Text(
-                    accountData["name"],
+                    accountData["name"] ?? "No Name",
                     style: const TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.w600,
@@ -71,7 +71,7 @@ class _AccountInfoState extends State<AccountInfo> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  subtitle: Text(accountData["referral"]),
+                  subtitle: Text(accountData["referral"] ?? "No Referral Code"),
                   trailing: IconButton(
                     onPressed: () async {
                       //Copy to Clipboard
