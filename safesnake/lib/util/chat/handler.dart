@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/data/constants.dart';
 import 'package:safesnake/util/data/remote.dart';
 import 'package:safesnake/util/models/chat.dart';
@@ -15,43 +16,9 @@ class ChatHandler {
   ///Chat Handler
   ChatHandler(this.context);
 
-  ///All Chats - by `userID`
-  Stream<List<ChatData>> allChatsByID({
-    required String userID,
-  }) {
-    return RemoteData(context)
-        .instance
-        .from("chats")
-        .stream(primaryKey: ["id"]).map(
-      (chats) {
-        //All Chats
-        List<ChatData> allChats = [];
-
-        //Parse Chats
-        for (final chatData in chats) {
-          //Chat
-          final chat = ChatData(
-            id: chatData["id"],
-            personOne: chatData["person_one"],
-            personTwo: chatData["person_two"],
-            latestMessage: chatData["latest_message"],
-            latestMessageTimestamp: chatData["latest_message_timestamp"],
-          );
-
-          //Check if User Owns Chat
-          if (chat.personOne == userID || chat.personTwo == userID) {
-            //Update Chats
-            allChats.add(chat);
-          }
-        }
-
-        return allChats;
-      },
-    );
-  }
-
-  ///Start New Chat by `userID`
-  Future<ChatData?> newChatByID({
+  ///Chat Data by `userID` & `lovedOneID`.
+  ///Creates New Chat if None Found
+  Future<ChatData?> chatByID({
     required String userID,
     required String lovedOneID,
   }) async {
@@ -63,7 +30,7 @@ class ChatHandler {
         .instance
         .from("chats")
         .select()
-        .or("person_one.eq.$lovedOneID,person_two.eq.$lovedOneID")
+        .or("person_one.eq.$userID,person_two.eq.$userID")
         .order("latest_message_timestamp", ascending: false);
 
     //Check if Chat Exists
@@ -92,7 +59,16 @@ class ChatHandler {
       chatData = chat;
     } else {
       //Set Chat Data
-      chatData = ChatData.fromJSON(userChats.first);
+      chatData = ChatData.fromJSON(
+        userChats.firstWhere(
+          (chat) {
+            return chat["person_one"] == userID &&
+                    chat["person_two"] == lovedOneID ||
+                chat["person_one"] == lovedOneID &&
+                    chat["person_two"] == userID;
+          },
+        ),
+      );
 
       //Chat Exists - Return Chat
       return chatData;

@@ -7,6 +7,7 @@ import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/animations/handler.dart';
 import 'package:safesnake/util/chat/handler.dart';
 import 'package:safesnake/util/help/handler.dart';
+import 'package:safesnake/util/models/loved_one.dart';
 
 class LovedOnes extends StatefulWidget {
   const LovedOnes({super.key});
@@ -35,25 +36,26 @@ class _LovedOnesState extends State<LovedOnes> {
                 itemCount: lovedOnes.length,
                 itemBuilder: (context, index) {
                   //Loved One
-                  final lovedOne = lovedOnes[index];
+                  final lovedOne = LovedOne.fromJSON(lovedOnes[index]);
 
                   //UI
                   return Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: ListTile(
                       onTap: () async {
-                        //User ID
+                        //User Sub-ID
                         final userID = AccountHandler.currentUser!.id
-                            .toUpperCase()
-                            .substring(0, 8);
+                            .substring(0, 8)
+                            .toUpperCase();
 
                         //Loved One Sub-ID
-                        final lovedOneSubID = (lovedOne["id"] as String)
+                        final lovedOneSubID = lovedOne.id
                             .toUpperCase()
-                            .substring(0, 8);
+                            .substring(0, 8)
+                            .toUpperCase();
 
                         //Chat Data
-                        final chat = await ChatHandler(context).newChatByID(
+                        final chat = await ChatHandler(context).chatByID(
                           userID: userID,
                           lovedOneID: lovedOneSubID,
                         );
@@ -76,7 +78,7 @@ class _LovedOnesState extends State<LovedOnes> {
                         borderRadius: BorderRadius.circular(14.0),
                       ),
                       title: Text(
-                        lovedOne["name"],
+                        lovedOne.name,
                         style: const TextStyle(fontSize: 16.0),
                       ),
                       trailing: IconButton.filled(
@@ -87,7 +89,7 @@ class _LovedOnesState extends State<LovedOnes> {
                             content: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "Do you want to contact ${lovedOne["name"]} urgently?",
+                                "Do you want to contact ${lovedOne.name} urgently?",
                               ),
                             ),
                             confirm: ElevatedButton(
@@ -96,8 +98,8 @@ class _LovedOnesState extends State<LovedOnes> {
                                 await HelpHandler.highAlertWarning(
                                   name: AccountHandler
                                       .currentUser?.userMetadata!["username"],
-                                  userName: lovedOne["name"],
-                                  userFCM: lovedOne["fcm"],
+                                  userName: lovedOne.name,
+                                  userFCM: lovedOne.fcmID,
                                 );
 
                                 //Close

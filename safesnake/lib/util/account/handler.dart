@@ -135,30 +135,27 @@ class AccountHandler {
     //Current User ID
     final currentUserID = currentUser?.id;
 
-    //Invitations
-    final invitations = await RemoteData(context).getData(
-      table: "invitations",
-    );
+    //Current User Referral
+    final currentReferral = LocalData.boxData(box: "personal")["referral"];
+
+    //Loved Ones
+    final lovedOnesData = await RemoteData(context)
+        .instance
+        .from("loved_ones")
+        .select()
+        .or("used_by.eq.$currentUserID,referral.eq.$currentReferral");
 
     //Filter By Current User's ID as the Creator and Used
-    for (final invitation in invitations) {
-      //Created Referral
-      if (invitation["created_by"] == currentUserID) {
-        final user = await userByID(
-          context: context,
-          id: invitation["used_by"],
-        );
+    for (final lovedOneData in lovedOnesData) {
+      if (lovedOneData["referral"] == currentReferral) {
+        final user = await userByID(id: lovedOneData["used_by"]);
 
         //Add User
         lovedOnes.add(user);
       }
 
-      //Used Referral
-      if (invitation["used_by"] == currentUserID) {
-        final user = await userByID(
-          context: context,
-          id: invitation["created_by"],
-        );
+      if (lovedOneData["used_by"] == currentUserID) {
+        final user = await userByReferral(referral: lovedOneData["referral"]);
 
         //Add User
         lovedOnes.add(user);
@@ -173,12 +170,9 @@ class AccountHandler {
   }
 
   ///User by ID
-  static Future<Map<String, dynamic>> userByID({
-    required BuildContext context,
-    required String id,
-  }) async {
+  static Future<Map<String, dynamic>> userByID({required String id}) async {
     //Get User Name via ID
-    final users = await RemoteData(context).getData(table: "users");
+    final users = await RemoteData(Get.context!).getData(table: "users");
 
     //Matching User
     final matchingUser = users.firstWhere((user) {
@@ -432,12 +426,6 @@ class AccountHandler {
           //Cache User Data
           await cacheUser();
 
-          //Set Referral as Used
-          if (user.userMetadata!["invited_by"] != null) {
-            //Set Referral Code as Used - If Not Null
-            setReferralAsUsed(referral: user.userMetadata!["invited_by"]);
-          }
-
           //Go Home
           Get.offAll(() => SafeSnake(user: user));
         }
@@ -496,19 +484,14 @@ class AccountHandler {
 
           //Add Referral if Used
           if (Get.context!.mounted && referralCode!.isNotEmpty) {
-            //User by Referral
-            final userByReferral =
-                await _userByReferral(referral: referralCode);
-
             //Add Data
             if (Get.context!.mounted) {
               await RemoteData(Get.context!).addData(
-                table: "invitations",
+                table: "loved_ones",
                 data: {
                   "id": const Uuid().v4(),
                   "referral": referralCode,
                   "used_by": user.id,
-                  "created_by": userByReferral?["id"],
                 },
               );
             }
@@ -579,15 +562,9 @@ class AccountHandler {
           await checkReferralUsage(id: currentUser!.id, referral: referral);
 
       if (!used) {
-        await RemoteData(Get.context!).addData(
-          table: "invitations",
-          data: {
-            "id": const Uuid().v4(),
-            "referral": referral,
-            "used_by": currentUser?.id,
-            "created_by": user["id"],
-          },
-        ).then((_) => Navigator.pop(Get.context!));
+        await setReferralAsUsed(referral: referral).then(
+          (_) => Navigator.pop(Get.context!),
+        );
       } else {
         LocalNotifications.toast(message: "Invalid Referral");
       }
@@ -618,9 +595,6 @@ class AccountHandler {
   static Future<void> setReferralAsUsed({
     required String referral,
   }) async {
-    //User By Referral
-    final user = await userByReferral(referral: referral);
-
     //Referral Status
     final referralStatus = await checkReferralUsage(
       id: currentUser!.id,
@@ -629,12 +603,11 @@ class AccountHandler {
 
     if (referralStatus == false) {
       await RemoteData(Get.context!).addData(
-        table: "invitations",
+        table: "loved_ones",
         data: {
           "id": const Uuid().v4(),
           "referral": referral,
           "used_by": currentUser!.id,
-          "created_by": user["id"],
         },
       );
     }
@@ -649,14 +622,13 @@ class AccountHandler {
     bool status = false;
 
     //Referral Data
-    final data = await RemoteData(Get.context!).getData(table: "invitations");
+    final data = await RemoteData(Get.context!).getData(table: "loved_ones");
 
     //Check Data
     if (data.isNotEmpty) {
       //Filter By ID & Referral
       for (final item in data) {
-        if (item["used_by"] == id && item["referral"] == referral ||
-            item["created_by"] == id && item["referral"] == referral) {
+        if (item["referral"] == referral) {
           //Set Status as Used
           status = true;
         } else {

@@ -221,7 +221,7 @@ class HelpHandler {
       final lovedOneID =
           (lovedOneData["id"] as String).substring(0, 8).toUpperCase();
 
-      final chat = await ChatHandler(context).newChatByID(
+      final chat = await ChatHandler(context).chatByID(
         userID: userID,
         lovedOneID: lovedOneID,
       );

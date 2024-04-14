@@ -3,6 +3,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/chat/handler.dart';
 import 'package:safesnake/util/models/chat.dart';
+import 'package:safesnake/util/models/loved_one.dart';
 import 'package:safesnake/util/models/message.dart';
 import 'package:safesnake/util/widgets/chat.dart';
 import 'package:safesnake/util/widgets/input.dart';
@@ -17,7 +18,7 @@ class LovedOneChat extends StatefulWidget {
   });
 
   ///Loved One
-  final Map<String, dynamic> lovedOne;
+  final LovedOne lovedOne;
 
   ///Chat Data
   final ChatData chat;
@@ -76,7 +77,7 @@ class _LovedOneChatState extends State<LovedOneChat> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: MainWidgets(context: context).appBar(
-        title: Text(widget.lovedOne["name"]),
+        title: Text(widget.lovedOne.name),
         actions: [
           //Information
           Padding(
@@ -96,7 +97,7 @@ class _LovedOneChatState extends State<LovedOneChat> {
                   builder: (context) {
                     return AlertDialog(
                       title: Text(
-                        lovedOne["name"],
+                        lovedOne.name,
                         textAlign: TextAlign.center,
                       ),
                       content: Text(
@@ -278,14 +279,13 @@ class _LovedOneChatState extends State<LovedOneChat> {
                                   //Sender Data
                                   final senderData =
                                       await AccountHandler.userByID(
-                                    context: context,
                                     id: currentUser,
                                   );
 
                                   //Receiver Data
                                   final receiverData =
                                       await AccountHandler.userByName(
-                                    name: widget.lovedOne["name"],
+                                    name: widget.lovedOne.name,
                                   );
 
                                   //Send Message

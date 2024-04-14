@@ -62,7 +62,7 @@ class ChatData extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: FutureBuilder(
-        future: AccountHandler.userByID(context: context, id: personID()),
+        future: AccountHandler.userByID(id: personID()),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             //User Data
