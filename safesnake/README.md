@@ -1,16 +1,10 @@
-# safesnake
+## What is it?
 
-A new Flutter project.
+SafeSnake aims to provide a safe haven for those who struggle with finding the right words for what they are feeling.
 
-## Getting Started
+So, to that end, SafeSnake gives the User a selection of pre-written phrases, which may be used to get their point / feelings across.
 
-This project is a starting point for a Flutter application.
+## Where can I get it?
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+As of right now, SafeSnake is available on the [App Store]("https://apps.apple.com/pt/app/safesnake/id6477356156").
+I am in the process of making it available on the Play Store as well.
