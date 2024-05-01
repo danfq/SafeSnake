@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safesnake/util/notifications/local.dart';
+import 'package:safesnake/util/services/notifications/local.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 ///Remote Data

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/data/constants.dart';
 import 'package:safesnake/util/data/remote.dart';
 import 'package:safesnake/util/models/chat.dart';

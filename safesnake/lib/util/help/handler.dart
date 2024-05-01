@@ -5,7 +5,7 @@ import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/chat/handler.dart';
 import 'package:safesnake/util/models/loved_one.dart';
 import 'package:safesnake/util/models/message.dart';
-import 'package:safesnake/util/notifications/local.dart';
+import 'package:safesnake/util/services/notifications/local.dart';
 import 'package:uuid/uuid.dart';
 
 ///Help Handler

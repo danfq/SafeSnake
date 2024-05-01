@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/data/local.dart';
-import 'package:safesnake/util/notifications/local.dart';
+import 'package:safesnake/util/services/notifications/local.dart';
 import 'package:safesnake/util/widgets/dialogs.dart';
 import 'package:safesnake/util/widgets/main.dart';
 import 'package:settings_ui/settings_ui.dart';
