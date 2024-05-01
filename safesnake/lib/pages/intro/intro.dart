@@ -4,6 +4,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:safesnake/pages/account/account.dart';
 import 'package:safesnake/pages/intro/pages/pages.dart';
 import 'package:safesnake/util/data/local.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 import 'package:safesnake/util/theming/controller.dart';
 import 'package:safesnake/util/widgets/main.dart';
 
@@ -23,6 +24,9 @@ class _IntroState extends State<Intro> {
     ThemeController.statusAndNav(context: context);
   }
 
+  ///Current Language
+  String _currentLang = Strings.currentLang;
+
   @override
   Widget build(BuildContext context) {
     //UI
@@ -30,6 +34,28 @@ class _IntroState extends State<Intro> {
       appBar: MainWidgets(context: context).appBar(
         title: const Text("SafeSnake"),
         allowBack: false,
+        centerTitle: false,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: TextButton(
+              onPressed: () async {
+                if (_currentLang == "en") {
+                  await Strings.setLang(lang: "pt");
+                  setState(() {
+                    _currentLang = "pt";
+                  });
+                } else if (_currentLang == "pt") {
+                  await Strings.setLang(lang: "en");
+                  setState(() {
+                    _currentLang = "en";
+                  });
+                }
+              },
+              child: Text(_currentLang.toUpperCase()),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: IntroductionScreen(
@@ -54,7 +80,7 @@ class _IntroState extends State<Intro> {
               );
             }
           },
-          pages: IntroPages.all,
+          pages: IntroPages.all(_currentLang),
         ),
       ),
     );
