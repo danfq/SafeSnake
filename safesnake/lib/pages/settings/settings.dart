@@ -4,6 +4,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/settings/pages/account_info.dart';
 import 'package:safesnake/pages/settings/pages/team/team.dart';
 import 'package:safesnake/util/data/local.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 import 'package:safesnake/util/theming/controller.dart';
 import 'package:safesnake/util/widgets/main.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -27,10 +28,13 @@ class _SettingsPageState extends State<SettingsPage> {
     //Current Theme
     final currentTheme = ThemeController.current(context: context);
 
+    //Current Language
+    final currentLang = Strings.currentLang;
+
     //UI
     return Scaffold(
       appBar: MainWidgets(context: context).appBar(
-        title: const Text("Settings"),
+        title: Text(Strings.pageTitles["settings"][currentLang]),
       ),
       body: SafeArea(
         child: SettingsList(
@@ -44,7 +48,7 @@ class _SettingsPageState extends State<SettingsPage> {
           sections: [
             //UI
             SettingsSection(
-              title: const Text("UI & Visuals"),
+              title: Text(Strings.settings["ui"][currentLang]),
               tiles: [
                 //Theme
                 SettingsTile.switchTile(
@@ -56,21 +60,27 @@ class _SettingsPageState extends State<SettingsPage> {
                   leading: !currentTheme
                       ? const Icon(Ionicons.ios_sunny)
                       : const Icon(Ionicons.ios_moon),
-                  title: const Text("Theme"),
-                  description: Text(currentTheme ? "Dark Mode" : "Light Mode"),
+                  title: Text(Strings.settings["theme"][currentLang]),
+                  description: Text(
+                    currentTheme
+                        ? Strings.settings["dark_mode"][currentLang]
+                        : Strings.settings["light_mode"][currentLang],
+                  ),
                 ),
+
+                //Language
               ],
             ),
 
             //Account
             SettingsSection(
-              title: const Text("Your Account"),
+              title: Text(Strings.settings["account"][currentLang]),
               tiles: [
                 SettingsTile.navigation(
                   leading: const Icon(Ionicons.ios_person),
-                  title: const Text("Information"),
-                  description: const Text(
-                    "See and change all your Account Information.",
+                  title: Text(Strings.settings["account_info"][currentLang]),
+                  description: Text(
+                    Strings.settings["change_acc_info"][currentLang],
                   ),
                   onPressed: (context) {
                     Navigator.push(
@@ -86,7 +96,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
             //Accessibility
             SettingsSection(
-              title: const Text("Accessibility"),
+              title: Text(Strings.settings["accessibility"][currentLang]),
               tiles: [
                 SettingsTile.switchTile(
                   initialValue: ttsStatus,
@@ -104,9 +114,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     );
                   },
                   leading: const Icon(MaterialCommunityIcons.text_to_speech),
-                  title: const Text("Text-to-Speech"),
-                  description: const Text(
-                    "Enables Text-to-Speech on Help Items & Messages.",
+                  title: Text(Strings.settings["tts"][currentLang]),
+                  description: Text(
+                    Strings.settings["tts_info"][currentLang],
                   ),
                 )
               ],
@@ -132,9 +142,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     );
                   },
                   leading: const Icon(Ionicons.ios_brush),
-                  title: const Text("Colorful Mode"),
-                  description: const Text(
-                    "Makes the App a lot more colorful!",
+                  title: Text(Strings.settings["color_mode"][currentLang]),
+                  description: Text(
+                    Strings.settings["color_mode_info"][currentLang],
                   ),
                 )
               ],
@@ -142,11 +152,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
             //Team & Licenses
             SettingsSection(
-              title: const Text("Team & Licenses"),
+              title: Text(Strings.settings["team_and_licenses"][currentLang]),
               tiles: [
                 SettingsTile.navigation(
                   leading: const Icon(Ionicons.ios_people),
-                  title: const Text("Team"),
+                  title: Text(Strings.settings["team"][currentLang]),
                   onPressed: (context) {
                     Navigator.push(
                       context,
@@ -156,7 +166,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 SettingsTile.navigation(
                   leading: const Icon(Ionicons.ios_document),
-                  title: const Text("Licenses"),
+                  title: Text(Strings.settings["licenses"][currentLang]),
                   onPressed: (context) {
                     Navigator.push(
                       context,

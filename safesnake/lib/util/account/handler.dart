@@ -11,6 +11,7 @@ import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/data/remote.dart';
 import 'package:safesnake/util/services/notifications/local.dart';
 import 'package:safesnake/util/services/notifications/remote.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
@@ -249,6 +250,9 @@ class AccountHandler {
   ///
   ///This action is PERMANENT
   static Future<void> deleteAccount() async {
+    //Current Lang
+    final currentLang = Strings.currentLang;
+
     //Show Sign Out Sheet
     await showModalBottomSheet(
       context: Get.context!,
@@ -268,14 +272,14 @@ class AccountHandler {
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Text(
-                    "Delete Account",
+                    Strings.buttons["delete_account"][currentLang],
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(40.0),
                   child: SwipeableButtonView(
-                    buttonText: "Swipe to Confirm",
+                    buttonText: Strings.buttons["swipe_confirm"][currentLang],
                     buttonWidget: const Icon(
                       Ionicons.ios_chevron_forward,
                       color: Colors.grey,
@@ -314,6 +318,9 @@ class AccountHandler {
   ///
   ///Takes the User back to `Account`
   static Future<void> signOut() async {
+    //Current Lang
+    final currentLang = Strings.currentLang;
+
     //Show Sign Out Sheet
     await showModalBottomSheet(
       context: Get.context!,
@@ -340,7 +347,7 @@ class AccountHandler {
                 Padding(
                   padding: const EdgeInsets.all(40.0),
                   child: SwipeableButtonView(
-                    buttonText: "Swipe to Sign Out",
+                    buttonText: Strings.buttons["swipe_confirm"][currentLang],
                     buttonWidget: const Icon(
                       Ionicons.ios_chevron_forward,
                       color: Colors.grey,
@@ -522,8 +529,7 @@ class AccountHandler {
     final referralCode = currentUser?.userMetadata?["referral"];
 
     //Message
-    final message =
-        "Hi!\n\n${currentUser?.userMetadata!["username"]} has invited you to be one of their Loved Ones.\n\nUse this Referral Code to create your Account: $referralCode";
+    final message = "SafeSnake: $referralCode";
 
     //Get Position of Source View
     final RenderBox renderBox = Get.context!.findRenderObject() as RenderBox;
@@ -549,6 +555,9 @@ class AccountHandler {
 
   ///Invite Person
   static Future<bool> addPersonByReferral({required String referral}) async {
+    //Current Lang
+    final currentLang = Strings.currentLang;
+
     //Status
     bool status = false;
 
@@ -566,10 +575,14 @@ class AccountHandler {
           (_) => Navigator.pop(Get.context!),
         );
       } else {
-        LocalNotifications.toast(message: "Invalid Referral");
+        LocalNotifications.toast(
+          message: Strings.errors["invalid_referral"][currentLang],
+        );
       }
     } else {
-      LocalNotifications.toast(message: "Invalid Referral");
+      LocalNotifications.toast(
+        message: Strings.errors["invalid_referral"][currentLang],
+      );
     }
 
     //Return Status

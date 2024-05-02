@@ -6,6 +6,7 @@ import 'package:safesnake/util/chat/handler.dart';
 import 'package:safesnake/util/models/loved_one.dart';
 import 'package:safesnake/util/models/message.dart';
 import 'package:safesnake/util/services/notifications/local.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 import 'package:uuid/uuid.dart';
 
 ///Help Handler
@@ -16,12 +17,15 @@ class HelpHandler {
     required String userName,
     required String userFCM,
   }) async {
+    //Current Lang
+    final currentLang = Strings.currentLang;
+
     //Send Notification
     await ChatHandler.sendNotification(
       context: Get.context!,
       fcmToken: userFCM,
-      title: "Quick!",
-      body: "$name needs you right now!",
+      title: Strings.help["notif_title"][currentLang],
+      body: "$name ${Strings.help["notif_body"][currentLang]}",
     ).then((_) {
       LocalNotifications.toast(message: "$userName notified!");
     });
@@ -45,6 +49,9 @@ class HelpHandler {
     required BuildContext context,
     required String helpContent,
   }) async {
+    //Current Lang
+    final currentLang = Strings.currentLang;
+
     //Loved Ones
     final lovedOnes = await AccountHandler.lovedOnes(context: context);
 
@@ -117,7 +124,9 @@ class HelpHandler {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).cardColor,
                         ),
-                        child: const Text("Notify All"),
+                        child: Text(
+                          Strings.lovedOnes["notify_all"][currentLang],
+                        ),
                       ),
                     ),
                   ],
@@ -152,7 +161,8 @@ class HelpHandler {
 
                                   //Alert User
                                   LocalNotifications.toast(
-                                    message: "Notified ${lovedOne.name}",
+                                    message: Strings.lovedOnes["notified"]
+                                        [currentLang],
                                   );
 
                                   //Close Sheet
@@ -177,11 +187,11 @@ class HelpHandler {
                           ).toList(),
                         ),
                       )
-                    : const Padding(
-                        padding: EdgeInsets.all(40.0),
+                    : Padding(
+                        padding: const EdgeInsets.all(40.0),
                         child: Center(
                           child: Text(
-                            "You don't have any Loved Ones.",
+                            Strings.lovedOnes["no_loved_ones"][currentLang],
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -203,6 +213,9 @@ class HelpHandler {
     required LovedOne lovedOne,
     required String content,
   }) async {
+    //Current Lang
+    final currentLang = Strings.currentLang;
+
     //Current User
     final currentUser = AccountHandler.currentUser;
     final userName = currentUser!.userMetadata!["username"];
@@ -248,7 +261,7 @@ class HelpHandler {
       await ChatHandler.sendNotification(
         context: context,
         fcmToken: lovedOneData["fcm"],
-        title: "$userName needs your help!",
+        title: "$userName ${Strings.lovedOnes["notif_title_2"][currentLang]}",
         body: content,
       );
     }

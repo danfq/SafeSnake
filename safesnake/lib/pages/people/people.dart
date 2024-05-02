@@ -4,6 +4,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/people/pages/add_by_code.dart';
 import 'package:safesnake/pages/people/widgets/loved_ones.dart';
 import 'package:safesnake/util/account/handler.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 import 'package:safesnake/util/widgets/main.dart';
 
 class PeoplePage extends StatelessWidget {
@@ -14,7 +15,8 @@ class PeoplePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //Loved Ones
+    //Current Lang
+    final currentLang = Strings.currentLang;
 
     //UI
     return Scaffold(
@@ -48,12 +50,12 @@ class PeoplePage extends StatelessWidget {
                           backgroundColor:
                               Theme.of(context).dialogBackgroundColor,
                         ),
-                        child: const Text("Invite Loved Ones"),
+                        child: Text(Strings.lovedOnes["invite"][currentLang]),
                       ),
                     ),
 
                     //Or
-                    const Text("OR"),
+                    Text(Strings.common["or"][currentLang]),
 
                     //Enter Code
                     Padding(
@@ -75,7 +77,9 @@ class PeoplePage extends StatelessWidget {
                           backgroundColor:
                               Theme.of(context).dialogBackgroundColor,
                         ),
-                        child: const Text("Enter Code Manually"),
+                        child: Text(
+                          Strings.lovedOnes["enter_code"][currentLang],
+                        ),
                       ),
                     ),
                   ],

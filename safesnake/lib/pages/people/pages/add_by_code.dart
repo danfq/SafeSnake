@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safesnake/util/account/handler.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 import 'package:safesnake/util/widgets/input.dart';
 import 'package:safesnake/util/widgets/main.dart';
 
@@ -14,12 +15,15 @@ class _AddByCodeState extends State<AddByCode> {
   ///Code Controller
   TextEditingController codeController = TextEditingController();
 
+  ///Current Language
+  static final currentLang = Strings.currentLang;
+
   @override
   Widget build(BuildContext context) {
     //UI
     return Scaffold(
       appBar: MainWidgets(context: context).appBar(
-        title: const Text("Add by Referral"),
+        title: Strings.pageTitles["referral_add_code"][currentLang],
       ),
       body: SafeArea(
         child: Column(
@@ -30,7 +34,7 @@ class _AddByCodeState extends State<AddByCode> {
             Input(
               controller: codeController,
               centerPlaceholder: true,
-              placeholder: "Referral Code",
+              placeholder: Strings.common["referral_code"][currentLang],
             ),
 
             //Proceed
@@ -49,7 +53,7 @@ class _AddByCodeState extends State<AddByCode> {
                     ).then((_) => setState(() {}));
                   }
                 },
-                child: const Text("Add Loved One"),
+                child: Text(Strings.lovedOnes["add"][currentLang]),
               ),
             ),
           ],

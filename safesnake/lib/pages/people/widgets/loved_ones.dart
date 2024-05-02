@@ -8,6 +8,7 @@ import 'package:safesnake/util/animations/handler.dart';
 import 'package:safesnake/util/chat/handler.dart';
 import 'package:safesnake/util/help/handler.dart';
 import 'package:safesnake/util/models/loved_one.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 
 class LovedOnes extends StatefulWidget {
   const LovedOnes({super.key});
@@ -17,6 +18,9 @@ class LovedOnes extends StatefulWidget {
 }
 
 class _LovedOnesState extends State<LovedOnes> {
+  ///Current Lang
+  static final currentLang = Strings.currentLang;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -89,7 +93,8 @@ class _LovedOnesState extends State<LovedOnes> {
                             content: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "Do you want to contact ${lovedOne.name} urgently?",
+                                Strings.lovedOnes["urgent_contact"]
+                                    [currentLang],
                               ),
                             ),
                             confirm: ElevatedButton(
@@ -105,11 +110,15 @@ class _LovedOnesState extends State<LovedOnes> {
                                 //Close
                                 Get.back();
                               },
-                              child: const Text("Confirm"),
+                              child: Text(
+                                Strings.buttons["confirm"][currentLang],
+                              ),
                             ),
                             cancel: TextButton(
                               onPressed: () => Get.back(),
-                              child: const Text("Cancel"),
+                              child: Text(
+                                Strings.buttons["cancel"][currentLang],
+                              ),
                             ),
                           );
                         },
@@ -134,7 +143,7 @@ class _LovedOnesState extends State<LovedOnes> {
                     reverse: true,
                   ),
                 ),
-                const Text("Looks like Tsuki needs to play by herself :("),
+                Text(Strings.common["empty"][currentLang]),
               ],
             );
           }
