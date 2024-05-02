@@ -196,6 +196,22 @@ class Strings {
     },
   };
 
+  ///Chat
+  static Map chat = {
+    "write_message": {
+      "en": "Write a message...",
+      "pt": "Escreve uma mensagem...",
+    },
+    "no_messages": {
+      "en": "No Messages",
+      "pt": "Sem Mensagens",
+    },
+    "new_message": {
+      "en": "New Message",
+      "pt": "Nova Mensagem",
+    },
+  };
+
   ///Buttons
   static Map buttons = {
     "next": {

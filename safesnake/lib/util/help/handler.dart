@@ -286,7 +286,7 @@ class HelpHandler {
       await ChatHandler.sendNotification(
         context: context,
         fcmToken: lovedOneData["fcm"],
-        title: "$userName ${Strings.lovedOnes["notif_title_2"][currentLang]}",
+        title: "$userName ${Strings.help["notif_title_2"][currentLang]}",
         body: content,
       );
     }

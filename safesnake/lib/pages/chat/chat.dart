@@ -5,6 +5,7 @@ import 'package:safesnake/util/chat/handler.dart';
 import 'package:safesnake/util/models/chat.dart';
 import 'package:safesnake/util/models/loved_one.dart';
 import 'package:safesnake/util/models/message.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 import 'package:safesnake/util/widgets/chat.dart';
 import 'package:safesnake/util/widgets/input.dart';
 import 'package:safesnake/util/widgets/main.dart';
@@ -64,6 +65,9 @@ class _LovedOneChatState extends State<LovedOneChat> {
       repliedMessageContents[messageID] = repliedMessage!.content;
     });
   }
+
+  ///Current Lang
+  final currentLang = Strings.currentLang;
 
   @override
   Widget build(BuildContext context) {
@@ -199,8 +203,8 @@ class _LovedOneChatState extends State<LovedOneChat> {
                             );
                           },
                         )
-                      : const Center(
-                          child: Text("No Messages"),
+                      : Center(
+                          child: Text(Strings.chat["no_messages"][currentLang]),
                         );
                 },
               ),
@@ -240,7 +244,8 @@ class _LovedOneChatState extends State<LovedOneChat> {
                         padding: const EdgeInsets.all(10.0),
                         child: Input(
                           controller: chatInputController,
-                          placeholder: "Write a message...",
+                          placeholder: Strings.chat["write_message"]
+                              [currentLang],
                           backgroundColor:
                               Theme.of(context).dialogBackgroundColor,
                           onChanged: (content) => setState(() {}),
@@ -307,7 +312,8 @@ class _LovedOneChatState extends State<LovedOneChat> {
                                       await ChatHandler.sendNotification(
                                         context: context,
                                         fcmToken: receiverData["fcm"],
-                                        title: "New Message",
+                                        title: Strings.chat["new_message"]
+                                            [currentLang],
                                         body:
                                             "${senderData["name"]}: ${message.content}",
                                       );
