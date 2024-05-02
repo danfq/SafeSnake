@@ -36,4 +36,13 @@ class TTSEngine {
     //Speak Message
     await _tts.speak(message);
   }
+
+  ///Change Language
+  static Future<void> changeLang({required String lang}) async {
+    if (lang == "en") {
+      await _tts.setLanguage("en-US");
+    } else if (lang == "pt") {
+      await _tts.setLanguage("pt-PT");
+    }
+  }
 }

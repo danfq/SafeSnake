@@ -1,3 +1,4 @@
+import 'package:safesnake/util/accessibility/tts.dart';
 import 'package:safesnake/util/data/local.dart';
 
 ///Strings
@@ -8,6 +9,7 @@ class Strings {
   ///Set Current Lang
   static Future<void> setLang({required String lang}) async {
     await LocalData.updateValue(box: "settings", item: "lang", value: lang);
+    await TTSEngine.changeLang(lang: lang);
   }
 
   ///Page Titles
