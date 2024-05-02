@@ -3,6 +3,8 @@ import 'package:get/route_manager.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/chat/handler.dart';
+import 'package:safesnake/util/data/remote.dart';
+import 'package:safesnake/util/models/help_item.dart';
 import 'package:safesnake/util/models/loved_one.dart';
 import 'package:safesnake/util/models/message.dart';
 import 'package:safesnake/util/services/notifications/local.dart';
@@ -11,6 +13,29 @@ import 'package:uuid/uuid.dart';
 
 ///Help Handler
 class HelpHandler {
+  ///Get All Help Items
+  static Future<List<HelpItem>> getItems() async {
+    //Items
+    List<HelpItem> items = [];
+
+    //All Items
+    final allItems = await RemoteData(Get.context!).getData(
+      table: "help_items",
+    );
+
+    //Parse Items
+    for (final item in allItems) {
+      //Help Item
+      final helpItem = HelpItem.fromJSON(item);
+
+      //Add Item to List
+      items.add(helpItem);
+    }
+
+    //Return Items
+    return items;
+  }
+
   ///High-Alert Warning
   static Future<void> highAlertWarning({
     required String name,

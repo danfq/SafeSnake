@@ -5,6 +5,7 @@ import 'package:safesnake/util/accessibility/tts.dart';
 import 'package:safesnake/util/data/constants.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/help/handler.dart';
+import 'package:safesnake/util/models/help_item.dart';
 import 'package:safesnake/util/services/strings/handler.dart';
 import 'package:safesnake/util/widgets/main.dart';
 
@@ -34,14 +35,33 @@ class _HelpState extends State<Help> {
     return Color.fromRGBO(red, green, blue, 1);
   }
 
-  ///Help Options
-  final List<String> _helpOptions = HelpItems.all;
-
   ///Help Mode
   bool _helpMode = false;
 
   ///Current Lang
   final currentLang = Strings.currentLang;
+
+  ///Help Items
+  List<HelpItem> _helpItems = [];
+
+  ///Get Items
+  Future<void> getItems() async {
+    //Items
+    final items = await HelpHandler.getItems();
+
+    //Set Items
+    setState(() {
+      _helpItems = items;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    //Get Items
+    getItems();
+  }
 
   ///Help List
   Widget _helpList() {
@@ -54,20 +74,22 @@ class _HelpState extends State<Help> {
           crossAxisCount: 2,
           crossAxisSpacing: 10.0,
           mainAxisSpacing: 10.0,
-          children: _helpOptions
+          children: _helpItems
               .map(
                 (item) => InkWell(
                   onLongPress: () async {
                     //Check Text to Speech
                     if (ttsMode) {
-                      await TTSEngine.speak(message: item);
+                      await TTSEngine.speak(
+                        message: currentLang == "en" ? item.en : item.pt,
+                      );
                     }
                   },
                   onTap: () async {
                     //Show Help Menu
                     await HelpHandler.showHelpSheet(
                       context: context,
-                      helpContent: item.trim(),
+                      helpContent: currentLang == "en" ? item.en : item.pt,
                     );
                   },
                   borderRadius: BorderRadius.circular(14.0),
@@ -79,7 +101,7 @@ class _HelpState extends State<Help> {
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
                         child: Text(
-                          item,
+                          currentLang == "en" ? item.en : item.pt,
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -92,10 +114,10 @@ class _HelpState extends State<Help> {
 
       case true:
         return ListView.builder(
-          itemCount: _helpOptions.length,
+          itemCount: _helpItems.length,
           itemBuilder: (context, index) {
             //Option
-            final option = _helpOptions[index];
+            final option = _helpItems[index];
 
             //UI
             return Padding(
@@ -104,14 +126,15 @@ class _HelpState extends State<Help> {
                 onLongPress: () async {
                   //Check Text to Speech
                   if (ttsMode) {
-                    await TTSEngine.speak(message: option);
+                    await TTSEngine.speak(
+                        message: currentLang == "en" ? option.en : option.pt);
                   }
                 },
                 onTap: () async {
                   //Show Help Menu
                   await HelpHandler.showHelpSheet(
                     context: context,
-                    helpContent: option.trim(),
+                    helpContent: currentLang == "en" ? option.en : option.pt,
                   );
                 },
                 tileColor: colorfulMode
@@ -120,7 +143,7 @@ class _HelpState extends State<Help> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14.0),
                 ),
-                title: Text(option),
+                title: Text(currentLang == "en" ? option.en : option.pt),
               ),
             );
           },

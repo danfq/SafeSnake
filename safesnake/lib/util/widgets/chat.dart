@@ -5,7 +5,6 @@ import 'package:get/route_manager.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:safesnake/util/accessibility/tts.dart';
 import 'package:safesnake/util/chat/handler.dart';
-import 'package:safesnake/util/data/constants.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/models/message.dart';
 import 'package:safesnake/util/theming/colors.dart';
@@ -65,11 +64,6 @@ class _ChatItemState extends State<ChatItem> {
 
     // Return Actual Width
     return textPainter.width;
-  }
-
-  ///Check if Message is Help Item
-  bool isHelpItem() {
-    return HelpItems.all.contains(widget.message.content);
   }
 
   @override
@@ -267,9 +261,8 @@ class _ChatItemState extends State<ChatItem> {
                           : Colors.white
                       : Colors.white,
                   fontSize: 16.0,
-                  fontStyle: isHelpItem() ? FontStyle.italic : FontStyle.normal,
-                  fontWeight:
-                      isHelpItem() ? FontWeight.bold : FontWeight.normal,
+                  fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.normal,
                 ),
                 tail: widget.isLastInGroup,
               ),
