@@ -69,6 +69,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
 
                 //Language
+                SettingsTile.navigation(
+                  title: Text(Strings.settings["language"][currentLang]),
+                ),
               ],
             ),
 

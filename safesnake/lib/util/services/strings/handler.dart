@@ -64,6 +64,10 @@ class Strings {
       "en": "Light Mode",
       "pt": "Modo Claro",
     },
+    "language": {
+      "en": "Language",
+      "pt": "Língua",
+    },
     "account": {
       "en": "Your Account",
       "pt": "A Tua Conta",
