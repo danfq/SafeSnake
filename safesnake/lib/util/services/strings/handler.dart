@@ -36,6 +36,22 @@ class Strings {
       "en": "OR",
       "pt": "OU",
     },
+    "copied": {
+      "en": "Copied!",
+      "pt": "Copiado!",
+    },
+    "change": {
+      "en": "Change ",
+      "pt": "Alterar ",
+    },
+    "new": {
+      "en": "New ",
+      "pt": "Novo(a) ",
+    },
+    "save": {
+      "en": "Save",
+      "pt": "Salvar",
+    },
   };
 
   ///Errors
@@ -128,6 +144,22 @@ class Strings {
       "en": " needs your help!",
       "pt": " precisa da tua ajuda!",
     },
+    "get_help": {
+      "en": "Get Help",
+      "pt": "Obter Ajuda",
+    },
+    "choose_list": {
+      "en": "Choose from the list below:",
+      "pt": "Escolhe da lista abaixo:",
+    },
+    "are_you_sure": {
+      "en": "Are you sure?",
+      "pt": "Tens a certeza?",
+    },
+    "call_sui_desc": {
+      "en": "A call will be made to the National Suicide Hotline.",
+      "pt": "Uma chamada será efetuada para o Centro de Prevenção do Suicídio.",
+    },
   };
 
   ///Loved Ones
@@ -164,6 +196,22 @@ class Strings {
 
   ///Buttons
   static Map buttons = {
+    "next": {
+      "en": "Next",
+      "pt": "Próximo",
+    },
+    "back": {
+      "en": "Back",
+      "pt": "Anterior",
+    },
+    "done": {
+      "en": "Done",
+      "pt": "Feito",
+    },
+    "begin": {
+      "en": "Let's Begin",
+      "pt": "Vamos Começar",
+    },
     "confirm": {
       "en": "Confirm",
       "pt": "Confirmar",
@@ -179,6 +227,46 @@ class Strings {
     "delete_account": {
       "en": "Delete Account",
       "pt": "Apagar Conta",
+    },
+  };
+
+  ///Account
+  static Map account = {
+    "create": {
+      "en": "Create Account",
+      "pt": "Criar Conta",
+    },
+    "referral": {
+      "en": "Your Referral Code",
+      "pt": "Código de Referência",
+    },
+    "change_user": {
+      "en": "Change Username",
+      "pt": "Alterar Nome",
+    },
+    "change_user_desc": {
+      "en": "Please don't be weird.",
+      "pt": "Por favor não sejas estranho.",
+    },
+    "change_password": {
+      "en": "Change Password",
+      "pt": "Alterar Password",
+    },
+    "change_password_desc": {
+      "en": "It must meet our Security Standards.",
+      "pt": "Tem de corresponder às nossas Diretrizes de Segurança.",
+    },
+    "delete_account": {
+      "en": "Delete Account",
+      "pt": "Apagar Conta",
+    },
+    "delete_account_desc": {
+      "en": "This will notify our Admins of your choice.",
+      "pt": "Isto irá notificar os nossos Admins da tua escolha.",
+    },
+    "sign_out": {
+      "en": "Sign Out",
+      "pt": "Sair",
     },
   };
 
@@ -207,6 +295,30 @@ class Strings {
     "body_3": {
       "en": "There's no shame in it.\nWe all struggle sometimes!",
       "pt": "Não tenhas vergonha.\nTodos precisamos de ajuda, às vezes.",
-    }
+    },
+    "question_1": {
+      "en": "What would you like me to call you?",
+      "pt": "O que queres que te chame?",
+    },
+    "question_2": {
+      "en": "What's your Loved One's Referral Code?",
+      "pt": "Qual é o Código de Referência?",
+    },
+    "question_3": {
+      "en": "Nice to meet you! What's your E-mail?",
+      "pt": "Prazer! Qual é o teu E-mail?",
+    },
+    "question_4": {
+      "en": "Can't forget the most important step!",
+      "pt": "Não esquecer o passo mais importante!",
+    },
+    "name": {
+      "en": "Name",
+      "pt": "Nome",
+    },
+    "referral": {
+      "en": "Leave blank if you don't have a Referral Code",
+      "pt": "Deixa em branco se não tiveres um Código",
+    },
   };
 }

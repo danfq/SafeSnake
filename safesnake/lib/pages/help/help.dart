@@ -5,6 +5,7 @@ import 'package:safesnake/util/accessibility/tts.dart';
 import 'package:safesnake/util/data/constants.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/help/handler.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 import 'package:safesnake/util/widgets/main.dart';
 
 class Help extends StatefulWidget {
@@ -38,6 +39,9 @@ class _HelpState extends State<Help> {
 
   ///Help Mode
   bool _helpMode = false;
+
+  ///Current Lang
+  final currentLang = Strings.currentLang;
 
   ///Help List
   Widget _helpList() {
@@ -131,7 +135,7 @@ class _HelpState extends State<Help> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainWidgets(context: context).appBar(
-        title: const Text("Get Help"),
+        title: Text(Strings.help["get_help"][currentLang]),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
@@ -157,7 +161,7 @@ class _HelpState extends State<Help> {
             Container(
               color: Theme.of(context).scaffoldBackgroundColor,
               child: MainWidgets(context: context).pageTitle(
-                title: "Choose from the list below:",
+                title: Strings.help["choose_list"][currentLang],
               ),
             ),
 

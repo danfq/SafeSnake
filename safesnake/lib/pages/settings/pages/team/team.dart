@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/util/models/team_member.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Team extends StatelessWidget {
@@ -51,12 +52,18 @@ class Team extends StatelessWidget {
       ),
     ];
 
+    //Current Lang
+    final currentLang = Strings.currentLang;
+
     //UI
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.transparent,
-        title: Text("Team", style: Theme.of(context).textTheme.titleLarge),
+        title: Text(
+          Strings.settings["team"][currentLang],
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {

@@ -4,28 +4,33 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/route_manager.dart';
 import 'package:safesnake/util/data/constants.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 
 class SuicideCall extends StatelessWidget {
   const SuicideCall({super.key});
 
   @override
   Widget build(BuildContext context) {
+    //Current Lang
+    final currentLang = Strings.currentLang;
+
+    //UI
     return Padding(
       padding: const EdgeInsets.only(left: 30.0),
       child: PressableDough(
         child: GestureDetector(
           onTap: () async {
             await Get.defaultDialog(
-              title: "Are you sure?",
-              content: const Padding(
-                padding: EdgeInsets.all(8.0),
+              title: Strings.help["are_you_sure"][currentLang],
+              content: Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "A call will be made to the National Suicide Hotline.",
+                  Strings.help["call_sui_desc"][currentLang],
                 ),
               ),
               cancel: TextButton(
                 onPressed: () => Get.back(),
-                child: const Text("Cancel"),
+                child: Text(Strings.buttons["cancel"][currentLang]),
               ),
               confirm: ElevatedButton(
                 onPressed: () async {
@@ -37,7 +42,7 @@ class SuicideCall extends StatelessWidget {
                     Constants.suicideHotline,
                   );
                 },
-                child: const Text("Confirm"),
+                child: Text(Strings.buttons["confirm"][currentLang]),
               ),
             );
           },

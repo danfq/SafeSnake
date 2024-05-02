@@ -62,11 +62,11 @@ class _IntroState extends State<Intro> {
           globalBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
           showNextButton: true,
           showBackButton: true,
-          back: const Text("Back"),
-          next: const Text("Next"),
-          done: const Text(
-            "Let's Begin",
-            style: TextStyle(fontWeight: FontWeight.bold),
+          back: Text(Strings.buttons["back"][_currentLang]),
+          next: Text(Strings.buttons["next"][_currentLang]),
+          done: Text(
+            Strings.buttons["begin"][_currentLang],
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           onDone: () async {
             //Set Intro as Complete

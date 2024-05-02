@@ -4,6 +4,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/util/account/handler.dart';
 import 'package:safesnake/util/data/local.dart';
 import 'package:safesnake/util/services/notifications/local.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 import 'package:safesnake/util/widgets/dialogs.dart';
 import 'package:safesnake/util/widgets/main.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -19,11 +20,14 @@ class _AccountInfoState extends State<AccountInfo> {
   ///Account Data
   Map<dynamic, dynamic> accountData = LocalData.boxData(box: "personal");
 
+  ///Current Lang
+  final currentLang = Strings.currentLang;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainWidgets(context: context).appBar(
-        title: const Text("Your Account"),
+        title: Text(Strings.settings["account"][currentLang]),
       ),
       body: SafeArea(
         child: Column(
@@ -64,9 +68,9 @@ class _AccountInfoState extends State<AccountInfo> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Card(
                 child: ListTile(
-                  title: const Text(
-                    "Your Referral Code",
-                    style: TextStyle(
+                  title: Text(
+                    Strings.common["referral_code"][currentLang],
+                    style: const TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.w600,
                     ),
@@ -80,7 +84,9 @@ class _AccountInfoState extends State<AccountInfo> {
                       );
 
                       //Notify User
-                      LocalNotifications.toast(message: "Copied!");
+                      LocalNotifications.toast(
+                        message: Strings.common["copied"][currentLang],
+                      );
                     },
                     style: IconButton.styleFrom(
                       backgroundColor: Colors.grey.shade600,
@@ -112,9 +118,11 @@ class _AccountInfoState extends State<AccountInfo> {
                       //Change Username
                       SettingsTile.navigation(
                         leading: const Icon(Ionicons.ios_person_outline),
-                        title: const Text("Change Username"),
-                        description: const Text(
-                          "Please don't be weird.",
+                        title: Text(
+                          Strings.account["change_user"][currentLang],
+                        ),
+                        description: Text(
+                          Strings.account["change_user_desc"][currentLang],
                         ),
                         onPressed: (context) async {
                           //Change Dialog - Username
@@ -133,9 +141,11 @@ class _AccountInfoState extends State<AccountInfo> {
                       //Change Password
                       SettingsTile.navigation(
                         leading: const Icon(Ionicons.ios_lock_closed_outline),
-                        title: const Text("Change Password"),
-                        description: const Text(
-                          "It must meet our security standards.",
+                        title: Text(
+                          Strings.account["change_password"][currentLang],
+                        ),
+                        description: Text(
+                          Strings.account["change_password_desc"][currentLang],
                         ),
                         onPressed: (context) async {
                           //Change Dialog - Password
@@ -152,9 +162,11 @@ class _AccountInfoState extends State<AccountInfo> {
                       //Delete Account
                       SettingsTile.navigation(
                         leading: const Icon(Ionicons.ios_trash_outline),
-                        title: const Text("Delete Account"),
-                        description: const Text(
-                          "This will notify our Admins of your choice.\nIf you change your mind, you may contact us.\n\nOtherwise, all your Data will be deleted, including Help Logs.",
+                        title: Text(
+                          Strings.account["delete_account"][currentLang],
+                        ),
+                        description: Text(
+                          Strings.account["delete_account_desc"][currentLang],
                         ),
                         onPressed: (context) async {
                           await AccountHandler.deleteAccount();

@@ -38,7 +38,7 @@ class RemoteNotifications {
         android: AndroidNotificationDetails(
           "safesnake_14",
           "SafeSnake",
-          importance: notif.title == "Quick!"
+          importance: notif.title == "Quick!" || notif.title == "Rápido!"
               ? Importance.high
               : Importance.defaultImportance,
         ),
@@ -47,7 +47,7 @@ class RemoteNotifications {
     );
 
     //Check for High-Alert Mode
-    if (notif.title == "Quick!") {
+    if (notif.title == "Quick!" || notif.title == "Rápido!") {
       //Play Alert
       await HelpHandler.highAlertNotif();
     }

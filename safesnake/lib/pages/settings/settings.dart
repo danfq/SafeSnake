@@ -29,12 +29,33 @@ class _SettingsPageState extends State<SettingsPage> {
     final currentTheme = ThemeController.current(context: context);
 
     //Current Language
-    final currentLang = Strings.currentLang;
+    String currentLang = Strings.currentLang;
 
     //UI
     return Scaffold(
       appBar: MainWidgets(context: context).appBar(
         title: Text(Strings.pageTitles["settings"][currentLang]),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: TextButton(
+              onPressed: () async {
+                if (currentLang == "en") {
+                  await Strings.setLang(lang: "pt");
+                  setState(() {
+                    currentLang = "pt";
+                  });
+                } else if (currentLang == "pt") {
+                  await Strings.setLang(lang: "en");
+                  setState(() {
+                    currentLang = "en";
+                  });
+                }
+              },
+              child: Text(currentLang.toUpperCase()),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SettingsList(
@@ -66,11 +87,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         ? Strings.settings["dark_mode"][currentLang]
                         : Strings.settings["light_mode"][currentLang],
                   ),
-                ),
-
-                //Language
-                SettingsTile.navigation(
-                  title: Text(Strings.settings["language"][currentLang]),
                 ),
               ],
             ),

@@ -253,7 +253,7 @@ class AccountHandler {
     //Current Lang
     final currentLang = Strings.currentLang;
 
-    //Show Sign Out Sheet
+    //Show Delete Account Sheet
     await showModalBottomSheet(
       context: Get.context!,
       builder: (context) {
@@ -340,7 +340,7 @@ class AccountHandler {
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Text(
-                    "Sign Out",
+                    Strings.account["sign_out"][currentLang],
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),

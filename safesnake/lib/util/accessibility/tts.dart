@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 
 ///Text-to-Speech Engine
 class TTSEngine {
@@ -8,6 +9,9 @@ class TTSEngine {
 
   ///Initialize Service
   static Future<void> init() async {
+    //Current Lang
+    final currentLang = Strings.currentLang;
+
     //Default Voice -  Android Only
     if (Platform.isAndroid) {
       final defaultVoice = await _tts.getDefaultVoice;
@@ -20,7 +24,11 @@ class TTSEngine {
 
     //Set Voice Properties
     await _tts.setVolume(0.8);
-    await _tts.setLanguage("en-US");
+    if (currentLang == "en") {
+      await _tts.setLanguage("en-US");
+    } else if (currentLang == "pt") {
+      await _tts.setLanguage("pt-PT");
+    }
   }
 
   ///Speak `message` using System Language & Voice

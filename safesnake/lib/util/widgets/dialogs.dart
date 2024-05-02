@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safesnake/util/account/handler.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 import 'package:safesnake/util/widgets/input.dart';
 
 ///Dialog Type
@@ -38,6 +39,9 @@ class UtilDialog {
     //Input
     String input = inputController.text.trim();
 
+    //Current Lang
+    final currentLang = Strings.currentLang;
+
     //Show Adaptive Dialog
     await showAdaptiveDialog(
       context: context,
@@ -50,7 +54,7 @@ class UtilDialog {
               Padding(
                 padding: const EdgeInsets.all(14.0),
                 child: Text(
-                  "Change $dialogName",
+                  "${Strings.common["change"][currentLang]} $dialogName",
                   style: const TextStyle(
                     fontSize: 22.0,
                     fontWeight: FontWeight.bold,
@@ -61,7 +65,8 @@ class UtilDialog {
               //Input
               Input(
                 controller: inputController,
-                placeholder: "New $dialogName",
+                placeholder:
+                    "${Strings.common["new"][currentLang]} $dialogName",
                 centerPlaceholder: true,
                 onChanged: (inputString) {
                   input = inputString;
@@ -112,7 +117,7 @@ class UtilDialog {
                         }
                       }
                     },
-                    child: const Text("Save"),
+                    child: Text(Strings.common["save"][currentLang]),
                   ),
                 ),
               ),

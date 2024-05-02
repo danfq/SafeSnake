@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:safesnake/pages/account/login.dart';
 import 'package:safesnake/util/account/handler.dart';
+import 'package:safesnake/util/services/strings/handler.dart';
 import 'package:safesnake/util/theming/controller.dart';
 import 'package:safesnake/util/widgets/input.dart';
 import 'package:safesnake/util/widgets/main.dart';
@@ -33,26 +34,28 @@ class _AccountState extends State<Account> {
   ///Question
   String question = "";
 
+  ///Current Lang
+  final currentLang = Strings.currentLang;
+
   ///Set Question
   void setQuestion() {
     //Question Based on Current Step
     switch (step) {
       //Name
       case 0:
-        question = "What would you like me to call you?";
+        question = Strings.intro["question_1"][currentLang];
 
       //Referral Code
       case 1:
-        question = "What's your Loved One's Referral Code?";
+        question = Strings.intro["question_2"][currentLang];
 
       //E-mail
       case 2:
-        question =
-            "Nice to meet you, ${usernameController.text}!\nWhat's your E-mail?";
+        question = Strings.intro["question_3"][currentLang];
 
       //Password
       case 3:
-        question = "Can't forget the most important step!";
+        question = Strings.intro["question_4"][currentLang];
 
       //Default
       default:
@@ -68,14 +71,14 @@ class _AccountState extends State<Account> {
       case 0:
         return Input(
           controller: usernameController,
-          placeholder: "Name",
+          placeholder: Strings.intro["name"][currentLang],
         );
 
       //Referral Code
       case 1:
         return Input(
           controller: referralController,
-          placeholder: "Leave blank if you don't have a Referral Code",
+          placeholder: Strings.intro["referral"][currentLang],
         );
 
       //E-mail
@@ -103,9 +106,9 @@ class _AccountState extends State<Account> {
   String navText() {
     //Return "Next" Except for Last Step
     if (step != 3) {
-      return "Next";
+      return Strings.buttons["next"][currentLang];
     } else {
-      return "All Done";
+      return Strings.buttons["done"][currentLang];
     }
   }
 
@@ -130,7 +133,7 @@ class _AccountState extends State<Account> {
       appBar: MainWidgets(context: context).appBar(
         allowBack: false,
         centerTitle: false,
-        title: const Text("Create Account"),
+        title: Text(Strings.account["create"][currentLang]),
         leading: step != 0
             ? IconButton(
                 onPressed: () {

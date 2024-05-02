@@ -23,7 +23,7 @@ class _AddByCodeState extends State<AddByCode> {
     //UI
     return Scaffold(
       appBar: MainWidgets(context: context).appBar(
-        title: Strings.pageTitles["referral_add_code"][currentLang],
+        title: Text(Strings.pageTitles["referral_add_code"][currentLang]),
       ),
       body: SafeArea(
         child: Column(
