@@ -33,7 +33,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     //UI
     return Scaffold(
-      appBar: MainWidgets(context: context).appBar(
+      appBar: MainWidgets.appBar(
         title: Text(Strings.pageTitles["settings"][currentLang]),
         actions: [
           Padding(

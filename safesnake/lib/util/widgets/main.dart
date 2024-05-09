@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/route_manager.dart';
 
 ///Main Widgets
 class MainWidgets {
-  //Context
-  final BuildContext context;
-
-  ///Initialize MainWidgets
-  MainWidgets({required this.context});
-
   ///AppBar
-  PreferredSizeWidget appBar({
+  static PreferredSizeWidget appBar({
     Widget? title,
     bool? allowBack = true,
     bool? centerTitle = true,
@@ -20,7 +15,7 @@ class MainWidgets {
   }) {
     //Default Leading
     final defaultLeading = IconButton(
-      onPressed: onBack ?? () => Navigator.pop(context),
+      onPressed: onBack ?? () => Navigator.pop(Get.context!),
       icon: const Icon(Ionicons.ios_chevron_back),
     );
 
@@ -32,7 +27,6 @@ class MainWidgets {
       title: title,
       automaticallyImplyLeading: allowBack ?? true,
       scrolledUnderElevation: 0.0,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       leading: finalLeading,
       centerTitle: centerTitle,
       actions: actions,
@@ -40,7 +34,7 @@ class MainWidgets {
   }
 
   ///Page Title
-  Widget pageTitle({required String title}) {
+  static Widget pageTitle({required String title}) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Text(

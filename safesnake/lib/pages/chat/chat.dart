@@ -80,7 +80,7 @@ class _LovedOneChatState extends State<LovedOneChat> {
     //UI
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: MainWidgets(context: context).appBar(
+      appBar: MainWidgets.appBar(
         title: Text(widget.lovedOne.name),
         actions: [
           //Information

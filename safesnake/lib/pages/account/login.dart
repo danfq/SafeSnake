@@ -21,7 +21,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: MainWidgets(context: context).appBar(title: const Text("Login")),
+      appBar: MainWidgets.appBar(title: const Text("Login")),
       body: SafeArea(
         child: LoginForm(
           emailController: emailController,

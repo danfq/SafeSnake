@@ -20,7 +20,7 @@ class PeoplePage extends StatelessWidget {
 
     //UI
     return Scaffold(
-      appBar: MainWidgets(context: context).appBar(
+      appBar: MainWidgets.appBar(
         title: const Text("Loved Ones"),
       ),
       body: const SafeArea(child: LovedOnes()),

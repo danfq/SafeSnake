@@ -130,7 +130,7 @@ class _AccountState extends State<Account> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainWidgets(context: context).appBar(
+      appBar: MainWidgets.appBar(
         allowBack: false,
         centerTitle: false,
         title: Text(Strings.account["create"][currentLang]),

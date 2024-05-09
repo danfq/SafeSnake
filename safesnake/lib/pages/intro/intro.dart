@@ -31,7 +31,7 @@ class _IntroState extends State<Intro> {
   Widget build(BuildContext context) {
     //UI
     return Scaffold(
-      appBar: MainWidgets(context: context).appBar(
+      appBar: MainWidgets.appBar(
         title: const Text("SafeSnake"),
         allowBack: false,
         centerTitle: false,

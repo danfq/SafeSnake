@@ -26,7 +26,7 @@ class _AccountInfoState extends State<AccountInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainWidgets(context: context).appBar(
+      appBar: MainWidgets.appBar(
         title: Text(Strings.settings["account"][currentLang]),
       ),
       body: SafeArea(

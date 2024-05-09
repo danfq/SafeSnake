@@ -157,7 +157,7 @@ class _HelpState extends State<Help> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainWidgets(context: context).appBar(
+      appBar: MainWidgets.appBar(
         title: Text(Strings.help["get_help"][currentLang]),
         actions: [
           Padding(
@@ -183,7 +183,7 @@ class _HelpState extends State<Help> {
             //Page Title
             Container(
               color: Theme.of(context).scaffoldBackgroundColor,
-              child: MainWidgets(context: context).pageTitle(
+              child: MainWidgets.pageTitle(
                 title: Strings.help["choose_list"][currentLang],
               ),
             ),

@@ -42,7 +42,7 @@ class _SafeSnakeState extends State<SafeSnake> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainWidgets(context: context).appBar(
+      appBar: MainWidgets.appBar(
         allowBack: false,
         title: Row(
           children: [
