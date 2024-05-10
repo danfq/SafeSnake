@@ -30,7 +30,7 @@ class Resources extends StatelessWidget {
             radius: 60.0,
             child: Center(
               child: Icon(
-                Ionicons.ios_alert_circle_outline,
+                FontAwesome5Solid.hand_holding_heart,
                 size: 50.0,
                 color: Colors.white,
               ),
