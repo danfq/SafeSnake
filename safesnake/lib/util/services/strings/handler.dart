@@ -22,6 +22,10 @@ class Strings {
       "en": "Settings",
       "pt": "Definições",
     },
+    "resources_hub": {
+      "en": "Resources Hub",
+      "pt": "Centro de Recursos",
+    },
   };
 
   ///Common
@@ -129,6 +133,50 @@ class Strings {
     "licenses": {
       "en": "Licenses",
       "pt": "Licenças",
+    },
+  };
+
+  ///Resources Hub
+  static Map resources = {
+    "section_suicide": {
+      "en": "Suicide",
+      "pt": "Suicídio",
+    },
+    "section_talk": {
+      "en": "Talk",
+      "pt": "Conversa",
+    },
+    "section_health": {
+      "en": "Health",
+      "pt": "Saúde",
+    },
+    "section_child": {
+      "en": "Children",
+      "pt": "Crianças",
+    },
+    "suicide_hotline": {
+      "en": "Suicide Prevention Hotline",
+      "pt": "Linha de Prevenção do Suicídio",
+    },
+    "sos_talk": {
+      "en": "SOS Friendly Voice",
+      "pt": "SOS Voz Amiga",
+    },
+    "health_general": {
+      "en": "General Health Line",
+      "pt": "Linha de Saúde Geral",
+    },
+    "health_24": {
+      "en": "24/7 Health Line",
+      "pt": "Linha de Saúde 24/7",
+    },
+    "child_missing": {
+      "en": "Missing Child Line",
+      "pt": "Linha de Criança Desaparecida",
+    },
+    "child_support": {
+      "en": "Child Support Line",
+      "pt": "Linha de Apoio a Crianças",
     },
   };
 
