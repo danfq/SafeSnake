@@ -34,15 +34,13 @@ class RemoteNotifications {
       14,
       notif.title,
       notif.body,
-      NotificationDetails(
+      const NotificationDetails(
         android: AndroidNotificationDetails(
           "safesnake_14",
           "SafeSnake",
-          importance: notif.title == "Quick!" || notif.title == "Rápido!"
-              ? Importance.high
-              : Importance.defaultImportance,
+          importance: Importance.high,
         ),
-        iOS: const DarwinNotificationDetails(),
+        iOS: DarwinNotificationDetails(),
       ),
     );
 
